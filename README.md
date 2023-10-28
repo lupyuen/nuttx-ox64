@@ -146,4 +146,6 @@ Header Values are exactly the same as Star64. (Except the Image Size and Executa
 
 Thus we simply reuse the code from NuttX Star64!
 
-TODO
+TODO: Dump the Device Tree
+
+TODO: Transmit to UART
