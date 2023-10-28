@@ -15,33 +15,24 @@ From the latest Ox64 Linux release...
 Unzip and mount the SD Card Image.
 
 ```bash
-→ ls -l /Users/Luppy/ox64/sdcard-pine64_ox64_full_defconfig     
-total 25744
--rwxrwxrwx@ 1 Luppy  staff  13154816 Mar  6  2023 Image
--rwxrwxrwx@ 1 Luppy  staff      4012 Mar  6  2023 bl808-pine64-ox64.dtb
--rwxrwxrwx@ 1 Luppy  staff      4106 Mar  6  2023 bl808-sipeed-m1s.dtb
--rwxrwxrwx@ 1 Luppy  staff       350 Mar  6  2023 boot-m1s.scr
--rwxrwxrwx@ 1 Luppy  staff       352 Mar  6  2023 boot-pine64.scr
--rwxrwxrwx@ 1 Luppy  staff       352 Mar  6  2023 boot.scr
-drwxrwxrwx@ 3 Luppy  staff        96 Mar  6  2023 extlinux
+→ ls -l sdcard-pine64_ox64_full_defconfig     
+-  13,154,816  Image
+-       4,012  bl808-pine64-ox64.dtb
+-       4,106  bl808-sipeed-m1s.dtb
+-         350  boot-m1s.scr
+-         352  boot-pine64.scr
+-         352  boot.scr
+d          96  extlinux
 ```
 
 Dump the `Image` as hex...
 
 ```bash
-→ hexdump /Users/Luppy/ox64/sdcard-pine64_ox64_full_defconfig/Image | mor
-e
+→ hexdump sdcard-pine64_ox64_full_defconfig/Image
 0000000 4d 5a 6f 10 20 08 01 00 00 00 20 00 00 00 00 00
 0000010 00 80 cd 00 00 00 00 00 00 00 00 00 00 00 00 00
 0000020 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 0000030 52 49 53 43 56 00 00 00 52 53 43 05 40 00 00 00
-0000040 50 45 00 00 64 50 02 00 00 00 00 00 00 00 00 00
-0000050 00 00 00 00 a0 00 06 02 0b 02 02 14 00 f0 5f 00
-0000060 00 80 6d 00 00 00 00 00 3e 2a 42 00 00 10 00 00
-0000070 00 00 00 00 00 00 00 00 00 10 00 00 00 02 00 00
-0000080 00 00 00 00 01 00 01 00 00 00 00 00 00 00 00 00
-0000090 00 80 cd 00 00 10 00 00 00 00 00 00 0a 00 00 00
-00000a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ```
 
 The Linux Kernel Image will begin with this __RISC-V Linux Image Header__...
