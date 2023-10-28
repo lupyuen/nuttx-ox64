@@ -1,8 +1,15 @@
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)
 
-TODO
+_Will Apache NuttX RTOS boot on Ox64 BL808?_
 
-Download [bl808-linux-pine64_ox64_full_defconfig.tar.gz](https://github.com/openbouffalo/buildroot_bouffalo/releases/download/v1.0.1/bl808-linux-pine64_ox64_full_defconfig.tar.gz) from [openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
+Let's examine the Linux Kernel Image for Ox64, and we replicate the same format for NuttX.
+
+We download...
+ [bl808-linux-pine64_ox64_full_defconfig.tar.gz](https://github.com/openbouffalo/buildroot_bouffalo/releases/download/v1.0.1/bl808-linux-pine64_ox64_full_defconfig.tar.gz) 
+
+From the latest release...
+
+[openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
 
 Unzip and mount the SD Card Image.
 
@@ -18,7 +25,7 @@ total 25744
 drwxrwxrwx@ 3 Luppy  staff        96 Mar  6  2023 extlinux
 ```
 
-Dump `Image` as hex...
+Dump the `Image` as hex...
 
 ```bash
 → hexdump /Users/Luppy/ox64/sdcard-pine64_ox64_full_defconfig/Image | mor
@@ -36,7 +43,7 @@ e
 00000a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ```
 
-Which will begin with this __RISC-V Linux Image Header__...
+The Linux Kernel Image will begin with this __RISC-V Linux Image Header__...
 
 -   [__"Boot Image Header in RISC-V Linux"__](https://www.kernel.org/doc/html/latest/riscv/boot-image-header.html)
 
@@ -136,3 +143,5 @@ Our NuttX Kernel shall __recreate this RISC-V Linux Image Header__. (Total `0x40
 (Or U-Boot Bootloader might refuse to boot NuttX)
 
 Header Values are exactly the same as Star64. (Except the Executable Code, since the Jump Address is different)
+
+TODO
