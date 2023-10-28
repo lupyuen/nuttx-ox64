@@ -80,7 +80,6 @@ Here are the decoded bytes...
 
     ```text
     00 80 cd 00 00 00 00 00
-    aaaa 00  C0  56  01  00  00  00  00
     ```
 
 1.  __flags__: Kernel flags, little endian 
@@ -143,6 +142,6 @@ Our NuttX Kernel shall __recreate this RISC-V Linux Image Header__. (Total `0x40
 
 (Or U-Boot Bootloader might refuse to boot NuttX)
 
-Header Values are exactly the same as Star64. (Except the Executable Code, since the Jump Address is different)
+Header Values are exactly the same as Star64. (Except the Image Size and Executable Code, since the Jump Address is different)
 
 TODO
