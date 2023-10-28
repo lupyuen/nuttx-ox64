@@ -1,0 +1,190 @@
+/dts-v1/;
+
+/ {
+	compatible = "pine64,ox64\0bflb,bl808";
+	#address-cells = <0x01>;
+	#size-cells = <0x01>;
+	model = "Pine64 Ox64";
+
+	cpus {
+		timebase-frequency = <0xf4240>;
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+
+		cpu@0 {
+			compatible = "thead,c906\0riscv";
+			device_type = "cpu";
+			reg = <0x00>;
+			d-cache-block-size = <0x40>;
+			d-cache-sets = <0x100>;
+			d-cache-size = <0x8000>;
+			i-cache-block-size = <0x40>;
+			i-cache-sets = <0x80>;
+			i-cache-size = <0x8000>;
+			mmu-type = "riscv,sv39";
+			riscv,isa = "rv64imafdc";
+			phandle = <0x07>;
+
+			interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+				#address-cells = <0x00>;
+				#interrupt-cells = <0x01>;
+				phandle = <0x06>;
+			};
+		};
+	};
+
+	xtal-clk {
+		compatible = "fixed-clock";
+		clock-frequency = <0x2625a00>;
+		clock-output-names = "xtal";
+		#clock-cells = <0x00>;
+		phandle = <0x04>;
+	};
+
+	sdh-clk {
+		compatible = "fixed-clock";
+		clock-frequency = <0x5b8d800>;
+		clock-output-names = "sdh";
+		#clock-cells = <0x00>;
+		phandle = <0x05>;
+	};
+
+	soc {
+		compatible = "simple-bus";
+		ranges;
+		interrupt-parent = <0x01>;
+		dma-noncoherent;
+		#address-cells = <0x01>;
+		#size-cells = <0x01>;
+
+		pinctrl@0x200008C4 {
+			compatible = "bflb,pinctrl";
+			reg = <0x200008c4 0x1000>;
+			gpio-controller;
+			#gpio-cells = <0x02>;
+			gpio-ranges = <0x02 0x00 0x00 0x2e>;
+			bflb,npins = <0x2e>;
+			status = "okay";
+			interrupt-controller;
+			#interrupt-cells = <0x02>;
+			interrupts-extended = <0x03 0x00 0x04 0x01>;
+			phandle = <0x02>;
+
+			sdh-pins {
+				pins = "GPIO0\0GPIO1\0GPIO2\0GPIO3\0GPIO4\0GPIO5";
+				function = "sdh";
+				phandle = <0x08>;
+			};
+		};
+
+		seceng@0x20004000 {
+			compatible = "bflb,seceng";
+			reg = <0x20004000 0x1000>;
+			status = "okay";
+			phandle = <0x09>;
+		};
+
+		serial@30002000 {
+			compatible = "bflb,bl808-uart";
+			reg = <0x30002000 0x1000>;
+			interrupts = <0x14 0x04>;
+			clocks = <0x04>;
+			status = "okay";
+			phandle = <0x0a>;
+		};
+
+		serial@0x2000AA00 {
+			compatible = "bflb,bl808-uart";
+			reg = <0x2000aa00 0x100>;
+			interrupts-extended = <0x03 0x00 0x01 0x01>;
+			mboxes = <0x03 0x00 0x01>;
+			clocks = <0x04>;
+			status = "okay";
+			phandle = <0x0b>;
+		};
+
+		sdhci@20060000 {
+			compatible = "bflb,bl808-sdhci";
+			reg = <0x20060000 0x100>;
+			interrupts-extended = <0x03 0x00 0x00 0x01>;
+			mboxes = <0x03 0x00 0x00>;
+			clocks = <0x05>;
+			status = "okay";
+			phandle = <0x0c>;
+		};
+
+		mailbox@30005000 {
+			compatible = "bflb,bl808-ipc";
+			reg = <0x30005000 0x20 0x30005020 0x20 0x2000a800 0x20 0x2000a820 0x20>;
+			interrupts = <0x36 0x04>;
+			interrupt-controller;
+			#interrupt-cells = <0x03>;
+			#mbox-cells = <0x02>;
+			status = "okay";
+			phandle = <0x03>;
+		};
+
+		interrupt-controller@e0000000 {
+			compatible = "thead,c900-plic";
+			reg = <0xe0000000 0x4000000>;
+			interrupts-extended = <0x06 0xffffffff 0x06 0x09>;
+			interrupt-controller;
+			#address-cells = <0x00>;
+			#interrupt-cells = <0x02>;
+			riscv,ndev = <0x40>;
+			phandle = <0x01>;
+		};
+
+		timer@e4000000 {
+			compatible = "thead,c900-clint";
+			reg = <0xe4000000 0xc000>;
+			interrupts-extended = <0x06 0x03 0x06 0x07>;
+			phandle = <0x0d>;
+		};
+	};
+
+	aliases {
+		serial0 = "/soc/serial@30002000";
+		serial1 = "/soc/serial@0x2000AA00";
+	};
+
+	chosen {
+		stdout-path = "serial0:2000000n8";
+		bootargs = "console=ttyS0,2000000 loglevel=8 earlycon=sbi root=PARTLABEL=rootfs rootwait rootfstype=ext4";
+		linux,initrd-start = <0x00 0x52000000>;
+		linux,initrd-end = <0x00 0x52941784>;
+	};
+
+	memory@50000000 {
+		device_type = "memory";
+		reg = <0x50000000 0x4000000>;
+	};
+
+	xip_flash@58500000 {
+		compatible = "mtd-rom";
+		reg = <0x58500000 0x400000>;
+		linux,mtd-name = "xip-flash.0";
+		erase-size = <0x10000>;
+		bank-width = <0x04>;
+		#address-cells = <0x01>;
+		#size-cells = <0x01>;
+	};
+
+	__symbols__ {
+		cpu0 = "/cpus/cpu@0";
+		cpu0_intc = "/cpus/cpu@0/interrupt-controller";
+		xtal = "/xtal-clk";
+		sdh = "/sdh-clk";
+		pinctrl = "/soc/pinctrl@0x200008C4";
+		sdh_pins = "/soc/pinctrl@0x200008C4/sdh-pins";
+		seceng = "/soc/seceng@0x20004000";
+		uart0 = "/soc/serial@30002000";
+		uart1 = "/soc/serial@0x2000AA00";
+		sdhci0 = "/soc/sdhci@20060000";
+		ipclic = "/soc/mailbox@30005000";
+		plic = "/soc/interrupt-controller@e0000000";
+		clint = "/soc/timer@e4000000";
+	};
+};

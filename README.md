@@ -139,6 +139,16 @@ Thus we simply reuse the code from NuttX Star64!
 
 TODO: Dump the Device Tree
 
+```text
+dtc \
+  -o bl808-pine64-ox64.dts \
+  -O dts \
+  -I dtb \
+  bl808-pine64-ox64.dtb
+```
+
+Here's the Decompiled Device Tree: [bl808-pine64-ox64.dts](bl808-pine64-ox64.dts)
+
 TODO: Transmit to UART3. Reuse the BL602 UART Driver for NuttX.
 
 TODO: Print Debug Logs with OpenSBI
