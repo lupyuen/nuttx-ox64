@@ -35,7 +35,7 @@ Dump the `Image` as hex...
 0000030 52 49 53 43 56 00 00 00 52 53 43 05 40 00 00 00
 ```
 
-The Linux Kernel Image will begin with this __RISC-V Linux Image Header__...
+The Linux Kernel Image begins with this __RISC-V Linux Image Header__...
 
 -   [__"Boot Image Header in RISC-V Linux"__](https://www.kernel.org/doc/html/latest/riscv/boot-image-header.html)
 
@@ -163,6 +163,28 @@ serial@30002000 {
 ```
 
 [(Source)](https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L89-L96)
+
+TODO: Forward the Interrupts from M0 Wireless Core to D0 Multimedia Core via Mailbox / IPC (Where are the addresses documented?)
+
+```text
+mailbox@30005000 {
+  compatible = "bflb,bl808-ipc";
+  reg = <
+    0x30005000 0x20 
+    0x30005020 0x20 
+    0x2000a800 0x20 
+    0x2000a820 0x20
+  >;
+  interrupts = <0x36 0x04>;
+  interrupt-controller;
+  #interrupt-cells = <0x03>;
+  #mbox-cells = <0x02>;
+  status = "okay";
+  phandle = <0x03>;
+};
+```
+
+[(Source)](https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L118-L127)
 
 TODO: Print Debug Logs with OpenSBI
 
