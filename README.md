@@ -149,3 +149,5 @@ Thus we simply reuse the code from NuttX Star64!
 TODO: Dump the Device Tree
 
 TODO: Transmit to UART
+
+TODO: Print Debug Logs with OpenSBI
