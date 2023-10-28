@@ -148,6 +148,6 @@ Thus we simply reuse the code from NuttX Star64!
 
 TODO: Dump the Device Tree
 
-TODO: Transmit to UART
+TODO: Transmit to UART. Reuse the BL602 UART Driver for NuttX.
 
 TODO: Print Debug Logs with OpenSBI
