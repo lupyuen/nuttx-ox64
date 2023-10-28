@@ -12,7 +12,7 @@ From the latest Ox64 Linux release...
 
 - [openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
 
-Unzip and mount the SD Card Image.
+Unzip it and mount the SD Card Image...
 
 ```bash
 → ls -l sdcard-pine64_ox64_full_defconfig     
@@ -166,3 +166,10 @@ TODO: Print Debug Logs with OpenSBI
 - [BL808 LP Core: T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
 
   (Low Power Core)
+
+From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
+
+* m0_lowload_bl808_m0.bin - This firmware runs on M0 and forwards interupts to the D0 for several peripherals
+* d0_lowload_bl808_d0.bin - This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
+* bl808-firmware.bin - A image containing OpenSBI, Uboot and uboot dtb files. 
+* sdcard-*.tar.xz - A tarball containing the rootfs for the image to be flashed to the SD card
