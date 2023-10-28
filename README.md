@@ -144,4 +144,6 @@ Our NuttX Kernel shall __recreate this RISC-V Linux Image Header__. (Total `0x40
 
 Header Values are exactly the same as Star64. (Except the Image Size and Executable Code, since the Jump Address is different)
 
+Thus we simply reuse the code from NuttX Star64!
+
 TODO
