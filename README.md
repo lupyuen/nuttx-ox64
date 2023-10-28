@@ -202,11 +202,13 @@ TODO: Print Debug Logs with OpenSBI
 
 - [BL808 D0 Core: T-Head C906 480MHz 64-bit RISC-V CPU](https://www.t-head.cn/product/c906?lang=en)
 
-  (Multimedia Core)
+  (Multimedia Core: MIPI CSI / DSI, Neural Proc Unit)
+
+  Memory Mgmt Unit is Sv39, 128/256/512 TLB table entry. (Same as Star64?)
 
 - [BL808 M0 Core: T-Head E907 320MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e907?lang=en)
 
-  (Wireless Core)
+  (Wireless + Peripherals Core: WiFi, BLE, BT, Zigbee, Audio)
 
 - [BL808 LP Core: T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
 
