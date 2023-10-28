@@ -149,7 +149,20 @@ dtc \
 
 Here's the Decompiled Device Tree: [bl808-pine64-ox64.dts](bl808-pine64-ox64.dts)
 
-TODO: Transmit to UART3. Reuse the BL602 UART Driver for NuttX.
+TODO: Transmit to UART3 at 0x30002000. Reuse the BL602 UART Driver for NuttX.
+
+```text
+serial@30002000 {
+  compatible = "bflb,bl808-uart";
+  reg = <0x30002000 0x1000>;
+  interrupts = <0x14 0x04>;
+  clocks = <0x04>;
+  status = "okay";
+  phandle = <0x0a>;
+};
+```
+
+[(Source)](https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L89-L96)
 
 TODO: Print Debug Logs with OpenSBI
 
