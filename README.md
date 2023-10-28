@@ -4,13 +4,13 @@ _Will Apache NuttX RTOS boot on Ox64 BL808?_
 
 Let's examine the Linux Kernel Image for Ox64, and we replicate the same format for NuttX.
 
-We download...
+We download the Ox64 Binaries...
 
 - [bl808-linux-pine64_ox64_full_defconfig.tar.gz](https://github.com/openbouffalo/buildroot_bouffalo/releases/download/v1.0.1/bl808-linux-pine64_ox64_full_defconfig.tar.gz) 
 
-From the latest Ox64 Linux release...
+From the latest Ox64 Linux Release...
 
-- [openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
+- [openbouffalo/buildroot_bouffalo (Release v1.0.1)](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
 
 Unzip it and mount the SD Card Image...
 
