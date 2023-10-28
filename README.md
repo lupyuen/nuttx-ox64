@@ -148,6 +148,30 @@ Thus we simply reuse the code from NuttX Star64!
 
 TODO: Dump the Device Tree
 
-TODO: Transmit to UART. Reuse the BL602 UART Driver for NuttX.
+TODO: Transmit to UART3. Reuse the BL602 UART Driver for NuttX.
 
 TODO: Print Debug Logs with OpenSBI
+
+- ["Booting Linux on the Pine64 Ox64 SBC"](https://adventurist.me/posts/00317)
+
+- [OpenBouffalo Wiki](https://openbouffalo.org/index.php/Main_Page)
+
+- [Linux Image for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
+
+  [(Newer version?)](https://github.com/bouffalolab/buildroot_bouffalo)
+
+- [BL808 Datasheet](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf)
+
+- [BL808 Reference Manual](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
+
+- [BL808 D0 Core: T-Head C906 480MHz 64-bit RISC-V CPU](https://www.t-head.cn/product/c906?lang=en)
+
+  (Multimedia Core)
+
+- [BL808 M0 Core: T-Head E907 320MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e907?lang=en)
+
+  (Wireless Core)
+
+- [BL808 LP Core: T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
+
+  (Low Power Core)
