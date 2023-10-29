@@ -4,17 +4,17 @@ _What's this BL808?_ [(Datasheet)](https://github.com/bouffalolab/bl_docs/blob/m
 
 BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
 
-1.  D0 Core: [T-Head C906 480MHz 64-bit RISC-V CPU](https://www.t-head.cn/product/c906?lang=en)
+1.  D0 Core: [T-Head C906 64-bit RV64IMAFCV](https://www.t-head.cn/product/c906?lang=en) (480 MHz)
 
     (Multimedia Core with MIPI CSI / DSI, Neural Proc Unit)
 
     (Memory Mgmt Unit is Sv39, 128/256/512 TLB table entry. Same as Star64?)
 
-1.  M0 Core: [T-Head E907 320MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e907?lang=en)
+1.  M0 Core: [T-Head E907 32-bit RV32IMAFCP](https://www.t-head.cn/product/e907?lang=en) (320 MHz)
 
     (Wireless + Peripherals Core with WiFi, BLE, BT, Zigbee, Audio)
 
-1.  LP Core: [T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
+1.  LP Core: [T-Head E902 32-bit RV32E[M]C](https://www.t-head.cn/product/e902?lang=en) (150 MHz)
 
     (Low Power Core)
 
