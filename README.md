@@ -1,8 +1,78 @@
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)
 
+_What's this BL808?_ [(Datasheet)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf) [(Reference Manual)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
+
+BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
+
+1.  D0 Core: [T-Head C906 480MHz 64-bit RISC-V CPU](https://www.t-head.cn/product/c906?lang=en)
+
+    (Multimedia Core with MIPI CSI / DSI, Neural Proc Unit)
+
+    (Memory Mgmt Unit is Sv39, 128/256/512 TLB table entry. Same as Star64?)
+
+1.  M0 Core: [T-Head E907 320MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e907?lang=en)
+
+    (Wireless + Peripherals Core with WiFi, BLE, BT, Zigbee, Audio)
+
+1.  LP Core: [T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
+
+    (Low Power Core)
+
+[Pine64 Ox64](https://wiki.pine64.org/wiki/Ox64) is the dev board for BL808C.
+
+(BL808C supports MIPI CSI Cameras but not MIPI DSI Displays. Maybe someday we'll see BL808D for MIPI DSI Displays)
+
+_Is Ox64 BL808 an SBC? Or an MCU Board?_
+
+Technically Ox64 BL808 boots 64-bit RISC-V Linux (via MicroSD), so it feels like an SBC...
+
+- ["Booting Linux on the Pine64 Ox64 SBC"](https://adventurist.me/posts/00317)
+
+- [OpenBouffalo Wiki](https://openbouffalo.org/index.php/Main_Page)
+
+- [Linux Image + OpenSBI + U-Boot for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
+
+  [(Newer version?)](https://github.com/bouffalolab/buildroot_bouffalo)
+
+But Ox64 BL808 also feels like an MCU Board...
+
+- Form Factor is similar to MCU Board
+
+- Limited Memory: 64 MB of RAM, [128 Megabits](https://pine64.com/product/128mb-ox64-sbc-available-on-december-2-2022/) (16 MB) of Flash Memory
+
+- UART Pins need a USB Serial Adapter for Flashing and Console I/O
+
+- M0 Wireless Core is 32-bit RISC-V MCU
+
+_Sounds a little tiny for 64-bit Linux?_
+
+Yeah 64-bit Linux runs on the D0 Multimedia Core. But most Peripherals are hosted on the M0 Wireless Core: WiFi, BLE, BT, Zigbee, Audio, ...
+
+So we flash M0 with a simple 32-bit RISC-V Firmware, to forward the Peripheral Interrupts from M0 to D0 Linux.
+
+From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
+
+* d0_lowload_bl808_d0.bin: This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
+
+* m0_lowload_bl808_m0.bin: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
+
+* bl808-firmware.bin: A image containing OpenSBI, Uboot and uboot dtb files. 
+
+* sdcard-*.tar.xz: A tarball containing the rootfs for the image to be flashed to the SD card
+
+Perhaps Ox64 BL808 might run more efficiently with a tiny 64-bit RTOS.
+
+_Why Apache NuttX RTOS?_
+
+It might be interesting to run Apache NuttX RTOS on both the D0 Multimedia Core and the M0 Wireless Core. Then D0 and M0 can talk over OpenAMP (Asymmetric Multi-Processing).
+
+Let's explore...
+
+# Inspect the Linux Image for Ox64 BL808
+
 _Will Apache NuttX RTOS boot on Ox64 BL808?_
 
-Let's examine the Linux Kernel Image for Ox64, and we replicate the same format for NuttX.
+Let's examine the Linux Kernel Image for Ox64, and we replicate the same format for NuttX. (Which is how we ported NuttX to 64-bit RISC-V Star64 JH7110 SBC)
 
 We download the Ox64 Binaries...
 
@@ -137,6 +207,8 @@ Header Values are exactly the same as Star64. (Except the Image Size and Executa
 
 Thus we simply reuse the code from NuttX Star64!
 
+# Linux Device Tree for Ox64 BL808
+
 TODO: Dump the Device Tree
 
 ```text
@@ -188,13 +260,15 @@ mailbox@30005000 {
 
 TODO: Print Debug Logs with OpenSBI
 
-BL808 Docs:
+# Documentation for Ox64 BL808
 
 - ["Booting Linux on the Pine64 Ox64 SBC"](https://adventurist.me/posts/00317)
 
+- [Pine64 Ox64 Wiki](https://wiki.pine64.org/wiki/Ox64)
+
 - [OpenBouffalo Wiki](https://openbouffalo.org/index.php/Main_Page)
 
-- [Linux Image for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
+- [Linux Image + OpenSBI + U-Boot for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
 
   [(Newer version?)](https://github.com/bouffalolab/buildroot_bouffalo)
 
