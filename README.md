@@ -303,7 +303,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     (Don't press the Boot Button!)
 
-    TODO: On the USB Serial Terminal (Serial Console) we should see...
+Let's boot Linux...
 
 # Boot Linux on Ox64 BL808
 
