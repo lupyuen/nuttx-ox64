@@ -78,6 +78,28 @@ It might be interesting to run Apache NuttX RTOS on both the D0 Multimedia Core 
 
 Let's explore...
 
+# Flashing UART vs Serial Console
+
+_We need to handle TWO UART Ports on Ox64?_
+
+Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distinctive names...
+
+1.  __Ox64 Flashing UART__: Used for Flashing Ox64
+
+    + Flashing UART TX is physical pin 1 / GPIO 14
+    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Remember to connect GND
+    + Baud 2,000,000 (2 Mbps)
+
+1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
+
+    + Serial Console TX is physical pin 32 / GPIO 16
+    + Serial Console RX is physical pin 31 / GPIO 17
+    + Remember to connect GND
+    + Baud 2,000,000 (2 Mbps)
+
+Now we flash Ox64 and boot Linux...
+
 # Flash OpenSBI and U-Boot Bootloader to Ox64 BL808
 
 Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multimedia Core, and the Peripheral Interrupt Firmware to M0 Wireless Core. From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
@@ -98,7 +120,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Like this CP2102, which shows garbled text at 2 Mbps)](https://www.lazada.sg/products/i2037772272-s11135131253.html)
 
-1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
+1.  To Test our USB Serial Adapter: Connect the USB Serial Adapter to __Ox64 Flashing UART__...
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
     + Remember to connect GND
@@ -135,7 +157,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Source)](https://gist.github.com/lupyuen/43676407bbced733e65566879e18732b)
 
-1.  Initial Check: Set BL808 board to programming mode
+1.  Pre-Flash Check: Set BL808 board to programming mode
     + Remove the microSD Card
     + Press and Hold BOOT Button
     + Unplug and replug the Micro USB Port
@@ -199,19 +221,19 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     ./BLDevCube-macos-x86_64
     ```
 
-1.  Run DevCube, select [BL808], and switch to [MCU] page
+1.  Run DevCube, select "BL808", and switch to "MCU" page
 
-1.  M0 Group[Group0] 
+1.  M0 Group: Group0
 
-    Image Addr [0x58000000] 
+    Image Addr: 0x58000000
     
-    [PATH to m0_lowload_bl808_m0.bin]
+    PATH: Select "m0_lowload_bl808_m0.bin"
 
-1.  D0 Group[Group0] 
+1.  D0 Group: Group0
 
-    Image Addr [0x58100000] 
+    Image Addr: 0x58100000
     
-    [PATH to d0_lowload_bl808_d0.bin]
+    PATH: Select "d0_lowload_bl808_d0.bin"
 
 1.  Set UART Rate to 230400.
 
@@ -219,17 +241,17 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
 
-1.  Click 'Create & Download' and wait until it's done
+1.  Click "Create & Download" and wait until it's done
 
     [(See the log)](https://gist.github.com/lupyuen/125e15be5ed1e034bed33d16ed496d87)
 
-1.  Switch to [IOT] page
+1.  Switch to "IOT" page
 
 1.  Enable 'Single Download'
 
     Set Address to 0x800000
     
-    Choose [bl808-firmware.bin]
+    Select "bl808-firmware.bin"
 
 1.  Set UART Rate to 230400.
 
@@ -237,7 +259,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
 
-1.  Click 'Create & Download' again and wait until it's done
+1.  Click "Create & Download" again and wait until it's done
 
     [(See the log)](https://gist.github.com/lupyuen/e8c0aca0ebd0f1eae034b0996a5b3ec3)
 
@@ -423,7 +445,19 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     [(Source)](https://gist.github.com/lupyuen/3035a70d52d2d1d529e96f5292f54210)
 
-Yep Linux is running on Ox64 yay!
+    Yep Linux is running on Ox64 yay!
+
+1.  If nothing appears...
+
+    Check that we are using [Bouffalo Lab DevCube 1.8.3](https://openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip)
+
+    [(1.8.4 and later won't work)](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
+
+    In BL Dev Cube, UART Rate (for MCU and IoT) should be 230400.
+
+    Don't set to 2000000, it will fail on macOS!
+
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
 
 # Inspect the Linux Image for Ox64 BL808
 
