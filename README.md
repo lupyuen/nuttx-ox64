@@ -68,6 +68,59 @@ It might be interesting to run Apache NuttX RTOS on both the D0 Multimedia Core 
 
 Let's explore...
 
+# Flash OpenSBI and U-Boot Bootloader to Ox64 BL808
+
+TODO
+
+Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
+
+1.  Get DevCube **1.8.3** from...
+
+    [openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip](https://openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip)
+
+    Normal download location is [dev.bouffalolab.com/download](http://dev.bouffalolab.com/download) but [1.8.4 and later do not work](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
+
+    TODO: Does latest version work?
+
+1.  Connect BL808 board via serial port to your PC
+
+1.  Set BL808 board to programming mode
+    + Press BOOT button when reseting or applying power
+    + Release BOOT button
+
+1.  Run DevCube, select [BL808], and switch to [MCU] page
+
+1.  Select the uart port and set baudrate with 2000000
+    + UART TX is physical pin 1/GPIO 14.
+    + UART RX is physical pin 2/GPIO 15.
+
+1.  M0 Group[Group0] Image Addr [0x58000000] [PATH to m0_lowload_bl808_m0.bin]
+
+1.  D0 Group[Group0] Image Addr [0x58100000] [PATH to d0_lowload_bl808_d0.bin]
+
+1.  Click 'Create & Download' and wait until it's done
+
+1.  Switch to [IOT] page
+
+1.  Enable 'Single Download', set Address with 0x800000, choose [bl808-firmware.bin]
+
+1.  Click 'Create & Download' again and wait until it's done
+
+# Boot Linux on Ox64 BL808
+
+TODO
+
+Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
+
+1.  Flash the sdcard-pine64-*.img.xz to your SD card.
+
+    You can use dd (after uncompressing) or [Balena Etcher](https://github.com/balena-io/etcher).
+
+1.  Serial Console access:
+    + UART TX is physical pin 32/GPIO 16.
+    + UART RX is physical pin 31/GPIO 17.
+    + Baud 2000000.
+
 # Inspect the Linux Image for Ox64 BL808
 
 _Will Apache NuttX RTOS boot on Ox64 BL808?_
@@ -265,6 +318,8 @@ TODO: Print Debug Logs with OpenSBI
 - ["Booting Linux on the Pine64 Ox64 SBC"](https://adventurist.me/posts/00317)
 
 - [Pine64 Ox64 Wiki](https://wiki.pine64.org/wiki/Ox64)
+
+- [Pine64 Ox64 Schematic](https://files.pine64.org/doc/ox64/PINE64_Ox64-Schematic-202221018.pdf)
 
 - [OpenBouffalo Wiki](https://openbouffalo.org/index.php/Main_Page)
 
