@@ -136,6 +136,8 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Source)](https://adventurist.me/posts/00317)
 
+    If the text appears garbled: Try a different USB Serial Adapter. (See above)
+
     My prototype version shows this...
 
     ```text
@@ -146,10 +148,6 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     ```
 
     [(Source)](https://gist.github.com/lupyuen/43676407bbced733e65566879e18732b)
-
-    If the text appears garbled, try a different USB Serial Adapter. (See above)
-
-    TODO: Verify this on shipped version of Ox64
 
 1.  Initial Check: Set BL808 board to programming mode
     + Remove the microSD Card
@@ -199,7 +197,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     Only Ubuntu x64, macOS and Windows are supported.
 
-    TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro? See [bflb-iot-tool / bflb-mcu-tool](https://wiki.pine64.org/wiki/Ox64#Alternative:_Open-Source_Flashing)
+    TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro? Sigh. See [bflb-iot-tool / bflb-mcu-tool](https://wiki.pine64.org/wiki/Ox64#Alternative:_Open-Source_Flashing)
 
 1.  Download Bouffalo Lab DevCube 1.8.3 from...
 
@@ -237,13 +235,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 1.  Click 'Create & Download' and wait until it's done
 
-    TODO: Why does it fail for 1.8.3? It succeeds with 1.8.6
-
-    [(OK after setting UART Rate to 230400)](https://gist.github.com/lupyuen/125e15be5ed1e034bed33d16ed496d87)
-
-    [(See the OK log for 1.8.6)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
-
-    [(See the fail log for 1.8.3)](https://gist.github.com/lupyuen/0fde950460cffed37c3c78ce79beca9c)
+    [(See the log)](https://gist.github.com/lupyuen/125e15be5ed1e034bed33d16ed496d87)
 
 1.  Switch to [IOT] page
 
@@ -261,9 +253,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 1.  Click 'Create & Download' again and wait until it's done
 
-    [(See the OK log for 1.8.3 for UART Rate 230400)](https://gist.github.com/lupyuen/e8c0aca0ebd0f1eae034b0996a5b3ec3)
-
-    [(See the OK log for 1.8.6)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
+    [(See the log)](https://gist.github.com/lupyuen/e8c0aca0ebd0f1eae034b0996a5b3ec3)
 
 1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
@@ -365,11 +355,20 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     (Don't press the Boot Button!)
 
-1.  On the USB Serial Terminal (Flashing UART) we should see...
+1.  On the USB Serial Terminal (Flashing UART) we should see the same thing as earlier...
 
     ```text
-    TODO
+    [I][MAIN] Starting Mailbox Handlers
+    [I][MBOX] Forwarding Interupt SDH (33) to D0 (0x58008bbc)
+    [I][MBOX] Forwarding Interupt GPIO (60) to D0 (0x58008d0e)
+    [I][MAIN] Running...
+    [I][MBOX] Mailbox IRQ Stats:
+    [I][MBOX] .Peripheral SDH (33): 0
+    [I][MBOX] .Peripheral GPIO (60): 0
+    [I][MBOX] Unhandled Interupts: 0 Unhandled Signals 0
     ```
+
+    [(Source)](https://gist.github.com/lupyuen/52ccdf076ae294db26e837e6ffc4bafb)
 
 1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
     + Serial Console TX is physical pin 32 / GPIO 16
@@ -386,10 +385,59 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 1.  On the USB Serial Terminal (Serial Console) we should see...
 
     ```text
-    TODO
+    [I][] Powered by BouffaloLab
+    [I][] Build:11:52:04,Mar  6 2023
+    [I][] Copyright (c) 2023 OpenBouffalo team
+    [I][] Copyright (c) 2022 Bouffalolab team
+    [I][] dynamic memory init success,heap s[I][LowLoad] D0 start...
+    [I][LowLoad] low_load start... 
+    [I][LowLoad] Header at 0x5d5ff000
+    [I][LowLoad] Section dtb(1) - Start 0x5d5ff100, Size 14314
+    [I][LowLoad] Copying DTB to 0x51ff8000...0x51ffb7ea
+    [I][LowLoad] Done!
+    [I][LowLoad] Section OpenSBI(2) - Start 0x5d60f100, Size 109864
+    [I][LowLoad] Copying OpenSBI to 0x3ef80000...0x3ef9ad28
+    [I][LowLoad] Done!
+    [I][LowLoad] Section Kernel(3) - Start 0x5d62f100, Size 315597
+    [I][LowLoad] Uncompressing Kernel to 0x50000000...
+    [I][LowLoad] Done!
+    [I][LowLoad] CRC: 00000000
+    [I][LowLoad] load time: 61306 us 
+    [I][LowLoad] ing PMP
+    [I][LowLoad] Booting OpenSBI at 0x000000003ef80000 with DTB at 0x51ff8000
+    ...
+    OpenSBI v1.2
+    Platform Name             : Pine64 Ox64 (D0)
+    Platform Features          medeleg
+    Platform HART Count       : 1
+    Platform IPI Device       : aclint-mswi
+    Platform Timer Device     : aclint-mtimer @ 1000000Hz
+    Platform Console Device   : bflb_uart
+    Platform HSM Device       : ---
+    Platform PMU Device       : ---
+    Platform Reboot Device    : ---
+    Platform Shutdown Device  : ---
+    Firmware Base             : 0x3ef80000
+    Firmware Size             : 200 KB
+    Runtime SBI Version       : 1.0
+    ...
+
+    U-Boot 2023.04-rc2 (Mar 06 2023 - 11:48:40 +0000)
+    DRAM:  64 MiB
+    Core:  36 devices, 17 uclasses, devicetree: board
+    MMC:   mmc@20060000: 0
+    Loading Environment from FAT... Unable to read "uboot.env" from mmc0:2... 
+    ...
+    Starting kernel ...
+    Linux version 6.2.0 (runner@fv-az587-938) (riscv64-unknown-linux-gnu-gcc (Xuantie-900 linux-5.10.4 glibc gcc Toolchain V2.6.1 B-20220906) 10.2.0, GNU ld (GNU Binutils) 2.35) #1 Mon Mar  6 11:17:27 UTC 2023
+    ...
+    Welcome to Buildroot
+    ox64 login: 
     ```
 
     [(Source)](https://gist.github.com/lupyuen/3035a70d52d2d1d529e96f5292f54210)
+
+Yep Linux is running on Ox64 yay!
 
 # Inspect the Linux Image for Ox64 BL808
 
