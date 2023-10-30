@@ -213,11 +213,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     
     [PATH to d0_lowload_bl808_d0.bin]
 
-1.  Set UART Rate to 230400
+1.  Set UART Rate to 230400.
 
     Don't set to 2000000, it will fail on macOS!
 
-    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash)
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
 
 1.  Click 'Create & Download' and wait until it's done
 
@@ -231,11 +231,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     
     Choose [bl808-firmware.bin]
 
-1.  Set UART Rate to 230400
+1.  Set UART Rate to 230400.
 
     Don't set to 2000000, it will fail on macOS!
 
-    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash)
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
 
 1.  Click 'Create & Download' again and wait until it's done
 
