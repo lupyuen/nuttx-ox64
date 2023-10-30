@@ -229,13 +229,21 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     
     [PATH to d0_lowload_bl808_d0.bin]
 
+1.  Set UART Rate to 230400
+
+    Don't set to 2000000, it will fail on macOS!
+
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash)
+
 1.  Click 'Create & Download' and wait until it's done
 
     TODO: Why does it fail for 1.8.3? It succeeds with 1.8.6
 
-    [(See the log for 1.8.6)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
+    [(OK after setting UART Rate to 230400)](https://gist.github.com/lupyuen/125e15be5ed1e034bed33d16ed496d87)
 
-    [(See the log for 1.8.3)](https://gist.github.com/lupyuen/0fde950460cffed37c3c78ce79beca9c)
+    [(See the OK log for 1.8.6)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
+
+    [(See the fail log for 1.8.3)](https://gist.github.com/lupyuen/0fde950460cffed37c3c78ce79beca9c)
 
 1.  Switch to [IOT] page
 
@@ -245,11 +253,17 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     
     Choose [bl808-firmware.bin]
 
+1.  Set UART Rate to 230400
+
+    Don't set to 2000000, it will fail on macOS!
+
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash)
+
 1.  Click 'Create & Download' again and wait until it's done
 
-    [(See the log for 1.8.6)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
+    [(See the OK log for 1.8.3 for UART Rate 230400)](https://gist.github.com/lupyuen/e8c0aca0ebd0f1eae034b0996a5b3ec3)
 
-    [(See the log for 1.8.3)](https://gist.github.com/lupyuen/7849366acb692b184e942bbefd2d2006)
+    [(See the OK log for 1.8.6)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
 
 1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
@@ -374,6 +388,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     ```text
     TODO
     ```
+
+    [(Source)](https://gist.github.com/lupyuen/3035a70d52d2d1d529e96f5292f54210)
 
 # Inspect the Linux Image for Ox64 BL808
 
