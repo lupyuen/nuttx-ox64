@@ -98,11 +98,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Like this CP2102, which shows garbled text at 2 Mbps)](https://www.lazada.sg/products/i2037772272-s11135131253.html)
 
-1.  Connect USB Serial Adapter to __Ox64 Serial Console__:
+1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
-    + Baud 2000000
+    + Baud 2,000,000 (2 Mbps)
 
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
@@ -110,11 +110,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     If the text appears garbled, try a different USB Serial Adapter. (See above)
 
-1.  Connect USB Serial Adapter to __Ox64 Flashing UART__:
+1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
     + Remember to connect GND
-    + Baud 2000000
+    + Baud 2,000,000 (2 Mbps)
 
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
@@ -213,7 +213,7 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
-    + Baud 2000000
+    + Baud 2,000,000 (2 Mbps)
 
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
