@@ -152,9 +152,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     TODO: Verify this on shipped version of Ox64
 
 1.  Initial Check: Set BL808 board to programming mode
+    + Remove the microSD Card
     + Press and Hold BOOT Button
     + Unplug and replug the Micro USB Port
     + Release BOOT button
+    + Ox64 Green LED should turn on
 
     In the USB Serial Terminal (Flashing UART), we should see this...
 
@@ -169,9 +171,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     Disconnect the USB Serial Terminal (to release the Flashing UART)
 
     Set BL808 board to programming mode
+    + Remove the microSD Card
     + Press and Hold BOOT Button
     + Unplug and replug the Micro USB Port
     + Release BOOT button
+    + Ox64 Green LED should turn on
 
 1.  We download the Ox64 Binaries...
 
@@ -188,7 +192,6 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
        7340032  bl808-firmware.bin
          31360  d0_lowload_bl808_d0.bin
          65760  m0_lowload_bl808_m0.bin
-    1820364800  sdcard-pine64_ox64_full_defconfig.img
       43859444  sdcard-pine64_ox64_full_defconfig.img.xz    
     ```
 
@@ -198,16 +201,18 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro? See [bflb-iot-tool / bflb-mcu-tool](https://wiki.pine64.org/wiki/Ox64#Alternative:_Open-Source_Flashing)
 
-1.  Download Bouffalo Lab DevCube 1.8.6 (or later) from [dev.bouffalolab.com/download](http://dev.bouffalolab.com/download)
+1.  Download Bouffalo Lab DevCube 1.8.3 from...
 
-    [(1.8.4 and 1.8.5 won't work)](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
+    [openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip](https://openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip)
+
+    [(1.8.4 and later won't work)](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
 
     May need to Grant Execute Permission...
 
     ```bash
-    cd BouffaloLabDevCube-v1.8.6
-    chmod +x BLDevCube-macos
-    ./BLDevCube-macos
+    cd BouffaloLabDevCube-v1.8.3
+    chmod +x BLDevCube-macos-x86_64
+    ./BLDevCube-macos-x86_64
     ```
 
 1.  Run DevCube, select [BL808], and switch to [MCU] page
@@ -238,7 +243,9 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 1.  Click 'Create & Download' again and wait until it's done
 
-    [(See the log)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
+    [(See the log for 1.8.6)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
+
+    [(See the log for 1.8.3)](https://gist.github.com/lupyuen/7849366acb692b184e942bbefd2d2006)
 
 1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
@@ -310,23 +317,59 @@ Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're
 
 Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
-1.  Flash the sdcard-pine64-*.img.xz to your microSD card.
+1.  Look for the microSD Image that we downloaded earlier...
 
-    You can use dd (after uncompressing) or [Balena Etcher](https://github.com/balena-io/etcher).
+    ```text
+    sdcard-pine64_ox64_full_defconfig.img.xz
+    ```
+
+    Uncompress the file to get...
+
+    ```text
+    sdcard-pine64_ox64_full_defconfig.img
+    ```
+
+1.  Flash the uncompressed image to your microSD card.
+
+    You can use [Balena Etcher](https://github.com/balena-io/etcher), GNOME Disks or `dd`.
 
 1.  Insert the microSD Card into Ox64.
 
+1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
+    + Flashing UART TX is physical pin 1 / GPIO 14
+    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Remember to connect GND
+    + Baud 2,000,000 (2 Mbps)
+
+    Start the USB Serial Terminal (Flashing UART).
+
     Unplug and replug the Micro USB Port.
 
-1.  Connect USB Serial Adapter to __Ox64 Serial Console__:
+    (Don't press the Boot Button!)
+
+1.  On the USB Serial Terminal (Flashing UART) we should see...
+
+    ```text
+    TODO
+    ```
+
+1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
-    Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
+    Start the USB Serial Terminal (Serial Console).
 
-    TODO: What do we see in USB Serial Terminal?
+    Unplug and replug the Micro USB Port.
+
+    (Don't press the Boot Button!)
+
+1.  On the USB Serial Terminal (Serial Console) we should see...
+
+    ```text
+    TODO
+    ```
 
 # Inspect the Linux Image for Ox64 BL808
 
