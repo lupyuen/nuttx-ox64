@@ -125,16 +125,20 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     In the USB Serial Terminal (Flashing UART), we should see the Ox64 Factory Test Firmware...
 
     ```text
-    Simple Malloc 5120
-    custom 0x0000
-    flash init 0
-    BLSP Boot2 start:Aug 25 2022,15:42:52
-    Build Version: 3aa71dc-dirty
-    Build Date: Sep 16 2022
-    Build Time: 14:40:13
-    [OS] Starting aos_loop_proc task...
-    [OS] Starting OS Scheduler...
-    [ERROR : bl_romfs.c: 129] romfs magic is NOT correct
+    Build:19:50:39,Nov 20 2022
+    Copyright (c) 2022 Bouffalolab team
+    dynamic memory init success,heap size = 93 Kbyte 
+    sig1:ffff32ff
+    sig2:0000ffff
+    Pong!
+    Ping!
+    ```
+
+    [(Source)](https://adventurist.me/posts/00317)
+
+    My prototype version shows this...
+
+    ```text
     Init CLI with event Driven
     start aos loop... 
     CLI RAW Data, c906
