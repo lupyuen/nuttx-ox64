@@ -38,11 +38,9 @@ Technically Ox64 BL808 boots 64-bit RISC-V Linux (via MicroSD), so it feels like
 
   (USB-C is not for Flashing!)
 
-- USB 2.0 Port for USB OTG
+- USB 2.0 support for USB OTG
 
   (On-The-Go = USB Host + USB Device)
-
-  (Nope not for Flashing either)
 
 But Ox64 BL808 also feels like an MCU Board...
 
@@ -50,9 +48,13 @@ But Ox64 BL808 also feels like an MCU Board...
 
 - Limited Memory: 64 MB of RAM, [128 Megabits](https://pine64.com/product/128mb-ox64-sbc-available-on-december-2-2022/) (16 MB) of Flash Memory
 
+- M0 Wireless Core is 32-bit RISC-V MCU
+
 - UART Pins need a USB Serial Adapter for Flashing and Console I/O
 
-- M0 Wireless Core is 32-bit RISC-V MCU
+- Powered by Micro USB Port
+
+  (Micro USB is not for Flashing either!)
 
 _Ox64 BL808 sounds a little tiny for 64-bit Linux?_
 
@@ -91,6 +93,7 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Remember to connect GND
     + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
     + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
+    + Controlled by the M0 Wireless Core
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
@@ -98,10 +101,31 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
     + Baud Rate: 2,000,000 (2 Mbps)
+    + Controlled by the D0 Multimedia Core (Linux)
 
 _Why 2 Baud Rates for Flashing UART?_
 
-TODO
+When we power up Ox64 in __Normal Mode__: (Boot Button NOT pressed)
+
+- Flashing UART outputs the Firmware running on M0 Wireless Core
+
+- This M0 Firmware will forward Peripheral Interrupts to D0 Multimedia Core
+
+- M0 Firmware is hardcoded for 2 Mbps
+
+When we power up Ox64 in __Flashing Mode__: (Boot Button pressed)
+
+- Ox64 is ready for Firmware Flashing by BL DevCube
+
+- Firmware Flashing supports various Baud Rates: 230.4 kbps, 2 Mbps, ...
+
+- But 2 Mbps will fail on macOS. That's why we Flash Firmware at 230.4 kbps.
+
+  [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
+
+_Serial Console is always 2 Mbps?_
+
+Yeah 2 Mbps is hardcoded in Ox64 Linux. Switching to other Baud Rates will show garbled text.
 
 Now we flash Ox64 and boot Linux...
 
