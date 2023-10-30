@@ -34,6 +34,16 @@ Technically Ox64 BL808 boots 64-bit RISC-V Linux (via MicroSD), so it feels like
 
   [(Newer version?)](https://github.com/bouffalolab/buildroot_bouffalo)
 
+- USB-C Port for Camera Module (Dual-Lane MIPI CSI)
+
+  (USB-C is not for Flashing!)
+
+- USB 2.0 Port for USB OTG
+
+  (On-The-Go = USB Host + USB Device)
+
+  (Nope not for Flashing either)
+
 But Ox64 BL808 also feels like an MCU Board...
 
 - Form Factor is similar to MCU Board
@@ -44,9 +54,9 @@ But Ox64 BL808 also feels like an MCU Board...
 
 - M0 Wireless Core is 32-bit RISC-V MCU
 
-_Sounds a little tiny for 64-bit Linux?_
+_Ox64 BL808 sounds a little tiny for 64-bit Linux?_
 
-Yeah 64-bit Linux runs on the D0 Multimedia Core. But most Peripherals are hosted on the M0 Wireless Core: WiFi, BLE, BT, Zigbee, Audio, ...
+Yeah 64-bit Linux runs with Limited RAM on the D0 Multimedia Core. But most Peripherals are hosted on the M0 Wireless Core: WiFi, BLE, BT, Zigbee, Audio, ...
 
 So we flash M0 with a simple 32-bit RISC-V Firmware, to forward the Peripheral Interrupts from M0 to D0 Linux.
 
