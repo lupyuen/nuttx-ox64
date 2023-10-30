@@ -60,15 +60,15 @@ Yeah 64-bit Linux runs with Limited RAM on the D0 Multimedia Core. But most Peri
 
 So we flash M0 with a simple 32-bit RISC-V Firmware, to forward the Peripheral Interrupts from M0 to D0 Linux.
 
-From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
+Here are the binaries loaded into D0 Multimedia Core and M0 Wireless Core, from [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo)...
 
-* d0_lowload_bl808_d0.bin: This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
+* __d0_lowload_bl808_d0.bin__: This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
 
-* m0_lowload_bl808_m0.bin: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
+* __m0_lowload_bl808_m0.bin__: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
 
-* bl808-firmware.bin: A image containing OpenSBI, Uboot and uboot dtb files. 
+* __bl808-firmware.bin__: A image containing OpenSBI, Uboot and uboot dtb files. 
 
-* sdcard-*.tar.xz: A tarball containing the rootfs for the image to be flashed to the SD card
+* __sdcard-*.tar.xz__: A tarball containing the rootfs for the image to be flashed to the SD card
 
 Perhaps Ox64 BL808 might run more efficiently with a tiny 64-bit RTOS.
 
@@ -80,9 +80,21 @@ Let's explore...
 
 # Flash OpenSBI and U-Boot Bootloader to Ox64 BL808
 
-TODO
+Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multimedia Core, and the Peripheral Interrupt Firmware to M0 Wireless Core. From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
 
-Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
+* __d0_lowload_bl808_d0.bin__: This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
+
+* __m0_lowload_bl808_m0.bin__: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
+
+* __bl808-firmware.bin__: A image containing OpenSBI, Uboot and uboot dtb files. 
+
+Here are the steps, based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
+
+1.  We'll run BouffaloLab DevCube for Flashing BL808.
+
+    Only Ubuntu x64, macOS and Windows are supported.
+
+    TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro?
 
 1.  Get DevCube **1.8.3** from...
 
@@ -116,9 +128,11 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
 1.  Click 'Create & Download' again and wait until it's done
 
+TODO: Does it work?
+
 # Boot Linux on Ox64 BL808
 
-TODO
+Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're ready to boot Linux on microSD!
 
 Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
@@ -130,6 +144,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     + UART TX is physical pin 32/GPIO 16.
     + UART RX is physical pin 31/GPIO 17.
     + Baud 2000000.
+
+TODO: Does it work?
 
 # Inspect the Linux Image for Ox64 BL808
 
