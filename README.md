@@ -89,14 +89,19 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
     + Remember to connect GND
-    + Baud 2,000,000 (2 Mbps)
+    + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
+    + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
-    + Baud 2,000,000 (2 Mbps)
+    + Baud Rate: 2,000,000 (2 Mbps)
+
+_Why 2 Baud Rates for Flashing UART?_
+
+TODO
 
 Now we flash Ox64 and boot Linux...
 
@@ -458,6 +463,15 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     Don't set to 2000000, it will fail on macOS!
 
     [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
+
+Comment by [@gamelaster](https://x.com/gamelaster/status/1719073156281798755?s=20)...
+
+> "This is not hardware specific, but flasher specific. With blisp, I was able to get faster flashing working, but this is Apple's quirk. Or maybe not? Because FreeBSD need same quirks and exact buffer sizes as Apple."
+
+Comment by [@madushan1000](https://x.com/madushan1000/status/1719069431580524720?s=20)...
+
+> "You can also use u-boot. https://github.com/openbouffalo/u-boot/releases/tag/bl808-2023-02-19 
+You can also get rid of mailbox, but you will have to build the kernel yourself https://github.com/openbouffalo/linux/tree/bl808/all"
 
 # Inspect the Linux Image for Ox64 BL808
 
