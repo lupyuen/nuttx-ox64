@@ -104,9 +104,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
+    Start the USB Serial Terminal (Serial Console).
+
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
-    TODO: What do we see in USB Serial Terminal?
+    TODO: On the USB Serial Terminal (Serial Console) we should see...
 
     If the text appears garbled, try a different USB Serial Adapter. (See above)
 
@@ -116,9 +118,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
+    Start the USB Serial Terminal (Flashing UART).
+
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
-    We should see the Ox64 Factory Test Firmware in the USB Serial Terminal...
+    In the USB Serial Terminal (Flashing UART), we should see the Ox64 Factory Test Firmware...
 
     ```text
     Simple Malloc 5120
@@ -148,7 +152,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     + Unplug and replug the Micro USB Port
     + Release BOOT button
 
-    We should see this in the USB Serial Terminal...
+    In the USB Serial Terminal (Flashing UART), we should see this...
 
     ```text
     .
@@ -190,29 +194,111 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro? See [bflb-iot-tool / bflb-mcu-tool](https://wiki.pine64.org/wiki/Ox64#Alternative:_Open-Source_Flashing)
 
-1.  Get DevCube **1.8.3** from...
+1.  Download Bouffalo Lab DevCube 1.8.6 (or later) from [dev.bouffalolab.com/download](http://dev.bouffalolab.com/download)
 
-    [openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip](https://openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip)
+    [(1.8.4 and 1.8.5 won't work)](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
 
-    Normal download location is [dev.bouffalolab.com/download](http://dev.bouffalolab.com/download) but [1.8.4 and later do not work](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
+    May need to Grant Execute Permission...
 
-    TODO: Does latest version work?
+    ```bash
+    cd BouffaloLabDevCube-v1.8.6
+    chmod +x BLDevCube-macos
+    ./BLDevCube-macos
+    ```
 
 1.  Run DevCube, select [BL808], and switch to [MCU] page
 
-1.  M0 Group[Group0] Image Addr [0x58000000] [PATH to m0_lowload_bl808_m0.bin]
+1.  M0 Group[Group0] 
 
-1.  D0 Group[Group0] Image Addr [0x58100000] [PATH to d0_lowload_bl808_d0.bin]
+    Image Addr [0x58000000] 
+    
+    [PATH to m0_lowload_bl808_m0.bin]
+
+1.  D0 Group[Group0] 
+
+    Image Addr [0x58100000] 
+    
+    [PATH to d0_lowload_bl808_d0.bin]
 
 1.  Click 'Create & Download' and wait until it's done
 
+    [(See the log)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
+
 1.  Switch to [IOT] page
 
-1.  Enable 'Single Download', set Address with 0x800000, choose [bl808-firmware.bin]
+1.  Enable 'Single Download'
+
+    Set Address to 0x800000
+    
+    Choose [bl808-firmware.bin]
 
 1.  Click 'Create & Download' again and wait until it's done
 
-TODO: Does it work?
+    [(See the log)](https://gist.github.com/lupyuen/65fcb05be4642b8543a0024f57963872)
+
+1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
+    + Flashing UART TX is physical pin 1 / GPIO 14
+    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Remember to connect GND
+    + Baud 2,000,000 (2 Mbps)
+
+    Start the USB Serial Terminal (Flashing UART).
+
+    Unplug and replug the Micro USB Port.
+
+    (Don't press the Boot Button!)
+
+1.  On the USB Serial Terminal (Flashing UART) we should see...
+
+    ```text
+    [I][] Powered by BouffaloLab
+    [I][] Build:11:52:22,Mar  6 2023
+    [I][] Copyright (c) 2023 OpenBouffalo team
+    [I][] Copyright (c) 2022 Bouffalolab team
+    [I][] =========== flash cfg ==============
+    [I][] jedec id   0xEF6018
+    [I][] mid            0xEF
+    [I][] iomode         0x04
+    [I][] clk delay      0x01
+    [I][] clk invert     0x01
+    [I][] read reg cmd0  0x05
+    [I][] read reg cmd1  0x35
+    [I][] write reg cmd0 0x01
+    [I][] write reg cmd1 0x31
+    [I][] qe write len   0x01
+    [I][] cread support  0x00
+    [I][] cread code     0xFF
+    [I][] burst wrap cmd 0x77
+    [I][] sector size:   0x04
+    [I][] =====================================
+    [I][] dynamic memory init success,heap size = 156 Kbyte 
+    [I][MAIN] Starting Mailbox Handlers
+    [I][MBOX] Forwarding Interupt SDH (33) to D0 (0x58008bbc)
+    [I][MBOX] Forwarding Interupt GPIO (60) to D0 (0x58008d0e)
+    [I][MAIN] Running...
+    [I][MBOX] Mailbox IRQ Stats:
+    [I][MBOX] .Peripheral SDH (33): 0
+    [I][MBOX] .Peripheral GPIO (60): 0
+    [I][MBOX] Unhandled Interupts: 0 Unhandled Signals 0
+    ```
+
+    [(Source)](https://gist.github.com/lupyuen/52ccdf076ae294db26e837e6ffc4bafb)
+
+    Yep we have flashed the OpenBouffalo Firmware successfully!
+
+1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
+    + Serial Console TX is physical pin 32 / GPIO 16
+    + Serial Console RX is physical pin 31 / GPIO 17
+    + Remember to connect GND
+    + Baud 2,000,000 (2 Mbps)
+
+    Start the USB Serial Terminal (Serial Console).
+
+    Unplug and replug the Micro USB Port.
+
+    (Don't press the Boot Button!)
+
+    TODO: On the USB Serial Terminal (Serial Console) we should see...
 
 # Boot Linux on Ox64 BL808
 
