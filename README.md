@@ -90,15 +90,25 @@ Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multime
 
 Here are the steps, based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
+1.  We tested with [Pine64 Woodpecker CH340G USB Serial Adapter](https://pine64.com/product/serial-console-woodpecker-edition/) on macOS x64.
+
+    Warning: Some USB Serial Adapters [WON'T WORK!](https://wiki.pine64.org/wiki/Ox64#Compatible_UARTs_when_in_bootloader_mode)
+
+    Probably because we are connecting at 2 Mbps, which might be too fast for some USB Serial Adapters.
+
+    [(Like this CP2102, which shows garbled text at 2 Mbps)](https://www.lazada.sg/products/i2037772272-s11135131253.html)
+
 1.  Connect USB Serial Adapter to __Ox64 Serial Console__:
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
     + Baud 2000000
 
-    Power up via the Micro USB Port.
+    Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
     TODO: What do we see in USB Serial Terminal?
+
+    If the text appears garbled, try a different USB Serial Adapter. (See above)
 
 1.  Connect USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
@@ -106,16 +116,54 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     + Remember to connect GND
     + Baud 2000000
 
-    Power up via the Micro USB Port.
+    Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
-    TODO: What do we see in USB Serial Terminal?
+    We should see the Ox64 Factory Test Firmware in the USB Serial Terminal...
 
-1.  Set BL808 board to programming mode
+    ```text
+    Simple Malloc 5120
+    custom 0x0000
+    flash init 0
+    BLSP Boot2 start:Aug 25 2022,15:42:52
+    Build Version: 3aa71dc-dirty
+    Build Date: Sep 16 2022
+    Build Time: 14:40:13
+    [OS] Starting aos_loop_proc task...
+    [OS] Starting OS Scheduler...
+    [ERROR : bl_romfs.c: 129] romfs magic is NOT correct
+    Init CLI with event Driven
+    start aos loop... 
+    CLI RAW Data, c906
+    /romfs/c906.bin not found!
+    ```
+
+    [(Source)](https://gist.github.com/lupyuen/43676407bbced733e65566879e18732b)
+
+    If the text appears garbled, try a different USB Serial Adapter. (See above)
+
+    TODO: Verify this on shipped version of Ox64
+
+1.  Initial Check: Set BL808 board to programming mode
     + Press and Hold BOOT Button
     + Unplug and replug the Micro USB Port
     + Release BOOT button
 
-    TODO: What do we see in USB Serial Terminal?
+    We should see this in the USB Serial Terminal...
+
+    ```text
+    .
+    ```
+
+    Yep Ox64 is ready for flashing!
+
+1.  Now we prepare to flash:
+
+    Disconnect the USB Serial Terminal (to release the Flashing UART)
+
+    Set BL808 board to programming mode
+    + Press and Hold BOOT Button
+    + Unplug and replug the Micro USB Port
+    + Release BOOT button
 
 1.  We'll run BouffaloLab DevCube for Flashing BL808.
 
@@ -167,7 +215,7 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     + Remember to connect GND
     + Baud 2000000
 
-    Power up via the Micro USB Port.
+    Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
     TODO: What do we see in USB Serial Terminal?
 
