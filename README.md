@@ -90,18 +90,20 @@ Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multime
 
 Here are the steps, based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
-1.  Connect USB Serial Adapter to __Linux Serial Console__:
-    + Linux UART TX is physical pin 32 / GPIO 16
-    + Linux UART RX is physical pin 31 / GPIO 17
+1.  Connect USB Serial Adapter to __Ox64 Serial Console__:
+    + Serial Console TX is physical pin 32 / GPIO 16
+    + Serial Console RX is physical pin 31 / GPIO 17
+    + Remember to connect GND
     + Baud 2000000
 
     Power up via the Micro USB Port.
 
     TODO: What do we see in USB Serial Terminal?
 
-1.  Connect USB Serial Adapter to __Flashing UART Port__:
+1.  Connect USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
+    + Remember to connect GND
     + Baud 2000000
 
     Power up via the Micro USB Port.
@@ -110,7 +112,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 1.  Set BL808 board to programming mode
     + Press and Hold BOOT Button
-    + Unplug and replug Micro USB Port
+    + Unplug and replug the Micro USB Port
     + Release BOOT button
 
     TODO: What do we see in USB Serial Terminal?
@@ -151,16 +153,23 @@ Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're
 
 Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
-1.  Flash the sdcard-pine64-*.img.xz to your SD card.
+1.  Flash the sdcard-pine64-*.img.xz to your microSD card.
 
     You can use dd (after uncompressing) or [Balena Etcher](https://github.com/balena-io/etcher).
 
-1.  Serial Console access:
-    + UART TX is physical pin 32/GPIO 16.
-    + UART RX is physical pin 31/GPIO 17.
-    + Baud 2000000.
+1.  Insert the microSD Card into Ox64.
 
-TODO: Does it work?
+    Unplug and replug the Micro USB Port.
+
+1.  Connect USB Serial Adapter to __Ox64 Serial Console__:
+    + Serial Console TX is physical pin 32 / GPIO 16
+    + Serial Console RX is physical pin 31 / GPIO 17
+    + Remember to connect GND
+    + Baud 2000000
+
+    Power up via the Micro USB Port.
+
+    TODO: What do we see in USB Serial Terminal?
 
 # Inspect the Linux Image for Ox64 BL808
 
