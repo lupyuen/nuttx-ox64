@@ -165,6 +165,25 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     + Unplug and replug the Micro USB Port
     + Release BOOT button
 
+1.  We download the Ox64 Binaries...
+
+    - [bl808-linux-pine64_ox64_full_defconfig.tar.gz](https://github.com/openbouffalo/buildroot_bouffalo/releases/download/v1.0.1/bl808-linux-pine64_ox64_full_defconfig.tar.gz) 
+
+    From the latest Ox64 Linux Release...
+
+    - [openbouffalo/buildroot_bouffalo (Release v1.0.1)](https://github.com/openbouffalo/buildroot_bouffalo/releases/tag/v1.0.1)
+
+    Unzip the download and we should see this...
+
+    ```bash
+    → ls -l firmware
+       7340032  bl808-firmware.bin
+         31360  d0_lowload_bl808_d0.bin
+         65760  m0_lowload_bl808_m0.bin
+    1820364800  sdcard-pine64_ox64_full_defconfig.img
+      43859444  sdcard-pine64_ox64_full_defconfig.img.xz    
+    ```
+
 1.  We'll run BouffaloLab DevCube for Flashing BL808.
 
     Only Ubuntu x64, macOS and Windows are supported.
