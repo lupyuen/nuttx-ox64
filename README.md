@@ -231,7 +231,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 1.  Click 'Create & Download' and wait until it's done
 
-    [(See the log)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
+    TODO: Why does it fail for 1.8.3? It succeeds with 1.8.6
+
+    [(See the log for 1.8.6)](https://gist.github.com/lupyuen/e34bb0968fedf2ba6671a41cc421f51e)
+
+    [(See the log for 1.8.3)](https://gist.github.com/lupyuen/0fde950460cffed37c3c78ce79beca9c)
 
 1.  Switch to [IOT] page
 
