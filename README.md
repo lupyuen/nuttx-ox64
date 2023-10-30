@@ -354,7 +354,32 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     (Don't press the Boot Button!)
 
-Let's boot Linux...
+1.  On the USB Serial Terminal (Serial Console) we should see...
+
+    ```text
+    U-Boot 2023.04-rc2 (Mar 06 2023 - 11:48:40 +0000)
+    Card did not respond to voltage select! : -110
+    BOOTP broadcast
+    Retry time exceeded; starting again
+    ```
+
+    [(Source)](https://gist.github.com/lupyuen/0b1a98781e86ba11c5538eb1e3058718)
+
+    Which is OK because U-Boot Bootloader is waiting for a microSD Card. 
+
+1.  If nothing appears...
+
+    Check that we are using [Bouffalo Lab DevCube 1.8.3](https://openbouffalo.org/static-assets/bldevcube/BouffaloLabDevCube-v1.8.3.zip)
+
+    [(1.8.4 and later won't work)](https://github.com/openbouffalo/buildroot_bouffalo/issues/60)
+
+    In BL Dev Cube, UART Rate (for MCU and IoT) should be 230400.
+
+    Don't set to 2000000, it will fail on macOS!
+
+    [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
+
+Let's load Ox64 Linux into a microSD Card...
 
 # Boot Linux on Ox64 BL808
 
@@ -487,6 +512,19 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     Don't set to 2000000, it will fail on macOS!
 
     [(Same problem when flashing BL602)](https://lupyuen.github.io/articles/flash#flash-the-firmware)
+
+1.  If we see...
+
+    ```text
+    U-Boot 2023.04-rc2 (Mar 06 2023 - 11:48:40 +0000)
+    Card did not respond to voltage select! : -110
+    BOOTP broadcast
+    Retry time exceeded; starting again
+    ```
+
+    [(Source)](https://gist.github.com/lupyuen/0b1a98781e86ba11c5538eb1e3058718)
+
+    Check that the microSD Card is inserted correctly.
 
 Comment by [@gamelaster](https://x.com/gamelaster/status/1719073156281798755?s=20)...
 
