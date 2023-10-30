@@ -90,11 +90,36 @@ Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multime
 
 Here are the steps, based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
+1.  Connect USB Serial Adapter to __Linux Serial Console__:
+    + Linux UART TX is physical pin 32 / GPIO 16
+    + Linux UART RX is physical pin 31 / GPIO 17
+    + Baud 2000000
+
+    Power up via the Micro USB Port.
+
+    TODO: What do we see in USB Serial Terminal?
+
+1.  Connect USB Serial Adapter to __Flashing UART Port__:
+    + Flashing UART TX is physical pin 1 / GPIO 14
+    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Baud 2000000
+
+    Power up via the Micro USB Port.
+
+    TODO: What do we see in USB Serial Terminal?
+
+1.  Set BL808 board to programming mode
+    + Press and Hold BOOT Button
+    + Unplug and replug Micro USB Port
+    + Release BOOT button
+
+    TODO: What do we see in USB Serial Terminal?
+
 1.  We'll run BouffaloLab DevCube for Flashing BL808.
 
     Only Ubuntu x64, macOS and Windows are supported.
 
-    TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro?
+    TODO: How to flash BL808 on Arm64 SBCs and Pinebook Pro? See [bflb-iot-tool / bflb-mcu-tool](https://wiki.pine64.org/wiki/Ox64#Alternative:_Open-Source_Flashing)
 
 1.  Get DevCube **1.8.3** from...
 
@@ -104,17 +129,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     TODO: Does latest version work?
 
-1.  Connect BL808 board via serial port to your PC
-
-1.  Set BL808 board to programming mode
-    + Press BOOT button when reseting or applying power
-    + Release BOOT button
-
 1.  Run DevCube, select [BL808], and switch to [MCU] page
-
-1.  Select the uart port and set baudrate with 2000000
-    + UART TX is physical pin 1/GPIO 14.
-    + UART RX is physical pin 2/GPIO 15.
 
 1.  M0 Group[Group0] Image Addr [0x58000000] [PATH to m0_lowload_bl808_m0.bin]
 
