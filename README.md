@@ -113,6 +113,8 @@ When we power up Ox64 in __Normal Mode__: (Boot Button NOT pressed)
 
 - M0 Firmware is hardcoded for 2 Mbps
 
+- Not really fun to watch. But we use this for testing our 2 Mbps USB Serial Adapter.
+
 When we power up Ox64 in __Flashing Mode__: (Boot Button pressed)
 
 - Ox64 is ready for Firmware Flashing by BL DevCube
@@ -497,7 +499,9 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     ox64 login: 
     ```
 
-    [(Source)](https://gist.github.com/lupyuen/3035a70d52d2d1d529e96f5292f54210)
+    [(See the Complete Log)](https://gist.github.com/lupyuen/3035a70d52d2d1d529e96f5292f54210)
+
+    [(Watch the Video on YouTube)](https://youtu.be/UJ_7DyHnfDA)
 
     Yep Linux is running on Ox64 yay!
 
