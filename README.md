@@ -74,7 +74,7 @@ Here are the binaries loaded into D0 Multimedia Core and M0 Wireless Core, from 
 
 * __m0_lowload_bl808_m0.bin__: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
 
-* __bl808-firmware.bin__: A image containing OpenSBI, Uboot and uboot dtb files. 
+* __bl808-firmware.bin__: An image containing OpenSBI, Uboot and uboot dtb files. 
 
 * __sdcard-*.tar.xz__: A tarball containing the rootfs for the image to be flashed to the SD card
 
@@ -156,7 +156,7 @@ Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multime
 
 * __m0_lowload_bl808_m0.bin__: This firmware runs on M0 and forwards interupts to the D0 for several peripherals
 
-* __bl808-firmware.bin__: A image containing OpenSBI, Uboot and uboot dtb files. 
+* __bl808-firmware.bin__: An image containing OpenSBI, Uboot and uboot dtb files. 
 
 Here are the steps, based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
 
@@ -796,5 +796,5 @@ From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
 
 * m0_lowload_bl808_m0.bin - This firmware runs on M0 and forwards interupts to the D0 for several peripherals
 * d0_lowload_bl808_d0.bin - This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
-* bl808-firmware.bin - A image containing OpenSBI, Uboot and uboot dtb files. 
+* bl808-firmware.bin - An image containing OpenSBI, Uboot and uboot dtb files. 
 * sdcard-*.tar.xz - A tarball containing the rootfs for the image to be flashed to the SD card
