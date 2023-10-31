@@ -96,8 +96,8 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
 
 1.  __Ox64 Flashing UART__: Used for Flashing Ox64
 
-    + Flashing UART TX is physical pin 1 / GPIO 14
-    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Flashing UART TX is __GPIO 14__ (Physical Pin 1)
+    + Flashing UART RX is __GPIO 15__ (Physical Pin 2)
     + Remember to connect GND
     + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
     + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
@@ -105,8 +105,8 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
-    + Serial Console TX is physical pin 32 / GPIO 16
-    + Serial Console RX is physical pin 31 / GPIO 17
+    + Serial Console TX is __GPIO 16__ (Physical Pin 32)
+    + Serial Console RX is __GPIO 17__ (Physical Pin 31)
     + Remember to connect GND
     + Baud Rate: 2,000,000 (2 Mbps)
     + BL808 UART3 is controlled by the D0 Multimedia Core (Linux + OpenSBI + U-Boot)
@@ -115,6 +115,8 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
 NEITHER UART Port is accessible over USB-C or Micro USB. So yeah it's totally counterintuitive.
 
 (Maybe someone can create a Stackable HAT or Breadboard, that will expose the 2 UART Ports as USB Dongles? Or a UART Switcher?)
+
+[(__For Pre-Production Ox64:__ Physical Pins are different, but GPIOs above are correct)](https://lupyuen.github.io/images/ox64-sd.jpg)
 
 _Why 2 Baud Rates for Flashing UART?_
 
@@ -169,8 +171,8 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     ![Flashing UART](https://lupyuen.github.io/images/ox64-pinout2.jpg)
 
 1.  To Test our USB Serial Adapter: Connect the USB Serial Adapter to __Ox64 Flashing UART__ (pic above)...
-    + Flashing UART TX is physical pin 1 / GPIO 14
-    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Flashing UART TX is __GPIO 14__ (Physical Pin 1)
+    + Flashing UART RX is __GPIO 15__ (Physical Pin 2)
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
@@ -362,8 +364,8 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
     ![Serial Console](https://lupyuen.github.io/images/ox64-pinout3.jpg)
 
 1.  Connect our USB Serial Adapter to __Ox64 Serial Console__: (pic above)
-    + Serial Console TX is physical pin 32 / GPIO 16
-    + Serial Console RX is physical pin 31 / GPIO 17
+    + Serial Console TX is __GPIO 16__ (Physical Pin 32)
+    + Serial Console RX is __GPIO 17__ (Physical Pin 31)
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
@@ -429,8 +431,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     ![Flashing UART](https://lupyuen.github.io/images/ox64-pinout2.jpg)
 
 1.  Connect our USB Serial Adapter to __Ox64 Flashing UART__: (pic above)
-    + Flashing UART TX is physical pin 1 / GPIO 14
-    + Flashing UART RX is physical pin 2 / GPIO 15
+    + Flashing UART TX is __GPIO 14__ (Physical Pin 1)
+    + Flashing UART RX is __GPIO 15__ (Physical Pin 2)
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
@@ -458,8 +460,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
     ![Serial Console](https://lupyuen.github.io/images/ox64-pinout3.jpg)
 
 1.  Connect our USB Serial Adapter to __Ox64 Serial Console__: (pic above)
-    + Serial Console TX is physical pin 32 / GPIO 16
-    + Serial Console RX is physical pin 31 / GPIO 17
+    + Serial Console TX is __GPIO 16__ (Physical Pin 32)
+    + Serial Console RX is __GPIO 17__ (Physical Pin 31)
     + Remember to connect GND
     + Baud 2,000,000 (2 Mbps)
 
