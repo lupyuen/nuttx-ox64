@@ -541,6 +541,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     Check that the microSD Card is inserted correctly.
 
+1.  TODO: TFTP Boot over Ethernet
+
 Comment by [@gamelaster](https://x.com/gamelaster/status/1719073156281798755?s=20)...
 
 > "This is not hardware specific, but flasher specific. With blisp, I was able to get faster flashing working, but this is Apple's quirk. Or maybe not? Because FreeBSD need same quirks and exact buffer sizes as Apple."
