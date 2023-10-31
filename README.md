@@ -109,7 +109,7 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
 
 NEITHER UART Port is accessible over USB-C or Micro USB. So yeah it's totally counterintuitive.
 
-(Maybe someone can create a Stackable HAT or Breadboard, that will expose the 2 UART Ports as USB Dongles?)
+(Maybe someone can create a Stackable HAT or Breadboard, that will expose the 2 UART Ports as USB Dongles? Or a UART Switcher?)
 
 _Why 2 Baud Rates for Flashing UART?_
 
