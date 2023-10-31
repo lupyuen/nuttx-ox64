@@ -30,9 +30,11 @@ Technically Ox64 BL808 boots 64-bit RISC-V Linux (via MicroSD), so it feels like
 
 - [OpenBouffalo Wiki](https://openbouffalo.org/index.php/Main_Page)
 
-- [Linux Image + OpenSBI + U-Boot for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
+- [Linux Image + OpenSBI + U-Boot Bootloader for BL808](https://github.com/openbouffalo/buildroot_bouffalo)
 
   [(Newer version?)](https://github.com/bouffalolab/buildroot_bouffalo)
+
+  [(OpenSBI is the BIOS for RISC-V SBCs)](https://lupyuen.github.io/articles/sbi)
 
 - USB-C Port for Camera Module (Dual-Lane MIPI CSI)
 
@@ -95,7 +97,7 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Remember to connect GND
     + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
     + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
-    + Controlled by the M0 Wireless Core (OpenBouffalo Firmware)
+    + UART0 controlled by the M0 Wireless Core (OpenBouffalo Firmware)
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
@@ -103,9 +105,11 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
     + Baud Rate: 2,000,000 (2 Mbps)
-    + Controlled by the D0 Multimedia Core (Linux)
+    + UART3 controlled by the D0 Multimedia Core (Linux + OpenSBI + U-Boot)
 
 NEITHER UART Port is accessible over USB-C or Micro USB. So yeah it's totally counterintuitive.
+
+(Maybe someone can create a Stackable HAT or Breadboard, that will expose the 2 UART Ports as USB Dongles?)
 
 _Why 2 Baud Rates for Flashing UART?_
 
