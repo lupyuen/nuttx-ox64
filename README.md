@@ -56,6 +56,8 @@ But Ox64 BL808 also feels like an MCU Board...
 
   (Micro USB is not for Flashing either!)
 
+- Super Affordable: [$8 for a 64-bit RISC-V Board!](https://pine64.com/product/128mb-ox64-sbc-available-on-december-2-2022/)
+
 _Ox64 BL808 sounds a little tiny for 64-bit Linux?_
 
 Yeah 64-bit Linux runs with Limited RAM on the D0 Multimedia Core. But most Peripherals are hosted on the M0 Wireless Core: WiFi, BLE, BT, Zigbee, Audio, ...
