@@ -1,3 +1,5 @@
+![Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)](https://lupyuen.github.io/images/ox64-sbc.jpg)
+
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)
 
 _What's this BL808?_ [(Datasheet)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf) [(Reference Manual)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
@@ -394,6 +396,8 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 Let's load Ox64 Linux into a microSD Card...
 
+![Ox64 Linux in a microSD Card](https://lupyuen.github.io/images/ox64-sd.jpg)
+
 # Boot Linux on Ox64 BL808
 
 Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're ready to boot Linux on microSD!
@@ -416,7 +420,7 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     You can use [Balena Etcher](https://github.com/balena-io/etcher), GNOME Disks or `dd`.
 
-1.  Insert the microSD Card into Ox64.
+1.  Insert the microSD Card into Ox64. (Pic above)
 
 1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
     + Flashing UART TX is physical pin 1 / GPIO 14
@@ -514,7 +518,7 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     [(Watch the Video on YouTube)](https://youtu.be/UJ_7DyHnfDA)
 
-    Yep Linux is running on Ox64 yay!
+    Yep Linux is running on Ox64 yay! (Pic below)
 
 1.  If nothing appears...
 
@@ -539,7 +543,7 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     [(Source)](https://gist.github.com/lupyuen/0b1a98781e86ba11c5538eb1e3058718)
 
-    Check that the microSD Card is inserted correctly.
+    Check that the microSD Card is inserted correctly. (Pic above)
 
 1.  TODO: TFTP Boot over Ethernet
 
@@ -551,6 +555,8 @@ Comment by [@madushan1000](https://x.com/madushan1000/status/1719069431580524720
 
 > "You can also use u-boot. https://github.com/openbouffalo/u-boot/releases/tag/bl808-2023-02-19 
 You can also get rid of mailbox, but you will have to build the kernel yourself https://github.com/openbouffalo/linux/tree/bl808/all"
+
+![Boot Linux on Ox64 BL808](https://lupyuen.github.io/images/ox64-title.jpg)
 
 # Inspect the Linux Image for Ox64 BL808
 
