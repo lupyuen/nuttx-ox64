@@ -568,6 +568,48 @@ Comment by [@madushan1000](https://x.com/madushan1000/status/1719069431580524720
 > "You can also use u-boot. https://github.com/openbouffalo/u-boot/releases/tag/bl808-2023-02-19 
 You can also get rid of mailbox, but you will have to build the kernel yourself https://github.com/openbouffalo/linux/tree/bl808/all"
 
+# Forward Peripheral Interrupts
+
+TODO
+
+```text
+[I][MAIN] Starting Mailbox Handlers
+[I][MBOX] Forwarding Interupt SDH (33) to D0 (0x58008bbc)
+[I][MBOX] Forwarding Interupt GPIO (60) to D0 (0x58008d0e)
+[I][MAIN] Running...
+[I][MBOX] Mailbox IRQ Stats:
+[I][MBOX] .Peripheral SDH (33): 0
+[I][MBOX] .Peripheral GPIO (60): 0
+[I][MBOX] Unhandled Interupts: 0 Unhandled Signals 0
+```
+
+[(Source)](https://gist.github.com/lupyuen/52ccdf076ae294db26e837e6ffc4bafb)
+
+SDH: SD Card (SDIO) Host Controller (BL808 RM Page 561)
+
+IRQ 60: GPIO_INT0 (IRQ_NUM_BASE+44) GPIO Interrupt (BL808 RM Page 44)
+
+[GPIO_INT0_IRQn](https://github.com/bouffalolab/bl808_linux/blob/main/bl_mcu_sdk_bl808/drivers/bl808_driver/regs/bl808.h#L123)
+
+[SDH is IRQ 33: SDH_IRQn](https://github.com/bouffalolab/bl808_linux/blob/main/bl_mcu_sdk_bl808/drivers/bl808_driver/regs/bl808.h#L96)
+
+IRQ_NUM_BASE is 16 (BL808 RM Page 45)
+
+[m0_lowload](https://github.com/openbouffalo/OBLFR/tree/master/apps/m0_lowload)
+
+[d0_lowload](https://github.com/openbouffalo/OBLFR/tree/master/apps/d0_lowload)
+
+[Forward GPIO Interrupt](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L127-L135)
+
+[Forward SDH Interrupt](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L95-L103)
+
+[Setup SDH Interrupt](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L238C1-L257)
+
+Other Interrupts (unused)
+- [UART2](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L103-L111)
+- [USB](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L111-L119)
+- [EMAC](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L119-L127)
+
 # Inspect the Linux Image for Ox64 BL808
 
 _Will Apache NuttX RTOS boot on Ox64 BL808?_
