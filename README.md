@@ -95,7 +95,7 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Remember to connect GND
     + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
     + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
-    + Controlled by the M0 Wireless Core
+    + Controlled by the M0 Wireless Core (OpenBouffalo Firmware)
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
@@ -105,11 +105,13 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Baud Rate: 2,000,000 (2 Mbps)
     + Controlled by the D0 Multimedia Core (Linux)
 
+NEITHER UART Port is accessible over USB-C or Micro USB. So yeah it's totally counterintuitive.
+
 _Why 2 Baud Rates for Flashing UART?_
 
 When we power up Ox64 in __Normal Mode__: (Boot Button NOT pressed)
 
-- Flashing UART outputs the Firmware running on M0 Wireless Core
+- Flashing UART Port will show us the OpenBouffalo Firmware running on M0 Wireless Core
 
 - This M0 Firmware will forward Peripheral Interrupts to D0 Multimedia Core
 
@@ -119,7 +121,7 @@ When we power up Ox64 in __Normal Mode__: (Boot Button NOT pressed)
 
 When we power up Ox64 in __Flashing Mode__: (Boot Button pressed)
 
-- Ox64 is ready for Firmware Flashing by BL DevCube
+- Ox64 is ready for Firmware Flashing by the BL DevCube GUI Tool
 
 - Firmware Flashing supports various Baud Rates: 230.4 kbps, 2 Mbps, ...
 
@@ -130,6 +132,8 @@ When we power up Ox64 in __Flashing Mode__: (Boot Button pressed)
 _Serial Console is always 2 Mbps?_
 
 Yeah 2 Mbps is hardcoded in Ox64 Linux. Switching to other Baud Rates will show garbled text.
+
+Thus our USB Serial Adapter must connect reliably to Ox64 at 2 Mbps.
 
 Now we flash Ox64 and boot Linux...
 
