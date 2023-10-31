@@ -178,7 +178,11 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     Power up Ox64 via the Micro USB Port. Ox64 Green LED should light up.
 
-    In the USB Serial Terminal (Flashing UART), we should see the Ox64 Factory Test Firmware...
+    This Clickety Micro USB Cable is very handy for rebooting Ox64...
+
+    ![Clickety Micro USB Cable](https://lupyuen.github.io/images/ox64usb.jpg)
+
+1.  In the USB Serial Terminal (Flashing UART), we should see the Ox64 Factory Test Firmware...
 
     ```text
     Build:19:50:39,Nov 20 2022
