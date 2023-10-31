@@ -88,7 +88,7 @@ Let's explore...
 
 _We need to handle TWO UART Ports on Ox64?_
 
-Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distinctive names...
+Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distinctive names [(like Migi & Dali)](https://en.wikipedia.org/wiki/Migi_%26_Dali)...
 
 1.  __Ox64 Flashing UART__: Used for Flashing Ox64
 
@@ -97,7 +97,7 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Remember to connect GND
     + Baud Rate for Normal Mode: 2,000,000 (2 Mbps)
     + Baud Rate for Flashing Mode: 230,400 (230.4 kbps)
-    + UART0 controlled by the M0 Wireless Core (OpenBouffalo Firmware)
+    + BL808 UART0 is controlled by the M0 Wireless Core (OpenBouffalo Firmware)
 
 1.  __Ox64 Serial Console__: Used for Linux Serial Console (plus OpenSBI and U-Boot Bootloader)
 
@@ -105,7 +105,8 @@ Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distincti
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
     + Baud Rate: 2,000,000 (2 Mbps)
-    + UART3 controlled by the D0 Multimedia Core (Linux + OpenSBI + U-Boot)
+    + BL808 UART3 is controlled by the D0 Multimedia Core (Linux + OpenSBI + U-Boot)
+    + Output is totally blank if OpenBouffalo Firmware [wasn't flashed correctly](https://github.com/openbouffalo/buildroot_bouffalo/issues/60), or if OpenSBI / U-Boot / Linux couldn't boot
 
 NEITHER UART Port is accessible over USB-C or Micro USB. So yeah it's totally counterintuitive.
 
