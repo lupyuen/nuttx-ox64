@@ -166,7 +166,9 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(Like this CP2102, which shows garbled text at 2 Mbps)](https://www.lazada.sg/products/i2037772272-s11135131253.html)
 
-1.  To Test our USB Serial Adapter: Connect the USB Serial Adapter to __Ox64 Flashing UART__...
+    ![Flashing UART](https://lupyuen.github.io/images/ox64-pinout2.jpg)
+
+1.  To Test our USB Serial Adapter: Connect the USB Serial Adapter to __Ox64 Flashing UART__ (pic above)...
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
     + Remember to connect GND
@@ -309,13 +311,7 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     [(See the log)](https://gist.github.com/lupyuen/e8c0aca0ebd0f1eae034b0996a5b3ec3)
 
-1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
-    + Flashing UART TX is physical pin 1 / GPIO 14
-    + Flashing UART RX is physical pin 2 / GPIO 15
-    + Remember to connect GND
-    + Baud 2,000,000 (2 Mbps)
-
-    Start the USB Serial Terminal (Flashing UART).
+1.  Start the USB Serial Terminal (Flashing UART at 2 Mbps).
 
     Unplug and replug the Micro USB Port.
 
@@ -359,7 +355,9 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
     Yep we have flashed the OpenBouffalo Firmware successfully!
 
-1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
+    ![Serial Console](https://lupyuen.github.io/images/ox64-pinout3.jpg)
+
+1.  Connect our USB Serial Adapter to __Ox64 Serial Console__: (pic above)
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
@@ -424,7 +422,9 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
 1.  Insert the microSD Card into Ox64. (Pic above)
 
-1.  Connect a USB Serial Adapter to __Ox64 Flashing UART__:
+    ![Flashing UART](https://lupyuen.github.io/images/ox64-pinout2.jpg)
+
+1.  Connect our USB Serial Adapter to __Ox64 Flashing UART__: (pic above)
     + Flashing UART TX is physical pin 1 / GPIO 14
     + Flashing UART RX is physical pin 2 / GPIO 15
     + Remember to connect GND
@@ -451,7 +451,9 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
     [(Source)](https://gist.github.com/lupyuen/52ccdf076ae294db26e837e6ffc4bafb)
 
-1.  Connect a USB Serial Adapter to __Ox64 Serial Console__:
+    ![Serial Console](https://lupyuen.github.io/images/ox64-pinout3.jpg)
+
+1.  Connect our USB Serial Adapter to __Ox64 Serial Console__: (pic above)
     + Serial Console TX is physical pin 32 / GPIO 16
     + Serial Console RX is physical pin 31 / GPIO 17
     + Remember to connect GND
@@ -549,6 +551,8 @@ Based on the [Official Flashing Instructions](https://github.com/openbouffalo/bu
 
 1.  TODO: TFTP Boot over Ethernet
 
+![Boot Linux on Ox64 BL808](https://lupyuen.github.io/images/ox64-title.jpg)
+
 Comment by [@gamelaster](https://x.com/gamelaster/status/1719073156281798755?s=20)...
 
 > "This is not hardware specific, but flasher specific. With blisp, I was able to get faster flashing working, but this is Apple's quirk. Or maybe not? Because FreeBSD need same quirks and exact buffer sizes as Apple."
@@ -557,8 +561,6 @@ Comment by [@madushan1000](https://x.com/madushan1000/status/1719069431580524720
 
 > "You can also use u-boot. https://github.com/openbouffalo/u-boot/releases/tag/bl808-2023-02-19 
 You can also get rid of mailbox, but you will have to build the kernel yourself https://github.com/openbouffalo/linux/tree/bl808/all"
-
-![Boot Linux on Ox64 BL808](https://lupyuen.github.io/images/ox64-title.jpg)
 
 # Inspect the Linux Image for Ox64 BL808
 
