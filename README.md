@@ -88,6 +88,8 @@ Let's explore...
 
 # Flashing UART vs Serial Console
 
+![Flashing UART vs Serial Console](https://lupyuen.github.io/images/ox64-pinout.jpg)
+
 _We need to handle TWO UART Ports on Ox64?_
 
 Yeah don't confuse the 2 UART Ports on Ox64! Let's give the UART Ports distinctive names [(like Migi & Dali)](https://en.wikipedia.org/wiki/Migi_%26_Dali)...
@@ -396,9 +398,9 @@ Here are the steps, based on the [Official Flashing Instructions](https://github
 
 Let's load Ox64 Linux into a microSD Card...
 
-![Ox64 Linux in a microSD Card](https://lupyuen.github.io/images/ox64-sd.jpg)
-
 # Boot Linux on Ox64 BL808
+
+![Ox64 Linux in a microSD Card](https://lupyuen.github.io/images/ox64-sd.jpg)
 
 Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're ready to boot Linux on microSD!
 
