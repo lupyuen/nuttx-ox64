@@ -2,6 +2,10 @@
 
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+
 _What's this BL808?_ [(Datasheet)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf) [(Reference Manual)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
 
 BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
@@ -88,6 +92,10 @@ Let's explore...
 
 # Flashing UART vs Serial Console
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+
 ![Flashing UART vs Serial Console](https://lupyuen.github.io/images/ox64-pinout.jpg)
 
 _We need to handle TWO UART Ports on Ox64?_
@@ -149,6 +157,10 @@ Thus our USB Serial Adapter must connect reliably to Ox64 at 2 Mbps.
 Now we flash Ox64 and boot Linux...
 
 # Flash OpenSBI and U-Boot Bootloader to Ox64 BL808
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
 Before booting Linux on Ox64, we flash OpenSBI + U-Boot Bootloader to D0 Multimedia Core, and the Peripheral Interrupt Firmware to M0 Wireless Core. From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
 
@@ -406,6 +418,10 @@ Let's load Ox64 Linux into a microSD Card...
 
 ![Ox64 Linux in a microSD Card](https://lupyuen.github.io/images/ox64-sd.jpg)
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+
 Now that D0 Multimedia Core is flashed with OpenSBI and U-Boot Bootloader, we're ready to boot Linux on microSD!
 
 Based on the [Official Flashing Instructions](https://github.com/openbouffalo/buildroot_bouffalo#flashing-instructions)...
@@ -570,6 +586,10 @@ You can also get rid of mailbox, but you will have to build the kernel yourself 
 
 # Forward Peripheral Interrupts
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+
 TODO
 
 ```text
@@ -611,6 +631,10 @@ Other Interrupts (unused)
 - [EMAC](https://github.com/openbouffalo/OBLFR/blob/master/components/mailbox/src/oblfr_mailbox.c#L119-L127)
 
 # Inspect the Linux Image for Ox64 BL808
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
 _Will Apache NuttX RTOS boot on Ox64 BL808?_
 
@@ -751,6 +775,10 @@ Thus we simply reuse the code from NuttX Star64!
 
 # Linux Device Tree for Ox64 BL808
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+
 TODO: Dump the Device Tree
 
 ```text
@@ -803,6 +831,8 @@ mailbox@30005000 {
 TODO: Print Debug Logs with OpenSBI
 
 # Documentation for Ox64 BL808
+
+- ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
 - ["Booting Linux on the Pine64 Ox64 SBC"](https://adventurist.me/posts/00317)
 
