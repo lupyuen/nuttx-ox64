@@ -1,6 +1,6 @@
-![Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)](https://lupyuen.github.io/images/ox64-sbc.jpg)
+![Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-sbc.jpg)
 
-# Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (BouffaloLab BL808)
+# Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)
 
 Read the article...
 
