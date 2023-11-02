@@ -24,6 +24,8 @@ BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
 
     (Low Power Core)
 
+    [(Upcoming BL606 looks similar, minus the Low Power Core)](https://en.bouffalolab.com/product/?type=detail&id=16)
+
 ![Bouffalo Lab BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores](https://lupyuen.github.io/images/ox64-cores.jpg)
 
 [Pine64 Ox64](https://wiki.pine64.org/wiki/Ox64) is the dev board for BL808C.
