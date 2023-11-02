@@ -24,6 +24,8 @@ BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
 
     (Low Power Core)
 
+![Bouffalo Lab BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores](https://lupyuen.github.io/images/ox64-cores.jpg)
+
 [Pine64 Ox64](https://wiki.pine64.org/wiki/Ox64) is the dev board for BL808C.
 
 (BL808C supports MIPI CSI Cameras but not MIPI DSI Displays. Maybe someday we'll see BL808D for MIPI DSI Displays)
