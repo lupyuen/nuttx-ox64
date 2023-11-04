@@ -941,7 +941,9 @@ Starting kernel ...
 
 [(Source)](https://gist.github.com/lupyuen/1f895c9d57cb4e7294522ce27fea70fb)
 
-TODO
+TODO: What is the Linux Boot Address for Ox64 BL808?
+
+TODO: Update the Boot Address in NuttX
 
 # Documentation for Ox64 BL808
 
