@@ -882,6 +882,65 @@ Let's print to the Ox64 Serial Console in the NuttX Boot Code (in RISC-V Assembl
 
 # Print to Ox64 Serial Console in NuttX Boot Code
 
+_How to print to the Ox64 Serial Console in the NuttX Boot Code? (RISC-V Assembly)_
+
+When we compare the BL808 and BL602 Reference Manuals, we discover that BL808 UART works the same way as BL602.
+
+This is how the BL602 UART Driver prints to the Serial Console: [bl602_serial.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl602/bl602_serial.c#L704-L725)
+
+```c
+#define BL602_UART_FIFO_WDATA_OFFSET 0x000088  /* uart_fifo_wdata */
+#define BL602_UART_FIFO_WDATA(n) (BL602_UART_BASE(n) + BL602_UART_FIFO_WDATA_OFFSET)
+
+static void bl602_send(struct uart_dev_s *dev, int ch) {
+  ...
+  // Wait for FIFO to be empty
+  while ((getreg32(BL602_UART_FIFO_CONFIG_1(uart_idx)) & \
+         UART_FIFO_CONFIG_1_TX_CNT_MASK) == 0);
+  // Write output to FIFO
+  putreg32(ch, BL602_UART_FIFO_WDATA(uart_idx));
+}
+```
+
+So for BL808, we simply write the character to...
+
+- UART3 Base Address: 0x30002000 (from the Linux Device Tree earlier)
+
+- Offset: 0x88
+
+[Based on Star64](https://lupyuen.github.io/articles/nuttx2#print-to-qemu-console), we code this in RISC-V Assembly...
+
+```text
+/* Load UART3 Base Address to Register t0 */
+li  t0, 0x30002000
+
+/* Load `1` to Register t1 */
+li  t1, 0x31
+/* Store byte from Register t1 to UART3 Base Address, Offset 0x88 */
+sb  t1, 0x88(t0)
+
+/* Load `2` to Register t1 */
+li  t1, 0x32
+/* Store byte from Register t1 to UART3 Base Address, Offset 0x88 */
+sb  t1, 0x88(t0)
+
+/* Load `3` to Register t1 */
+li  t1, 0x33
+/* Store byte from Register t1 to UART3 Base Address, Offset 0x88 */
+sb  t1, 0x88(t0)
+```
+
+We insert the above code into the NuttX Boot Code: [jh7110_head.S](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L69-L87)
+
+Now NuttX prints to the Serial Console yay!
+
+```text
+Starting kernel ...
+123
+```
+
+[(Source)](https://gist.github.com/lupyuen/1f895c9d57cb4e7294522ce27fea70fb)
+
 TODO
 
 # Documentation for Ox64 BL808
