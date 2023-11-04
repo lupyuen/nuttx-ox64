@@ -836,15 +836,49 @@ TODO: Print Debug Logs with OpenSBI
 
 # Boot Apache NuttX RTOS on Ox64 BL808
 
-TODO
+_What happens if we boot Star64 NuttX on Ox64 BL808?_
+
+Let's find out!
 
 ```bash
+## Download and build NuttX for Star64
 git clone --branch ox64 https://github.com/lupyuen2/wip-pinephone-nuttx nuttx
 git clone --branch ox64 https://github.com/lupyuen2/wip-pinephone-nuttx-apps apps
 cd nuttx
 tools/configure.sh star64:nsh
 make
+
+## Export the Binary Image to nuttx.bin
+riscv64-unknown-elf-objcopy \
+  -O binary \
+  nuttx \
+  nuttx.bin
+
+## Copy to microSD
+cp nuttx.bin Image
+cp Image "/Volumes/NO NAME"
+diskutil unmountDisk /dev/disk2
 ```
+
+We boot Nuttx on Ox64 via microSD... But Ox64 shows absolutely nothing!
+
+```text
+Retrieving file: /extlinux/../Image
+append: root=PARTLABEL=rootfs rootwait rw rootfstype=ext4 console=ttyS0,2000000 loglevel=8 earlycon=sbi
+Retrieving file: /extlinux/../bl808-pine64-ox64.dtb
+## Flattened Device Tree blob at 51ff8000
+   Booting using the fdt blob at 0x51ff8000
+Working FDT set to 51ff8000
+   Loading Device Tree to 0000000053f22000, end 0000000053f25fab ... OK
+Working FDT set to 53f22000
+Starting kernel ...
+```
+
+[(Source)](https://gist.github.com/lupyuen/8134f17502db733ce87d6fa8b00eab55)
+
+Let's print to the Serial Console in the NuttX Boot Code (in RISC-V Assembly)
+
+TODO
 
 # Documentation for Ox64 BL808
 
