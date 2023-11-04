@@ -896,7 +896,7 @@ static void bl602_send(struct uart_dev_s *dev, int ch) {
   ...
   // Wait for FIFO to be empty
   while ((getreg32(BL602_UART_FIFO_CONFIG_1(uart_idx)) & \
-         UART_FIFO_CONFIG_1_TX_CNT_MASK) == 0);
+    UART_FIFO_CONFIG_1_TX_CNT_MASK) == 0);
   // Write output to FIFO
   putreg32(ch, BL602_UART_FIFO_WDATA(uart_idx));
 }
@@ -908,7 +908,7 @@ So for BL808, we simply write the character to...
 
 - Offset: 0x88
 
-[Based on Star64](https://lupyuen.github.io/articles/nuttx2#print-to-qemu-console), we code this in RISC-V Assembly...
+[Based on Star64 Debug Code](https://lupyuen.github.io/articles/nuttx2#print-to-qemu-console), we code this in RISC-V Assembly...
 
 ```text
 /* Load UART3 Base Address to Register t0 */
