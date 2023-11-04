@@ -932,7 +932,7 @@ sb  t1, 0x88(t0)
 
 We insert the above code into the NuttX Boot Code: [jh7110_head.S](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L69-L87)
 
-Now NuttX prints to the Serial Console yay!
+Now NuttX prints to the Serial Console yay! (Pic below)
 
 ```text
 Starting kernel ...
@@ -944,6 +944,8 @@ Starting kernel ...
 TODO: What is the Linux Boot Address for Ox64 BL808?
 
 TODO: Update the Boot Address in NuttX
+
+![Booting Apache NuttX RTOS on Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-nuttx.png)
 
 # Documentation for Ox64 BL808
 
@@ -978,10 +980,3 @@ TODO: Update the Boot Address in NuttX
 - [BL808 LP Core: T-Head E902 150MHz 32-bit RISC-V CPU](https://www.t-head.cn/product/e902?lang=en)
 
   (Low Power Core)
-
-From [buildroot_bouffalo](https://github.com/openbouffalo/buildroot_bouffalo):
-
-* m0_lowload_bl808_m0.bin - This firmware runs on M0 and forwards interupts to the D0 for several peripherals
-* d0_lowload_bl808_d0.bin - This is a very basic bootloader that loads opensbi, the kernel and dts files into ram
-* bl808-firmware.bin - An image containing OpenSBI, Uboot and uboot dtb files. 
-* sdcard-*.tar.xz - A tarball containing the rootfs for the image to be flashed to the SD card
