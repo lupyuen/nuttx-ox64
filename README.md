@@ -834,6 +834,18 @@ mailbox@30005000 {
 
 TODO: Print Debug Logs with OpenSBI
 
+# Boot Apache NuttX RTOS on Ox64 BL808
+
+TODO
+
+```bash
+git clone --branch ox64 https://github.com/lupyuen2/wip-pinephone-nuttx nuttx
+git clone --branch ox64 https://github.com/lupyuen2/wip-pinephone-nuttx-apps apps
+cd nuttx
+tools/configure.sh star64:nsh
+make
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
