@@ -854,7 +854,10 @@ riscv64-unknown-elf-objcopy \
   nuttx \
   nuttx.bin
 
-## Copy to microSD
+## TODO: Prepare the microSD for Ox64 Linux
+## https://lupyuen.github.io/articles/ox64#boot-linux-on-ox64
+
+## Copy and overwrite the `Image` file on the microSD for Ox64 Linux
 cp nuttx.bin Image
 cp Image "/Volumes/NO NAME"
 diskutil unmountDisk /dev/disk2
