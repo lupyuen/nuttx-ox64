@@ -944,6 +944,17 @@ Starting kernel ...
 
 [(Source)](https://gist.github.com/lupyuen/1f895c9d57cb4e7294522ce27fea70fb)
 
+OpenSBI boots on Ox64 with Hart ID 0 (instead of 1), so we remove this code...
+
+```text
+ /* We assume that OpenSBI has passed Hart ID (value 1) in Register a0.
+   * But NuttX expects Hart ID to start at 0, so we subtract 1.
+   */
+  /* Previously: addi a0, a0, -1 */
+```
+
+[(Source)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L89-L93)
+
 TODO: What is the Linux Boot Address for Ox64 BL808? From the [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)...
 
 ```bash
