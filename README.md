@@ -955,6 +955,8 @@ OpenSBI boots on Ox64 with Hart ID 0 (instead of 1), so we remove this code...
 
 [(Source)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L89-L93)
 
+![Booting Apache NuttX RTOS on Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-nuttx.png)
+
 # Update the NuttX Boot Address for Ox64 BL808
 
 _What is the Linux Boot Address for Ox64 BL808?_
@@ -977,7 +979,7 @@ MEMORY
 }
 ```
 
-Which adds up to 64 MB, the total RAM Size on Ox64.
+TODO: Use up to 64 MB, the total RAM Size on Ox64
 
 We make the same changes to the NuttX Config: [nsh/defconfig](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/boards/risc-v/jh7110/star64/configs/nsh/defconfig)
 
@@ -997,7 +999,7 @@ And the Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinep
 #define MMU_IO_SIZE     (0x50000000)
 ```
 
-TODO: What is the RAM Disk Address? It's missing from [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)
+TODO: What's the RAM Disk Address? It's missing from [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)
 
 ```c
 /* Ramdisk Load Address from U-Boot */
@@ -1017,11 +1019,88 @@ Starting kernel ...
 
 Let's fix the NuttX UART Driver...
 
-TODO: Fix the NuttX UART Driver
+# Fix the NuttX UART Driver for Ox64 BL808
 
-[Our very first Stack Dump yay!](https://gist.github.com/lupyuen/36b8c47abc2632063ca5cdebb958e3e8)
+_NuttX on Ox64 has been awfully quiet. How to fix the UART Driver so that NuttX can print things?_
 
-![Booting Apache NuttX RTOS on Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-nuttx.png)
+Ox64 is still running on the JH7110 UART Driver (16550). Let's make a quick patch so that we will see something on the Ox64 Serial Console...
+
+We hardcode the UART3 Base Address (from above) and FIFO Offset for now: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1698-L1716)
+
+```c
+// Write one character to the UART (polled)
+static void u16550_putc(FAR struct u16550_s *priv, int ch) {
+
+  // Hardcode the UART3 Base Address and FIFO Offset
+  *(volatile uint8_t *) 0x30002088 = ch; ////
+
+  // Previously:
+  // while ((u16550_serialin(priv, UART_LSR_OFFSET) & UART_LSR_THRE) == 0);
+  // u16550_serialout(priv, UART_THR_OFFSET, (uart_datawidth_t)ch);
+}
+```
+
+(Yeah the UART Buffer might overflow, we'll fix later)
+
+We skip the reading and writing of other UART Registers, because we'll patch them later: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L604-L632
+
+```c
+// Read UART Register
+static inline uart_datawidth_t u16550_serialin(FAR struct u16550_s *priv, int offset) {
+  return 0; ////
+  // Commented out the rest
+}
+
+// Write UART Register
+static inline void u16550_serialout(FAR struct u16550_s *priv, int offset, uart_datawidth_t value) {
+  // Commented out the rest
+}
+```
+
+And we won't wait for UART Ready, since we're not accessing the Line Control Register: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L633-L670
+
+```c
+// Wait until UART is not busy. This is needed before writing to Line Control Register.
+// Otherwise we will get spurious interrupts on Synopsys DesignWare 8250.
+static int u16550_wait(FAR struct u16550_s *priv) {
+  // Nopez! No waiting for now
+  return OK; ////
+}
+```
+
+Now NuttX prints our very first Stack Dump on Ox64 yay!
+
+```text
+Starting kernel ...
+123
+ABC
+riscv_exception: EXCEPTION: Load access fault. MCAUSE: 0000000000000005, EPC: 0000000050208086, MTVAL: 000000000c002104
+riscv_exception: PANIC!!! Exception = 0000000000000005
+_assert: Current Version: NuttX  12.0.3 93a92a7-dirty Nov  5 2023 11:27:46 risc-v
+_assert: Assertion failed panic: at file: common/riscv_exception.c:85 task: Idle_Task process: Kernel 0x50200e28
+up_dump_register: EPC: 0000000050208086
+up_dump_register: A0: 000000000c002104 A1: ffffffffffffffff A2: 0000000000000001 A3: 0000000000000003
+up_dump_register: A4: ffffffffffffffff A5: 8000000200046000 A6: 0000000000000000 A7: fffffffffffffff8
+up_dump_register: T0: 00000000502000a8 T1: 0000000000000007 T2: 656d616e2d64746d T3: 0000000050407b10
+up_dump_register: T4: 0000000050407b08 T5: 0000000053f23fff T6: 0000000053f33870
+up_dump_register: S0: 0000000000000000 S1: 0000000050400140 S2: 0000000000000001 S3: 8000000200046002
+up_dump_register: S4: 0000000050400070 S5: 00000000000001b6 S6: 0000000000000000 S7: 0000000000000000
+up_dump_register: S8: 0000000053f7a15c S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
+up_dump_register: SP: 0000000050407a00 FP: 0000000000000000 TP: 0000000000000000 RA: 0000000050204064
+```
+
+[(Source)](https://gist.github.com/lupyuen/36b8c47abc2632063ca5cdebb958e3e8)
+
+Let's look up the RISC-V Exception Address 0xc002104 in our RISC-V Disassembly...
+
+```text
+EXCEPTION: Load access fault 
+MCAUSE: 0000000000000005 
+EPC: 0000000050208086 
+MTVAL: 000000000c002104
+```
+
+TODO
 
 # Documentation for Ox64 BL808
 
