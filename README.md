@@ -955,13 +955,50 @@ OpenSBI boots on Ox64 with Hart ID 0 (instead of 1), so we remove this code...
 
 [(Source)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L89-L93)
 
-TODO: What is the Linux Boot Address for Ox64 BL808? From the [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)...
+# Update the NuttX Boot Address for Ox64 BL808
+
+_What is the Linux Boot Address for Ox64 BL808?_
+
+From the [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)...
 
 ```bash
 kernel_addr_r=0x50200000
 ```
 
-TODO: Update the Boot Address in NuttX
+Let's update the Boot Address in NuttX: [ld.script](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/boards/risc-v/jh7110/star64/scripts/ld.script#L20-L27)
+
+```text
+MEMORY
+{
+  kflash (rx) : ORIGIN = 0x50200000, LENGTH = 2048K   /* w/ cache */
+  ksram (rwx) : ORIGIN = 0x50400000, LENGTH = 2048K   /* w/ cache */
+  pgram (rwx) : ORIGIN = 0x50600000, LENGTH = 4096K   /* w/ cache */
+  ramdisk (rwx) : ORIGIN = 0x50A00000, LENGTH = 6M   /* w/ cache */
+}
+```
+
+Which adds up to 64 MB, the total RAM Size on Ox64.
+
+We make the same changes to the NuttX Config: [nsh/defconfig](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/boards/risc-v/jh7110/star64/configs/nsh/defconfig)
+
+```text
+CONFIG_RAM_START=0x50200000
+CONFIG_RAM_SIZE=1048576
+CONFIG_ARCH_PGPOOL_PBASE=0x50600000
+CONFIG_ARCH_PGPOOL_VBASE=0x50600000
+CONFIG_ARCH_PGPOOL_SIZE=4194304
+```
+
+NuttX shows the same output as earlier, no change...
+
+```text
+Starting kernel ...
+123
+```
+
+[(Source)](https://gist.github.com/lupyuen/1f895c9d57cb4e7294522ce27fea70fb)
+
+TODO: Fix the NuttX UART Driver
 
 ![Booting Apache NuttX RTOS on Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-nuttx.png)
 
