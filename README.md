@@ -1042,7 +1042,7 @@ static void u16550_putc(FAR struct u16550_s *priv, int ch) {
 
 (Yeah the UART Buffer might overflow, we'll fix later)
 
-We skip the reading and writing of other UART Registers, because we'll patch them later: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L604-L632
+We skip the reading and writing of other UART Registers, because we'll patch them later: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L604-L632)
 
 ```c
 // Read UART Register
@@ -1057,7 +1057,7 @@ static inline void u16550_serialout(FAR struct u16550_s *priv, int offset, uart_
 }
 ```
 
-And we won't wait for UART Ready, since we're not accessing the Line Control Register: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L633-L670
+And we won't wait for UART Ready, since we're not accessing the Line Control Register: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L633-L670)
 
 ```c
 // Wait until UART is not busy. This is needed before writing to Line Control Register.
