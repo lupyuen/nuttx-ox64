@@ -989,6 +989,23 @@ CONFIG_ARCH_PGPOOL_VBASE=0x50600000
 CONFIG_ARCH_PGPOOL_SIZE=4194304
 ```
 
+And the Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
+
+```c
+/* Map the whole I/O memory with vaddr = paddr mappings */
+#define MMU_IO_BASE     (0x00000000)
+#define MMU_IO_SIZE     (0x50000000)
+```
+
+TODO: What is the RAM Disk Address? It's missing from [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)
+
+```c
+/* Ramdisk Load Address from U-Boot */
+#define RAMDISK_ADDR_R  (0x46100000)
+```
+
+[(Source)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L43-L45)
+
 NuttX shows the same output as earlier, no change...
 
 ```text
@@ -998,7 +1015,11 @@ Starting kernel ...
 
 [(Source)](https://gist.github.com/lupyuen/1f895c9d57cb4e7294522ce27fea70fb)
 
+Let's fix the NuttX UART Driver...
+
 TODO: Fix the NuttX UART Driver
+
+[Our very first Stack Dump yay!](https://gist.github.com/lupyuen/36b8c47abc2632063ca5cdebb958e3e8)
 
 ![Booting Apache NuttX RTOS on Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/ox64-nuttx.png)
 
