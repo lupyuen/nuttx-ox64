@@ -1100,7 +1100,9 @@ EPC:    0000000050208086
 MTVAL:  000000000c002104
 ```
 
-And the offending Data Address 0xc002104.
+And the offending Data Address 0xc002104. (Which looks very familiar!)
+
+![NuttX prints our very first Stack Dump on Ox64 yay!](https://lupyuen.github.io/images/ox64-stack.png)
 
 TODO
 
