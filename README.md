@@ -1091,7 +1091,7 @@ up_dump_register: SP: 0000000050407a00 FP: 0000000000000000 TP: 0000000000000000
 
 [(Source)](https://gist.github.com/lupyuen/36b8c47abc2632063ca5cdebb958e3e8)
 
-Let's look up the RISC-V Exception Address 0x50208086 in our RISC-V Disassembly...
+Let's look up the RISC-V Exception Code Address 0x50208086 in our RISC-V Disassembly...
 
 ```text
 EXCEPTION: Load access fault 
@@ -1099,6 +1099,8 @@ MCAUSE: 0000000000000005
 EPC:    0000000050208086 
 MTVAL:  000000000c002104
 ```
+
+And the offending Data Address 0xc002104.
 
 TODO
 
