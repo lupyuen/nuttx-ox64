@@ -991,7 +991,7 @@ CONFIG_ARCH_PGPOOL_VBASE=0x50600000
 CONFIG_ARCH_PGPOOL_SIZE=4194304
 ```
 
-And the Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
+And the Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ba093f2477f011ec7c5351eaba0a3002add02d6b/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
 
 ```c
 /* Map the whole I/O memory with vaddr = paddr mappings */
@@ -1396,6 +1396,43 @@ up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000
 ```
 
 Data Address is 0xe0002100. Our BL808 PLIC!
+
+Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ba093f2477f011ec7c5351eaba0a3002add02d6b/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
+
+```c
+/* Map the whole I/O memory with vaddr = paddr mappings */
+#define MMU_IO_BASE     (0x00000000)
+#define MMU_IO_SIZE     (0xf0000000)
+```
+
+https://gist.github.com/lupyuen/ade5ff1433812fb675ff06f805f7339f
+
+```text
+up_irqinitialize: c
+up_irqinitialize: d
+up_irqinitialize: e
+up_irqinitialize: g
+irq_attach: irq=17, isr=0x50207eee
+up_enable_irq: irq=17
+uart_register: Registering /dev/console
+uart_register: Registering /dev/ttyS0
+irq_attach: irq=57, isr=0x502041fe
+up_enable_irq: irq=57
+riscv_dispatch_irq: irq=5
+riscv_exception: EXCEPTION: Load access fault. MCAUSE: 0000000000000005, EPC: 0000000050208342, MTVAL: 00000000e0002104
+riscv_exception: PANIC!!! Exception = 0000000000000005
+_assert: Current Version: NuttX  12.0.3 89bfb73-dirty Nov  6 2023 17:20:16 risc-v
+_assert: Assertion failed panic: at file: common/riscv_exception.c:85 task: Idle_Task process: Kernel 0x50200e50
+up_dump_register: EPC: 0000000050208342
+up_dump_register: A0: 00000000e0002104 A1: ffffffffffffffff A2: 0000000000000001 A3: 000000000000000a
+up_dump_register: A4: ffffffffffffffff A5: 8000000200046000 A6: 0000000000000009 A7: fffffffffffffff8
+up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 000000000000006c
+up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
+up_dump_register: S0: 0000000000000000 S1: 0000000050400140 S2: 0000000000000001 S3: 8000000200046002
+up_dump_register: S4: 0000000050400070 S5: 00000000000001b6 S6: 0000000000000000 S7: 0000000000000000
+up_dump_register: S8: 0000000053f7a15c S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
+up_dump_register: SP: 0000000050407a00 FP: 0000000000000000 TP: 0000000000000000 RA: 00000000502041d0
+```
 
 TODO
 
