@@ -2,7 +2,9 @@
 
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)
 
-Read the article...
+Read the articles...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 -   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
@@ -836,6 +838,10 @@ TODO: Print Debug Logs with OpenSBI
 
 # Boot Apache NuttX RTOS on Ox64 BL808
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
+
 _What happens if we boot Star64 NuttX on Ox64 BL808?_
 
 Let's find out!
@@ -884,6 +890,10 @@ We're hoping that NuttX could crash and OpenSBI could print a meaningful Stack T
 Let's print to the Ox64 Serial Console in the NuttX Boot Code (in RISC-V Assembly)...
 
 # Print to Ox64 Serial Console in NuttX Boot Code
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 _How to print to the Ox64 Serial Console in the NuttX Boot Code? (RISC-V Assembly)_
 
@@ -959,6 +969,10 @@ OpenSBI boots on Ox64 with Hart ID 0 (instead of 1), so we remove this code...
 
 # Update the NuttX Boot Address for Ox64 BL808
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
+
 _What is the Linux Boot Address for Ox64 BL808?_
 
 From the [U-Boot Settings](https://gist.github.com/lupyuen/30df5a965fabf719cc52bf733e945db7)...
@@ -1020,6 +1034,10 @@ Starting kernel ...
 Let's fix the NuttX UART Driver...
 
 # Fix the NuttX UART Driver for Ox64 BL808
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 _NuttX on Ox64 has been awfully quiet. How to fix the UART Driver so that NuttX can print things?_
 
@@ -1105,6 +1123,10 @@ And the offending Data Address 0xc002104. (Which looks very familiar!)
 ![NuttX prints our very first Stack Dump on Ox64 yay!](https://lupyuen.github.io/images/ox64-stack.png)
 
 # Platform-Level Interrupt Controller for Ox64 BL808
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 _Why did NuttX crash with this RISC-V Exception?_
 
@@ -1215,6 +1237,10 @@ So we change the PLIC Base Address for Ox64: [jh7110_memorymap.h](https://github
 TODO: Enable Scheduler Debug
 
 # Handle RISC-V Exceptions in NuttX
+
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 Now NuttX crashes at a different place, with IRQ 15...
 
@@ -1337,6 +1363,10 @@ The offending Data Address is 0xe0002100. Which is our BL808 PLIC!
 
 # Add PLIC to I/O Memory Map
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
+
 _But is 0xe0002100 accessible?_
 
 Ah we forgot to add it to the I/O Memory Map! Let's fix it: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/b244f85065ecc749599842088f35f1b190466429/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
@@ -1392,6 +1422,10 @@ static int u16550_attach(struct uart_dev_s *dev) {
 
 # Fail to Load Initial RAM Disk
 
+Read the article...
+
+-   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
+
 Now NuttX boots even further yay! But crashes in the NuttX Bringup...
 
 ```text
@@ -1443,6 +1477,8 @@ TODO
 - [BL808 Datasheet](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf)
 
 - [BL808 Reference Manual](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
+
+- [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
 
 - [BL808 D0 Core: T-Head C906 480MHz 64-bit RISC-V CPU](https://www.t-head.cn/product/c906?lang=en)
 
