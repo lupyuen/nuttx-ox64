@@ -1242,6 +1242,8 @@ From [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.ali
 
 > "Exception Vector ID 15: A store/atomic instruction page error exception."
 
+https://www.reddit.com/r/RISCV/comments/zqp5f7/store_access_fault_when_executing_amo/
+
 TODO: What is IRQ 15?
 
 TODO: Why is the IRQ 15 unexpected?
