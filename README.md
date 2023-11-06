@@ -1397,7 +1397,7 @@ up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000
 
 Data Address is 0xe0002100. Our BL808 PLIC!
 
-Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ba093f2477f011ec7c5351eaba0a3002add02d6b/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
+Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/b244f85065ecc749599842088f35f1b190466429/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
 
 ```c
 /* Map the whole I/O memory with vaddr = paddr mappings */
