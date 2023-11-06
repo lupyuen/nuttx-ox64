@@ -1214,6 +1214,8 @@ So we change the PLIC Base Address for Ox64: [jh7110_memorymap.h](https://github
 
 TODO: Enable Scheduler Debug
 
+# Handle RISC-V Exceptions in NuttX
+
 Now NuttX crashes at a different place, with IRQ 15...
 
 ```text
@@ -1333,9 +1335,11 @@ Code Address is 0x50207e6a, from our PLIC Code...
 
 The offending Data Address is 0xe0002100. Which is our BL808 PLIC!
 
-TODO
+# Add PLIC to I/O Memory Map
 
-Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/b244f85065ecc749599842088f35f1b190466429/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
+_But is 0xe0002100 accessible?_
+
+Ah we forgot to add it to the I/O Memory Map! Let's fix it: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/b244f85065ecc749599842088f35f1b190466429/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
 
 ```c
 /* Map the whole I/O memory with vaddr = paddr mappings */
@@ -1343,7 +1347,9 @@ Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nut
 #define MMU_IO_SIZE     (0xf0000000)
 ```
 
-Now NuttX boots further, and tries to register IRQ 57 for the Star64 UART Interrupt...
+(Doesn't look right, but we'll fix later)
+
+Now NuttX boots further! And tries to register IRQ 57 for the Star64 UART Interrupt...
 
 ```text
 up_irqinitialize: c
@@ -1366,42 +1372,27 @@ MTVAL:  00000000e0002104
 
 [(Source)](https://gist.github.com/lupyuen/ade5ff1433812fb675ff06f805f7339f)
 
-Disable UART Interrupt
+But it crashes while accessing the PLIC at another address: 0xe0002104.
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L902-L958
+_Are we tired of PLIC yet?_
+
+Yeah let's fix PLIC later. The entire UART Driver will be revamped anyway, including the UART Interrupt.
+
+Let's disable the UART Interrupt for now: [uart_16550.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L902-L958)
 
 ```c
-static int u16550_attach(struct uart_dev_s *dev)
-{
-  //// TODO: FAR struct u16550_s *priv = (FAR struct u16550_s *)dev->priv;
-  int ret;
+// Attach the UART Interrupt for Star64
+static int u16550_attach(struct uart_dev_s *dev) {
+  // Don't attach the interrupt
+  // Previously: ret = irq_attach(priv->irq, u16550_interrupt, dev);
 
-#ifdef CONFIG_CLK
-  /* Clk enable */
-
-  priv->mclk = clk_get(priv->clk_name);
-  if (priv->mclk)
-    {
-      clk_set_rate(priv->mclk, priv->uartclk);
-      clk_enable(priv->mclk);
-    }
-#endif
-
-  /* Attach and enable the IRQ */
-
-  ret = 0;//// TODO
-  //// TODO: ret = irq_attach(priv->irq, u16550_interrupt, dev);
-#ifndef CONFIG_ARCH_NOINTC
-  if (ret == OK)
-    {
-      /* Enable the interrupt (RX and TX interrupts are still disabled
-       * in the UART
-       */
-
-      //// TODO: up_enable_irq(priv->irq);
+  // Don't enable the interrupt
+  // Previously: up_enable_irq(priv->irq);
 ```
 
-https://gist.github.com/lupyuen/ab640bcb3ba3a19834bcaa29e43baddf
+# Fail to Load Initial RAM Disk
+
+Now NuttX boots even further yay! But crashes in the NuttX Bringup...
 
 ```text
 up_irqinitialize: c
@@ -1415,18 +1406,11 @@ uart_register: Registering /dev/ttyS0
 work_start_lowpri: Starting low-priority kernel worker thread(s)
 _assert: Current Version: NuttX  12.0.3 b244f85-dirty Nov  6 2023 17:35:34 risc-v
 _assert: Assertion failed ret >= 0: at file: init/nx_bringup.c:283 task: AppBringUp process: Kernel 0x5020107e
-up_dump_register: EPC: 000000005020f698
-up_dump_register: A0: 0000000050401d50 A1: 000000000000011b A2: 0000000050219b30 A3: 000000000000007e
-up_dump_register: A4: 0000000050409950 A5: 0000000000000001 A6: 0000000050407d18 A7: fffffffffffffff8
-up_dump_register: T0: 000000000000002e T1: 0000000000000007 T2: 00000000000001ff T3: 000000005040c6dc
-up_dump_register: T4: 000000005040c6d0 T5: 0000000000000009 T6: 000000000000002a
-up_dump_register: S0: 0000000000000000 S1: 0000000050409950 S2: 0000000000000000 S3: 0000000000000000
-up_dump_register: S4: 0000000050219b30 S5: 0000000050219b40 S6: 0000000200042022 S7: 0000000050401f90
-up_dump_register: S8: 000000000000011b S9: 0000000000000000 S10: 0000000000000000 S11: 0000000000000000
-up_dump_register: SP: 000000005040c660 FP: 0000000000000000 TP: 0000000000000000 RA: 000000005020f698
 ```
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L276-L284
+[(Source)](https://gist.github.com/lupyuen/ab640bcb3ba3a19834bcaa29e43baddf)
+
+Because it couldn't map the Initial RAM Disk: [nx_bringup.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L276-L284)
 
 ```c
 /* Mount the file system containing the init program. */
@@ -1435,6 +1419,8 @@ ret = nx_mount(CONFIG_INIT_MOUNT_SOURCE, CONFIG_INIT_MOUNT_TARGET,
   CONFIG_INIT_MOUNT_DATA);
 DEBUGASSERT(ret >= 0);
 ```
+
+That's because we haven't loaded the Initial RAM Disk! Let's fix this later.
 
 TODO
 
