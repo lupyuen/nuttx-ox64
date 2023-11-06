@@ -1387,6 +1387,16 @@ up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000
 
 [(Source)](https://gist.github.com/lupyuen/85db0510712ba8c660e10f922d4564c9)
 
+```text
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/jh7110_irq.c:62
+  putreg32(0x0, JH7110_PLIC_ENABLE1);
+    50207e64:	700017b7          	lui	a5,0x70001
+    50207e68:	0786                	slli	a5,a5,0x1
+    50207e6a:	1007a023          	sw	zero,256(a5) # 70001100 <__ramdisk_end+0x1e601100>
+```
+
+Data Address is 0xe0002100. Our BL808 PLIC!
+
 TODO
 
 # Documentation for Ox64 BL808
