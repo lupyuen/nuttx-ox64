@@ -1252,6 +1252,70 @@ TODO: Who triggers the unexpected IRQ?
 
 Enable Scheduler Debug
 
+```text
+123ABCnx_start: Entry
+up_irqinitialize: a
+up_irqinitialize: b
+up_irqinitialize: c
+riscv_dispatch_irq: irq=15
+irq_unexpected_isr: ERROR irq: 15
+_assert: Current Version: NuttX  12.0.3 910bfca-dirty Nov  6 2023 15:23:11 risc-v
+_assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_Task process: Kernel 0x50200e50
+```
+
+[(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
+
+Crashes before setting PLIC!
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
+
+```c
+/****************************************************************************
+ * Name: up_irqinitialize
+ ****************************************************************************/
+
+void up_irqinitialize(void)
+{
+  _info("a\n");////
+  /* Disable S-Mode interrupts */
+
+  _info("b\n");////
+  up_irq_save();
+
+  /* Disable all global interrupts */
+
+  _info("c\n");////
+  putreg32(0x0, JH7110_PLIC_ENABLE1);
+  putreg32(0x0, JH7110_PLIC_ENABLE2);
+
+  /* Colorize the interrupt stack for debug purposes */
+
+#if defined(CONFIG_STACK_COLORATION) && CONFIG_ARCH_INTERRUPTSTACK > 15
+  size_t intstack_size = (CONFIG_ARCH_INTERRUPTSTACK & ~15);
+  riscv_stack_color(g_intstackalloc, intstack_size);
+#endif
+
+  /* Set priority for all global interrupts to 1 (lowest) */
+
+  _info("d\n");////
+  int id;
+
+  for (id = 1; id <= NR_IRQS; id++)
+    {
+      putreg32(1, (uintptr_t)(JH7110_PLIC_PRIORITY + 4 * id));
+    }
+
+  /* Set irq threshold to 0 (permits all global interrupts) */
+
+  _info("e\n");////
+  putreg32(0, JH7110_PLIC_THRESHOLD);
+
+  /* Attach the common interrupt handler */
+
+  _info("f\n");////
+  riscv_exception_attach();
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
