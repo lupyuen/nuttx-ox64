@@ -1233,7 +1233,9 @@ up_dump_register: SP: 0000000050400900 FP: 0000000000000000 TP: 0000000000000000
 
 [(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
 
-TODO: Why?
+TODO: Why is the IRQ unexpected?
+
+TODO: Who triggers the unexpected IRQ?
 
 # Documentation for Ox64 BL808
 
