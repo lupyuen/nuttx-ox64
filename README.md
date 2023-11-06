@@ -1106,7 +1106,18 @@ And the offending Data Address 0xc002104. (Which looks very familiar!)
 
 # Platform-Level Interrupt Controller for Ox64 BL808
 
-TODO
+_Why did NuttX crash with this RISC-V Exception?_
+
+```text
+EXCEPTION: Load access fault 
+MCAUSE: 0000000000000005 
+EPC:    0000000050208086 
+MTVAL:  000000000c002104
+```
+
+NuttX crashed when it tried to access invalid Data Address 0xc002104 from Code Address 0x50208086.
+
+We look up Code Address 0x50208086 in our NuttX Disassembly...
 
 ```text
 000000005020807a <modifyreg32>:
@@ -1131,19 +1142,11 @@ modifyreg32():
     50208086:	2701                	sext.w	a4,a4
 ```
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_modifyreg32.c#L38-L57
+Which comes from here: [riscv_modifyreg32.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_modifyreg32.c#L38-L57)
 
 ```c
-/****************************************************************************
- * Name: modifyreg32
- *
- * Description:
- *   Atomically modify the specified bits in a memory mapped register
- *
- ****************************************************************************/
-
-void modifyreg32(uintptr_t addr, uint32_t clearbits, uint32_t setbits)
-{
+ // Atomically modify the specified bits in a memory mapped register
+void modifyreg32(uintptr_t addr, uint32_t clearbits, uint32_t setbits) {
   irqstate_t flags;
   uint32_t   regval;
 
@@ -1157,7 +1160,11 @@ void modifyreg32(uintptr_t addr, uint32_t clearbits, uint32_t setbits)
 }
 ```
 
-TODO
+It's trying to modify a Memory-Mapped Register, and crashed.
+
+_But what Memory-Mapped Register?_
+
+The offending Data Address 0xc002104 actually comes from Star64 PLIC! (Platform-Level Interrupt Controller)
 
 ```c
 // From https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/hardware/jh7110_memorymap.h#L30
@@ -1178,7 +1185,11 @@ TODO
 #define JH7110_PLIC_CLAIM     (JH7110_PLIC_BASE + 0x202004)
 ```
 
-https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L129-L138
+The PLIC Base Address is different for BL808, let's change it.
+
+_What's the PLIC Base Address in Ox64 BL808?_
+
+PLIC Base Address is 0xe0000000, according to the Linux Device Tree: [bl808-pine64-ox64.dts](https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L129-L138)
 
 ```text
 interrupt-controller@e0000000 {
@@ -1193,7 +1204,36 @@ interrupt-controller@e0000000 {
 };
 ```
 
-[XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
+TODO: Why isn't this documented in [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)?
+
+So we change the PLIC Base Address for Ox64: [jh7110_memorymap.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/hardware/jh7110_memorymap.h#L30)
+
+```c
+#define JH7110_PLIC_BASE    0xe0000000
+```
+
+Now NuttX crashes at a different place...
+
+```text
+Starting kernel ...
+123ABC
+irq_unexpected_isr: ERROR irq: 15
+_assert: Current Version: NuttX  12.0.3 2c32676-dirty Nov  6 2023 08:36:26 risc-v
+_assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_Task process: Kernel 0x50200e2c
+up_dump_register: EPC: 000000005020f422
+up_dump_register: A0: 0000000050401d50 A1: 0000000000000036 A2: 0000000050219058 A3: 0000000000000000
+up_dump_register: A4: 0000000050400b08 A5: 0000000050407980 A6: 0000000000000009 A7: fffffffffffffff8
+up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 000000000000006c
+up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
+up_dump_register: S0: 0000000000000000 S1: 0000000050400b08 S2: 0000000050401fa4 S3: 0000000000000000
+up_dump_register: S4: 0000000050219058 S5: 0000000050219060 S6: 8000000200046100 S7: 0000000050401f90
+up_dump_register: S8: 0000000000000036 S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
+up_dump_register: SP: 0000000050400900 FP: 0000000000000000 TP: 0000000000000000 RA: 000000005020f422
+```
+
+[(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
+
+TODO: Why?
 
 # Documentation for Ox64 BL808
 
