@@ -1248,6 +1248,8 @@ TODO: Why is the IRQ 15 unexpected?
 
 TODO: Who triggers the unexpected IRQ?
 
+Enable Scheduler Debug
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
