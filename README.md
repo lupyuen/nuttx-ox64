@@ -1104,7 +1104,96 @@ And the offending Data Address 0xc002104. (Which looks very familiar!)
 
 ![NuttX prints our very first Stack Dump on Ox64 yay!](https://lupyuen.github.io/images/ox64-stack.png)
 
+# Platform-Level Interrupt Controller for Ox64 BL808
+
 TODO
+
+```text
+000000005020807a <modifyreg32>:
+up_irq_save():
+/Users/Luppy/ox64/nuttx/include/arch/irq.h:689
+    5020807a:	4789                	li	a5,2
+    5020807c:	1007b7f3          	csrrc	a5,sstatus,a5
+modifyreg32():
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
+{
+  irqstate_t flags;
+  uint32_t   regval;
+
+  flags   = spin_lock_irqsave(NULL);
+  regval  = getreg32(addr);
+    50208080:	4118                	lw	a4,0(a0)
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:53
+  regval &= ~clearbits;
+    50208082:	fff5c593          	not	a1,a1
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
+  regval  = getreg32(addr);
+    50208086:	2701                	sext.w	a4,a4
+```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_modifyreg32.c#L38-L57
+
+```c
+/****************************************************************************
+ * Name: modifyreg32
+ *
+ * Description:
+ *   Atomically modify the specified bits in a memory mapped register
+ *
+ ****************************************************************************/
+
+void modifyreg32(uintptr_t addr, uint32_t clearbits, uint32_t setbits)
+{
+  irqstate_t flags;
+  uint32_t   regval;
+
+  flags   = spin_lock_irqsave(NULL);
+  // Crashes here because `addr` is invalid...
+  regval  = getreg32(addr);
+  regval &= ~clearbits;
+  regval |= setbits;
+  putreg32(regval, addr);
+  spin_unlock_irqrestore(NULL, flags);
+}
+```
+
+TODO
+
+```c
+// From https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/hardware/jh7110_memorymap.h#L30
+#define JH7110_PLIC_BASE    0x0c000000
+
+// From https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/hardware/jh7110_plic.h#L34-L49
+/* Interrupt Priority */
+#define JH7110_PLIC_PRIORITY  (JH7110_PLIC_BASE + 0x000000)
+
+/* Hart 1 S-Mode Interrupt Enable */
+#define JH7110_PLIC_ENABLE1   (JH7110_PLIC_BASE + 0x002100)
+#define JH7110_PLIC_ENABLE2   (JH7110_PLIC_BASE + 0x002104)
+
+/* Hart 1 S-Mode Priority Threshold */
+#define JH7110_PLIC_THRESHOLD (JH7110_PLIC_BASE + 0x202000)
+
+/* Hart 1 S-Mode Claim / Complete */
+#define JH7110_PLIC_CLAIM     (JH7110_PLIC_BASE + 0x202004)
+```
+
+https://github.com/lupyuen/nuttx-ox64/blob/main/bl808-pine64-ox64.dts#L129-L138
+
+```text
+interrupt-controller@e0000000 {
+  compatible = "thead,c900-plic";
+  reg = <0xe0000000 0x4000000>;
+  interrupts-extended = <0x06 0xffffffff 0x06 0x09>;
+  interrupt-controller;
+  #address-cells = <0x00>;
+  #interrupt-cells = <0x02>;
+  riscv,ndev = <0x40>;
+  phandle = <0x01>;
+};
+```
+
+[XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
 
 # Documentation for Ox64 BL808
 
