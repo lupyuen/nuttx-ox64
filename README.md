@@ -1267,7 +1267,7 @@ _assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_
 
 Crashes before setting PLIC!
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
 
 ```c
 /****************************************************************************
@@ -1315,6 +1315,10 @@ void up_irqinitialize(void)
   _info("f\n");////
   riscv_exception_attach();
 ```
+
+Let's attach the Common Interrupt Handlers earlier.
+
+TODO
 
 # Documentation for Ox64 BL808
 
