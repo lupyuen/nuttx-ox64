@@ -1234,7 +1234,17 @@ up_dump_register: SP: 0000000050400900 FP: 0000000000000000 TP: 0000000000000000
 
 [(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
 
-TODO: Why is the IRQ unexpected?
+From BL808 Reference Manual:
+
+> "interrupt number 015 is RISC-V reserved interrupt"
+
+From [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf) (Page 21):
+
+> "Exception Vector ID 15: A store/atomic instruction page error exception."
+
+TODO: What is IRQ 15?
+
+TODO: Why is the IRQ 15 unexpected?
 
 TODO: Who triggers the unexpected IRQ?
 
