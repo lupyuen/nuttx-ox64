@@ -1212,48 +1212,13 @@ So we change the PLIC Base Address for Ox64: [jh7110_memorymap.h](https://github
 #define JH7110_PLIC_BASE    0xe0000000
 ```
 
-Now NuttX crashes at a different place...
+TODO: Enable Scheduler Debug
+
+Now NuttX crashes at a different place, with IRQ 15...
 
 ```text
-Starting kernel ...
 123ABC
-riscv_dispatch_irq: irq=15
-irq_unexpected_isr: ERROR irq: 15
-_assert: Current Version: NuttX  12.0.3 2c32676-dirty Nov  6 2023 08:36:26 risc-v
-_assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_Task process: Kernel 0x50200e2c
-up_dump_register: EPC: 000000005020f422
-up_dump_register: A0: 0000000050401d50 A1: 0000000000000036 A2: 0000000050219058 A3: 0000000000000000
-up_dump_register: A4: 0000000050400b08 A5: 0000000050407980 A6: 0000000000000009 A7: fffffffffffffff8
-up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 000000000000006c
-up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
-up_dump_register: S0: 0000000000000000 S1: 0000000050400b08 S2: 0000000050401fa4 S3: 0000000000000000
-up_dump_register: S4: 0000000050219058 S5: 0000000050219060 S6: 8000000200046100 S7: 0000000050401f90
-up_dump_register: S8: 0000000000000036 S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
-up_dump_register: SP: 0000000050400900 FP: 0000000000000000 TP: 0000000000000000 RA: 000000005020f422
-```
-
-[(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
-
-From BL808 Reference Manual:
-
-> "interrupt number 015 is RISC-V reserved interrupt"
-
-From [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf) (Page 21):
-
-> "Exception Vector ID 15: A store/atomic instruction page error exception."
-
-https://www.reddit.com/r/RISCV/comments/zqp5f7/store_access_fault_when_executing_amo/
-
-TODO: What is IRQ 15?
-
-TODO: Why is the IRQ 15 unexpected?
-
-TODO: Who triggers the unexpected IRQ?
-
-Enable Scheduler Debug
-
-```text
-123ABCnx_start: Entry
+nx_start: Entry
 up_irqinitialize: a
 up_irqinitialize: b
 up_irqinitialize: c
@@ -1265,127 +1230,98 @@ _assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_
 
 [(Source)](https://gist.github.com/lupyuen/11b8d4221a150f10afa3aa5ab5e50a4c)
 
-Crashes before setting PLIC!
+_What's IRQ 15?_
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
+From [XuanTie OpenC906 User Manual](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf) (Page 21):
 
-```c
-// Init the IRQs
-void up_irqinitialize(void) {
-  _info("a\n");////
-  /* Disable S-Mode interrupts */
+> "Exception Vector ID 15: A store/atomic instruction page error exception."
 
-  _info("b\n");////
-  up_irq_save();
+This RISC-V Exception says that we tried to write to an invalid Data Address. And failed.
 
-  /* Disable all global interrupts */
+_Where did it crash?_
 
-  _info("c\n");////
-  putreg32(0x0, JH7110_PLIC_ENABLE1);
-  putreg32(0x0, JH7110_PLIC_ENABLE2);
+Based on our log, NuttX crashes before setting the PLIC!
 
-  /* Colorize the interrupt stack for debug purposes */
-
-#if defined(CONFIG_STACK_COLORATION) && CONFIG_ARCH_INTERRUPTSTACK > 15
-  size_t intstack_size = (CONFIG_ARCH_INTERRUPTSTACK & ~15);
-  riscv_stack_color(g_intstackalloc, intstack_size);
-#endif
-
-  /* Set priority for all global interrupts to 1 (lowest) */
-
-  _info("d\n");////
-  int id;
-
-  for (id = 1; id <= NR_IRQS; id++)
-    {
-      putreg32(1, (uintptr_t)(JH7110_PLIC_PRIORITY + 4 * id));
-    }
-
-  /* Set irq threshold to 0 (permits all global interrupts) */
-
-  _info("e\n");////
-  putreg32(0, JH7110_PLIC_THRESHOLD);
-
-  /* Attach the common interrupt handler */
-
-  _info("f\n");////
-  riscv_exception_attach();
-```
-
-Let's attach the Common Interrupt Handlers earlier...
-
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
+From [jh7110_irq.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85)
 
 ```c
 // Init the IRQs
 void up_irqinitialize(void) {
   _info("a\n");////
-  /* Disable S-Mode interrupts */
 
+  /* Disable S-Mode interrupts */
   _info("b\n");////
   up_irq_save();
 
-  /* Attach the common interrupt handler */
-
-  _info("f\n");////
-  riscv_exception_attach();
-
   /* Disable all global interrupts */
-
   _info("c\n");////
+  // Crashes here!
   putreg32(0x0, JH7110_PLIC_ENABLE1);
   putreg32(0x0, JH7110_PLIC_ENABLE2);
 
   /* Colorize the interrupt stack for debug purposes */
-
-#if defined(CONFIG_STACK_COLORATION) && CONFIG_ARCH_INTERRUPTSTACK > 15
-  size_t intstack_size = (CONFIG_ARCH_INTERRUPTSTACK & ~15);
-  riscv_stack_color(g_intstackalloc, intstack_size);
-#endif
-
-  /* Set priority for all global interrupts to 1 (lowest) */
-
-  _info("d\n");////
-  int id;
-
-  for (id = 1; id <= NR_IRQS; id++)
-    {
-      putreg32(1, (uintptr_t)(JH7110_PLIC_PRIORITY + 4 * id));
-    }
+  ...
 
   /* Set irq threshold to 0 (permits all global interrupts) */
-
   _info("e\n");////
   putreg32(0, JH7110_PLIC_THRESHOLD);
+
+  /* Attach the common interrupt handler */
+  _info("f\n");////
+  riscv_exception_attach();
 ```
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142
+_But it's a RISC-V Exception! Shouldn't NuttX dump this as a proper exception?_
+
+See the `riscv_exception_attach()` above? It happens AFTER the crash! This means NuttX hasn't properly initialised the Exception Handlers, when the crash happened.
+
+Let's init the Exception Handlers earlier: [jh7110_irq.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85)
+
+```c
+// Init the IRQs
+void up_irqinitialize(void) {
+  _info("a\n");////
+
+  /* Disable S-Mode interrupts */
+  _info("b\n");////
+  up_irq_save();
+
+  /* Attach the common interrupt handler */
+  _info("f\n");////
+  // Init the Exception Handlers here
+  riscv_exception_attach();
+
+  /* Disable all global interrupts */
+  _info("c\n");////
+  // Crashes here!
+  putreg32(0x0, JH7110_PLIC_ENABLE1);
+  putreg32(0x0, JH7110_PLIC_ENABLE2);
+```
+
+`riscv_exception_attach()` will handle all RISC-V Exceptions, including Store/AMO Page Fault (IRQ 15): [riscv_exception.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142)
 
 ```c
 // Attach standard exception with suitable handler
 void riscv_exception_attach(void) {
+  // Handle Store/AMO Page Fault (IRQ 15)
   irq_attach(RISCV_IRQ_STOREPF, riscv_exception, NULL);
 ```
+
+Now we see the Store/AMO Page Fault Exception!
 
 ```text
 up_irqinitialize: c
 riscv_dispatch_irq: irq=15
-riscv_exception: EXCEPTION: Store/AMO page fault. MCAUSE: 000000000000000f, EPC: 0000000050207e6a, MTVAL: 00000000e0002100
-riscv_exception: PANIC!!! Exception = 000000000000000f
-_assert: Current Version: NuttX  12.0.3 8f318c3-dirty Nov  6 2023 15:45:46 risc-v
-_assert: Assertion failed panic: at file: common/riscv_exception.c:85 task: Idle_Task process: Kernel 0x50200e50
-up_dump_register: EPC: 0000000050207e6a
-up_dump_register: A0: 0000000000000014 A1: 000000000000000a A2: 0000000000000010 A3: 000000000000000a
-up_dump_register: A4: 000000000000000a A5: 00000000e0002000 A6: 000000000000003f A7: fffffffffffffff8
-up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 00000000000006c
-up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
-up_dump_register: S0: 0000000050400b08 S1: 0000000050401fa8 S2: 0000000050401fa4 S3: 0000000050400af8
-up_dump_register: S4: fffffffffffffff3 S5: 0000000053fe2f98 S6: 0000000000000000 S7: 0000000000000000
-up_dump_register: S8: 0000000053f7a15c S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
-up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000 RA: 0000000050207e64
+riscv_exception: 
+EXCEPTION: Store/AMO page fault
+MCAUSE: 000000000000000f
+EPC:    0000000050207e6a
+MTVAL:  00000000e0002100
 ```
 
 [(Source)](https://gist.github.com/lupyuen/85db0510712ba8c660e10f922d4564c9)
+
+Code Address is 0x50207e6a, from our PLIC Code...
 
 ```text
 /Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/jh7110_irq.c:62
@@ -1395,7 +1331,9 @@ up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000
     50207e6a:	1007a023          	sw	zero,256(a5) # 70001100 <__ramdisk_end+0x1e601100>
 ```
 
-Data Address is 0xe0002100. Our BL808 PLIC!
+The offending Data Address is 0xe0002100. Which is our BL808 PLIC!
+
+TODO
 
 Memory Mapping: [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/b244f85065ecc749599842088f35f1b190466429/arch/risc-v/src/jh7110/jh7110_mm_init.c#L47-L50)
 
@@ -1492,6 +1430,16 @@ up_dump_register: S0: 0000000000000000 S1: 0000000050409950 S2: 0000000000000000
 up_dump_register: S4: 0000000050219b30 S5: 0000000050219b40 S6: 0000000200042022 S7: 0000000050401f90
 up_dump_register: S8: 000000000000011b S9: 0000000000000000 S10: 0000000000000000 S11: 0000000000000000
 up_dump_register: SP: 000000005040c660 FP: 0000000000000000 TP: 0000000000000000 RA: 000000005020f698
+```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L276-L284
+
+```c
+  /* Mount the file system containing the init program. */
+  ret = nx_mount(CONFIG_INIT_MOUNT_SOURCE, CONFIG_INIT_MOUNT_TARGET,
+                 CONFIG_INIT_MOUNT_FSTYPE, CONFIG_INIT_MOUNT_FLAGS,
+                 CONFIG_INIT_MOUNT_DATA);
+  DEBUGASSERT(ret >= 0);
 ```
 
 TODO
