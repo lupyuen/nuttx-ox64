@@ -1217,6 +1217,7 @@ Now NuttX crashes at a different place...
 ```text
 Starting kernel ...
 123ABC
+riscv_dispatch_irq: irq=15
 irq_unexpected_isr: ERROR irq: 15
 _assert: Current Version: NuttX  12.0.3 2c32676-dirty Nov  6 2023 08:36:26 risc-v
 _assert: Assertion failed panic: at file: irq/irq_unexpectedisr.c:54 task: Idle_Task process: Kernel 0x50200e2c
