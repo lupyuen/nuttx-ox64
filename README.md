@@ -1434,6 +1434,66 @@ up_dump_register: S8: 0000000053f7a15c S9: 0000000053fcf2e0 S10: 000000000000000
 up_dump_register: SP: 0000000050407a00 FP: 0000000000000000 TP: 0000000000000000 RA: 00000000502041d0
 ```
 
+Disable UART Interrupt
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L902-L958
+
+```c
+static int u16550_attach(struct uart_dev_s *dev)
+{
+  //// TODO: FAR struct u16550_s *priv = (FAR struct u16550_s *)dev->priv;
+  int ret;
+
+#ifdef CONFIG_CLK
+  /* Clk enable */
+
+  priv->mclk = clk_get(priv->clk_name);
+  if (priv->mclk)
+    {
+      clk_set_rate(priv->mclk, priv->uartclk);
+      clk_enable(priv->mclk);
+    }
+#endif
+
+  /* Attach and enable the IRQ */
+
+  ret = 0;//// TODO
+  //// TODO: ret = irq_attach(priv->irq, u16550_interrupt, dev);
+#ifndef CONFIG_ARCH_NOINTC
+  if (ret == OK)
+    {
+      /* Enable the interrupt (RX and TX interrupts are still disabled
+       * in the UART
+       */
+
+      //// TODO: up_enable_irq(priv->irq);
+```
+
+https://gist.github.com/lupyuen/ab640bcb3ba3a19834bcaa29e43baddf
+
+```text
+up_irqinitialize: c
+up_irqinitialize: d
+up_irqinitialize: e
+up_irqinitialize: g
+irq_attach: irq=17, isr=0x50207e64
+up_enable_irq: irq=17
+uart_register: Registering /dev/console
+uart_register: Registering /dev/ttyS0
+work_start_lowpri: Starting low-priority kernel worker thread(s)
+_assert: Current Version: NuttX  12.0.3 b244f85-dirty Nov  6 2023 17:35:34 risc-v
+_assert: Assertion failed ret >= 0: at file: init/nx_bringup.c:283 task: AppBringUp process: Kernel 0x5020107e
+up_dump_register: EPC: 000000005020f698
+up_dump_register: A0: 0000000050401d50 A1: 000000000000011b A2: 0000000050219b30 A3: 000000000000007e
+up_dump_register: A4: 0000000050409950 A5: 0000000000000001 A6: 0000000050407d18 A7: fffffffffffffff8
+up_dump_register: T0: 000000000000002e T1: 0000000000000007 T2: 00000000000001ff T3: 000000005040c6dc
+up_dump_register: T4: 000000005040c6d0 T5: 0000000000000009 T6: 000000000000002a
+up_dump_register: S0: 0000000000000000 S1: 0000000050409950 S2: 0000000000000000 S3: 0000000000000000
+up_dump_register: S4: 0000000050219b30 S5: 0000000050219b40 S6: 0000000200042022 S7: 0000000050401f90
+up_dump_register: S8: 000000000000011b S9: 0000000000000000 S10: 0000000000000000 S11: 0000000000000000
+up_dump_register: SP: 000000005040c660 FP: 0000000000000000 TP: 0000000000000000 RA: 000000005020f698
+```
+
 TODO
 
 # Documentation for Ox64 BL808
