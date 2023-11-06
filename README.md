@@ -1270,12 +1270,8 @@ Crashes before setting PLIC!
 https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
 
 ```c
-/****************************************************************************
- * Name: up_irqinitialize
- ****************************************************************************/
-
-void up_irqinitialize(void)
-{
+// Init the IRQs
+void up_irqinitialize(void) {
   _info("a\n");////
   /* Disable S-Mode interrupts */
 
@@ -1316,7 +1312,80 @@ void up_irqinitialize(void)
   riscv_exception_attach();
 ```
 
-Let's attach the Common Interrupt Handlers earlier.
+Let's attach the Common Interrupt Handlers earlier...
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/8f318c363c80e1d4f5788f3815009cb57b5ff298/arch/risc-v/src/jh7110/jh7110_irq.c#L42-L85
+
+```c
+// Init the IRQs
+void up_irqinitialize(void) {
+  _info("a\n");////
+  /* Disable S-Mode interrupts */
+
+  _info("b\n");////
+  up_irq_save();
+
+  /* Attach the common interrupt handler */
+
+  _info("f\n");////
+  riscv_exception_attach();
+
+  /* Disable all global interrupts */
+
+  _info("c\n");////
+  putreg32(0x0, JH7110_PLIC_ENABLE1);
+  putreg32(0x0, JH7110_PLIC_ENABLE2);
+
+  /* Colorize the interrupt stack for debug purposes */
+
+#if defined(CONFIG_STACK_COLORATION) && CONFIG_ARCH_INTERRUPTSTACK > 15
+  size_t intstack_size = (CONFIG_ARCH_INTERRUPTSTACK & ~15);
+  riscv_stack_color(g_intstackalloc, intstack_size);
+#endif
+
+  /* Set priority for all global interrupts to 1 (lowest) */
+
+  _info("d\n");////
+  int id;
+
+  for (id = 1; id <= NR_IRQS; id++)
+    {
+      putreg32(1, (uintptr_t)(JH7110_PLIC_PRIORITY + 4 * id));
+    }
+
+  /* Set irq threshold to 0 (permits all global interrupts) */
+
+  _info("e\n");////
+  putreg32(0, JH7110_PLIC_THRESHOLD);
+```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142
+
+```c
+// Attach standard exception with suitable handler
+void riscv_exception_attach(void) {
+  irq_attach(RISCV_IRQ_STOREPF, riscv_exception, NULL);
+```
+
+```text
+up_irqinitialize: c
+riscv_dispatch_irq: irq=15
+riscv_exception: EXCEPTION: Store/AMO page fault. MCAUSE: 000000000000000f, EPC: 0000000050207e6a, MTVAL: 00000000e0002100
+riscv_exception: PANIC!!! Exception = 000000000000000f
+_assert: Current Version: NuttX  12.0.3 8f318c3-dirty Nov  6 2023 15:45:46 risc-v
+_assert: Assertion failed panic: at file: common/riscv_exception.c:85 task: Idle_Task process: Kernel 0x50200e50
+up_dump_register: EPC: 0000000050207e6a
+up_dump_register: A0: 0000000000000014 A1: 000000000000000a A2: 0000000000000010 A3: 000000000000000a
+up_dump_register: A4: 000000000000000a A5: 00000000e0002000 A6: 000000000000003f A7: fffffffffffffff8
+up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 00000000000006c
+up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
+up_dump_register: S0: 0000000050400b08 S1: 0000000050401fa8 S2: 0000000050401fa4 S3: 0000000050400af8
+up_dump_register: S4: fffffffffffffff3 S5: 0000000053fe2f98 S6: 0000000000000000 S7: 0000000000000000
+up_dump_register: S8: 0000000053f7a15c S9: 0000000053fcf2e0 S10: 0000000000000001 S11: 0000000000000003
+up_dump_register: SP: 0000000050407b90 FP: 0000000050400b08 TP: 0000000000000000 RA: 0000000050207e64
+```
+
+[(Source)](https://gist.github.com/lupyuen/85db0510712ba8c660e10f922d4564c9)
 
 TODO
 
