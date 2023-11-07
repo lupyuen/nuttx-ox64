@@ -885,7 +885,7 @@ Starting kernel ...
 
 [(Source)](https://gist.github.com/lupyuen/8134f17502db733ce87d6fa8b00eab55)
 
-We're hoping that NuttX could crash and OpenSBI could print a meaningful Stack Trace. But nope! NuttX was probably stuck in a loop waiting for Star64 UART.
+We're hoping that NuttX would crash and OpenSBI could print a meaningful Stack Trace. But nope! NuttX was probably stuck in a loop waiting for Star64 UART.
 
 Let's print to the Ox64 Serial Console in the NuttX Boot Code (in RISC-V Assembly)...
 
