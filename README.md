@@ -869,7 +869,7 @@ cp Image "/Volumes/NO NAME"
 diskutil unmountDisk /dev/disk2
 ```
 
-We boot Nuttx on Ox64 via microSD... But Ox64 shows absolutely nothing!
+We boot NuttX on Ox64 via microSD... But Ox64 shows absolutely nothing!
 
 ```text
 Retrieving file: /extlinux/../Image
