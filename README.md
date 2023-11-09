@@ -1489,34 +1489,27 @@ click up_irqinitialize href "https://github.com/lupyuen2/wip-pinephone-nuttx/blo
 nx_start --> nx_bringup["Bringup NuttX: \n nx_bringup"]
 click nx_bringup href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462" "sched/init/nx_bringup.c" _blank
 
+up_irqinitialize --> riscv_exception_attach["Attach RISC-V Exceptions: \n riscv_exception_attach \n (Attach the RISC-V Exception Handlers)"]
+click riscv_exception_attach href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142" "arch/risc-v/src/common/riscv_exception.c" _blank
+
+up_irqinitialize --> up_initialize["Init NuttX: \n up_initialize"]
+click up_initialize href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132" "arch/risc-v/src/common/riscv_initialize.c" _blank
+
+up_initialize --> riscv_serialinit["Serial Init: \n riscv_serialinit"]
+click riscv_serialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L164-L168" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
+riscv_serialinit --> u16550_serialinit["UART Init: \n u16550_serialinit \n (Register /dev/console and /dev/ttyS0)"]
+click u16550_serialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1747-L1775" "drivers/serial/uart_16550.c" _blank
+
+nx_bringup --> nx_create_initthread["Create Init Thread: \n nx_create_initthread \n (Create AppBringUp thread)"]
+click aaa href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L330-L369" "sched/init/nx_bringup.c" _blank
+
+nx_create_initthread --> nx_start_application["Start Application: \n nx_start_application"]
+click nx_start_application href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L212-L304" "sched/init/nx_bringup.c" _blank
+
+nx_start_application --> nx_mount["Mount RAM Disk: nx_mount \n (Fails because Initial RAM Disk is missing)"]
+click nx_mount href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/fs/mount/fs_mount.c#L260-L514" "fs/mount/fs_mount.c" _blank
 ```
-
-aaa --> aaa["aaa \n (aaa)"]
-click aaa href "aaa" "aaa" _blank
-
-[__IRQ Init: up_irqinitialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103) calls...
-
-- [__Attach RISC-V Exceptions: riscv_exception_attach__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142) (to attach the RISC-V Exception Handlers) and...
-
-  [__Init NuttX: up_initialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132) (see below)
-
-[__Init NuttX: up_initialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132) calls...
-
-- [__Serial Init: riscv_serialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L164-L168) which calls...
-
-- [__UART Init: u16550_serialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1747-L1775)
-
-  (To register "/dev/console" and "/dev/ttyS0")
-
-[__Bringup NuttX: nx_bringup__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462) calls...
-
-- [__Create Init Thread: nx_create_initthread__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L330-L369) (to create "AppBringUp" thread) which calls...
-
-- [__Start Application: nx_start_application__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L212-L304) which calls...
-
-- [__Mount RAM Disk: nx_mount__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/fs/mount/fs_mount.c#L260-L514)
-
-
 
 Read the article...
 
