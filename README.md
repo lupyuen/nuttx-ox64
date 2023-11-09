@@ -1458,11 +1458,16 @@ That's because we haven't loaded the Initial RAM Disk! Let's fix this later.
 
 # NuttX Boot Flow for Ox64 BL808
 
+Right-click to show NuttX Source Code...
+
 ```mermaid
 flowchart TD
-START --> jh7110_head
+START --> jh7110_head["`__NuttX Boot Code: jh7110_head__
+(Prints "123")`"]
 click jh7110_head href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156" "arch/risc-v/src/jh7110/jh7110_head.S" _blank
 ```
+
+START --> jh7110_head["`__NuttX Boot Code: jh7110_head__<br>(Prints "123")`"]
 
 [__: __](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156) prints "123" and calls...
 
