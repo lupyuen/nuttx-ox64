@@ -1480,32 +1480,19 @@ click jh7110_mm_init href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/
 jh7110_start_s --> nx_start["Start NuttX: \n nx_start \n (Starts many things)"]
 click nx_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713" "sched/init/nx_start.c" _blank
 
+riscv_earlyserialinit --> u16550_earlyserialinit["UART Early Init: \n u16550_earlyserialinit \n (Setup the UART)"]
+click u16550_earlyserialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1722-L1747" "drivers/serial/uart_16550.c" _blank
+
+nx_start --> up_irqinitialize["IRQ Init: \n up_irqinitialize"]
+click up_irqinitialize href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103" "arch/risc-v/src/jh7110/jh7110_irq.c#" _blank
+
+nx_start --> nx_bringup["Bringup NuttX: \n nx_bringup"]
+click nx_bringup href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462" "sched/init/nx_bringup.c" _blank
+
 ```
 
 aaa --> aaa["aaa \n (aaa)"]
 click aaa href "aaa" "aaa" _blank
-
-- [____]() which calls...
-
-- [____]() which  and calls...
-
-- [____]() (see below) and...
-
-  [____]() () and...
-
-  [____]() (see below)
-
-[__Early Serial Init: riscv_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164) calls...
-
-- [__UART Early Init: u16550_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1722-L1747)
-
-  (To setup the UART)
-
-[__Start NuttX: nx_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713) does [__many things__](https://lupyuen.github.io/articles/unicorn2#after-primary-routine) and calls...
-
-- [__IRQ Init: up_irqinitialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103) (see below) and...
-
-  [__Bringup NuttX: nx_bringup__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462) (see below)
 
 [__IRQ Init: up_irqinitialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103) calls...
 
