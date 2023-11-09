@@ -1462,8 +1462,7 @@ Right-click to show NuttX Source Code...
 
 ```mermaid
 flowchart TD
-START --> jh7110_head["`NuttX Boot Code: jh7110_head
-(Prints 123)`"]
+START --> jh7110_head["__NuttX Boot Code: jh7110_head__<br> (Prints 123)"]
 click jh7110_head href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156" "arch/risc-v/src/jh7110/jh7110_head.S" _blank
 ```
 
