@@ -1465,7 +1465,7 @@ flowchart TD
 START --> jh7110_head["NuttX Boot Code: \n jh7110_head \n (Prints 123)"]
 click jh7110_head href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156" "arch/risc-v/src/jh7110/jh7110_head.S" _blank
 
-jh7110_head --> jh7110_start["NuttX Start Code: jh7110_start \n (aaa)"]
+jh7110_head --> jh7110_start["NuttX Start Code: \n jh7110_start"]
 click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
 
 jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
