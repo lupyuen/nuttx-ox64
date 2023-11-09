@@ -1458,7 +1458,7 @@ That's because we haven't loaded the Initial RAM Disk! Let's fix this later.
 
 # NuttX Boot Flow for Ox64 BL808
 
-Right-click to show NuttX Source Code...
+Right-click the box to show NuttX Source Code...
 
 ```mermaid
 flowchart TD
