@@ -1464,21 +1464,36 @@ Right-click to show NuttX Source Code...
 flowchart TD
 START --> jh7110_head["NuttX Boot Code: \n jh7110_head \n (Prints 123)"]
 click jh7110_head href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156" "arch/risc-v/src/jh7110/jh7110_head.S" _blank
+
+jh7110_head --> jh7110_start["NuttX Start Code: jh7110_start \n (aaa)"]
+click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
+jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
+click jh7110_start_s href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
+jh7110_start_s --> riscv_earlyserialinit["Early Serial Init: \n riscv_earlyserialinit"]
+click riscv_earlyserialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
+jh7110_start_s --> jh7110_mm_init["Memory Mgmt Init: \n jh7110_mm_init \n (Map the Memory Mgmt Unit)"]
+click jh7110_mm_init href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L259-L284" "arch/risc-v/src/jh7110/jh7110_mm_init.c" _blank
+
+jh7110_start_s --> nx_start["Start NuttX: \n nx_start \n (Starts many things)"]
+click nx_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713" "sched/init/nx_start.c" _blank
+
 ```
 
-START --> jh7110_head["`__NuttX Boot Code: jh7110_head__<br>(Prints "123")`"]
+aaa --> aaa["aaa \n (aaa)"]
+click aaa href "aaa" "aaa" _blank
 
-[__: __](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156) prints "123" and calls...
+- [____]() which calls...
 
-- [__NuttX Start Code: jh7110_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159) which calls...
+- [____]() which  and calls...
 
-- [__Start Supervisor Mode: jh7110_start_s__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129) which prints "ABC" and calls...
+- [____]() (see below) and...
 
-- [__Early Serial Init: riscv_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164) (see below) and...
+  [____]() () and...
 
-  [__Memory Mgmt Init: jh7110_mm_init__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L259-L284) (to map the Memory Mgmt Unit) and...
-
-  [__Start NuttX: nx_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713) (see below)
+  [____]() (see below)
 
 [__Early Serial Init: riscv_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164) calls...
 
