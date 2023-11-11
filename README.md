@@ -2056,6 +2056,8 @@ _assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBring
 
 TODO: Map PLIC as L2 at 0xE000 0000: Fails with IRQ 5
 
+[Add L1 for 0xC000 0000. Move apps to 0x8000 0000. NSH starts OK yay!](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
