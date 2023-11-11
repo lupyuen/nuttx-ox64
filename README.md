@@ -1791,7 +1791,7 @@ Which says...
 
 1.  The NuttX Binary Image `nuttx.bin` terminates at `_edata`. (End of Data Section)
 
-1.  If we append `initrd` directly to the end of `nuttx.bin`, it will collide with BSS and the Idle Stack. And `initrd` will get corrupted.
+1.  If we append `initrd` directly to the end of `nuttx.bin`, it will collide with the [BSS Section](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L74-L92) and the [Idle Stack](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_head.S#L94-L101). And `initrd` will get overwritten by NuttX.
 
 1.  Best place to append `initrd` is after the Top of Idle Stack. Which is located 32 KB after `_edata`. (End of Data Section)
 
