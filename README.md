@@ -1801,6 +1801,16 @@ Which says...
 
 1.  NuttX mounts the RAM Disk from `__ramdisk_start`. (Memory Region for the RAM Disk)
 
+_But 32 KB sounds so arbitrary. What if the parameters change?_
+
+That's why we have a Runtime Check: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245)
+
+```c
+  // RAM Disk must be after Idle Stack
+  if (ramdisk_addr <= (uint8_t *)JH7110_IDLESTACK_TOP) { _info("RAM Disk must be after Idle Stack"); }
+  DEBUGASSERT(ramdisk_addr > (uint8_t *)JH7110_IDLESTACK_TOP);
+```
+
 _Why did we call local_memmove to copy `initrd` to `__ramdisk_start`? Why not memcpy?_
 
 That's because `initrd` overlaps with `__ramdisk_start`!
