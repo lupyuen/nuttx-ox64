@@ -2054,7 +2054,7 @@ _assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBring
 
 [(Source)](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
 
-TODO: Map PLIC as L2 at 0xE000 0000 (is it aligned?)
+TODO: Map PLIC as L2 at 0xE000 0000: Fails with IRQ 5
 
 # Documentation for Ox64 BL808
 
