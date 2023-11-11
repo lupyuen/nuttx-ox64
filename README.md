@@ -1910,7 +1910,7 @@ _Let's disable PLIC, and exclude PLIC from Memory Map. Will the NuttX Shell star
 
 Yep it does! [(See the log)](https://gist.github.com/lupyuen/9fc9b2de9938b48666cc5e5fa3f8278e)
 
-TODO: Fix the Memory Map
+TODO: Fix the Memory Map [(See the MMU Log)](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a)
 
 # Documentation for Ox64 BL808
 
