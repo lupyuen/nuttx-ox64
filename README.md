@@ -2010,6 +2010,8 @@ mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x518000
 
 `mmuflags=0x26` means Read + Write + Global
 
+TODO: [Add L1 for 0xC000 0000](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
