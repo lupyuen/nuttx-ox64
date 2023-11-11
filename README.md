@@ -1918,7 +1918,7 @@ TODO
 
 From the [MMU Log](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a)
 
-map I/O regions: (Level 1)
+__Map I/O regions: (Level 1)__
 
 ```text
 mmu_ln_map_region: 
@@ -1930,7 +1930,9 @@ mmu_ln_setentry:
   ptlevel=1, lnvaddr=0x50406000, paddr=0x40000000, vaddr=0x40000000, mmuflags=0x26
 ```
 
-map PLIC: (Level 1)
+`mmuflags=0x26` means Read + Write + Global
+
+__Map PLIC: (Level 1)__
 
 ```text
 mmu_ln_map_region: 
@@ -1939,7 +1941,9 @@ mmu_ln_setentry:
   ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
 ```
 
-map kernel text:  (Levels 2 & 3)
+`mmuflags=0x26` means Read + Write + Global
+
+__Map kernel text:  (Levels 2 & 3)__
 
 ```text
 mmu_ln_setentry:
@@ -1954,7 +1958,11 @@ mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503fe000, vaddr=0x503fe0
 mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503ff000, vaddr=0x503ff000, mmuflags=0x2a
 ```
 
-map kernel data: (Levels 2 & 3)
+`mmuflags=0x0` means PTE is a pointer to the next level of the page table
+
+`mmuflags=0x2a` means Read + Execute + Global
+
+__Map kernel data: (Levels 2 & 3)__
 
 ```text
 mmu_ln_setentry:
@@ -1969,14 +1977,20 @@ mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505fe000, vaddr=0x505fe0
 mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505ff000, vaddr=0x505ff000, mmuflags=0x26
 ```
 
-connect the L1 and L2 page tables:
+`mmuflags=0x0` means PTE is a pointer to the next level of the page table
+
+`mmuflags=0x26` means Read + Write + Global
+
+__Connect the L1 and L2 page tables:__
 
 ```text
 mmu_ln_setentry:
   ptlevel=1, lnvaddr=0x50406000, paddr=0x50405000, vaddr=0x50200000, mmuflags=0x20
 ```
 
-map the page pool: (Level 2)
+`mmuflags=0x20` means PTE_G: Page is a Global Mapping
+
+__Map the page pool: (Level 2)__
 
 ```text
 mmu_ln_map_region: 
@@ -1990,6 +2004,8 @@ mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51400000, vaddr=0x514000
 mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51600000, vaddr=0x51600000, mmuflags=0x26
 mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x51800000, mmuflags=0x26
 ```
+
+`mmuflags=0x26` means Read + Write + Global
 
 # Documentation for Ox64 BL808
 
