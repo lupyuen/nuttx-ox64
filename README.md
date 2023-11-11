@@ -1571,15 +1571,11 @@ In this article, NuttX has booted plenty of code on Ox64. Here's the flow of the
 
 # NuttX UART Driver for Ox64 BL808
 
-TODO
+BL808 UART is mostly identical to BL602 UART, so we ported the NuttX BL602 UART Driver to BL808.
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c
+Here's the UART Driver ported to BL808: [bl602_serial.c] (https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c)
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h
-
-Disabled Interrupts: [bl602_attach and bl602_detach](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c#L377-L431)
-
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h#L30-L41
+We hardcoded the UART3 Base Address: [bl602_uart.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h#L30-L41)
 
 ```c
 #define BL602_UART0_BASE 0x30002000
@@ -1587,23 +1583,23 @@ https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh711
 // Previously: #define BL602_UART_BASE(n)    (BL602_UART0_BASE + (n * (BL602_UART1_BASE - BL602_UART0_BASE)))
 ```
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L175-L184
+We fixed the NuttX Start Code to call our new UART Driver: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L175-L184)
 
 ```c
-void riscv_earlyserialinit(void)
-{
+void riscv_earlyserialinit(void) {
   bl602_earlyserialinit();
 }
 
-void riscv_serialinit(void)
-{
+void riscv_serialinit(void) {
   bl602_serialinit();
 }
 ```
 
-TODO: /dev/ttyS0 is missing
+We disabled UART Interrupts for now: [bl602_attach and bl602_detach](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c#L377-L431)
 
-https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89
+And the UART Driver works! [(See the log)](https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89)
+
+TODO: /dev/ttyS0 is missing
 
 # Initial RAM Disk for Ox64 BL808
 
