@@ -1999,6 +1999,8 @@ mmu_ln_setentry:
 
 And PTE is a pointer to the next level of the page table.
 
+Which means that Virtual Address 0x5020 0000 points to the L2 Page Table 0x5040 5000
+
 __Map the page pool: (Level 2)__
 
 ```text
