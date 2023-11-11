@@ -1603,8 +1603,6 @@ TODO: /dev/ttyS0 is missing
 
 # Initial RAM Disk for Ox64 BL808
 
-TODO
-
 Two ways we can load the Initial RAM Disk...
 
 1.  Load the Initial RAM Disk from a __Separate File: initrd__ (similar to Star64)
@@ -1625,9 +1623,11 @@ Two ways we can load the Initial RAM Disk...
 
     (Which might be more efficient for our Limited RAM)
 
+    [(See the __U-Boot Boot Flow__)](https://github.com/openbouffalo/buildroot_bouffalo/wiki/U-Boot-Bootflow)
+
     __TODO:__ Can we mount the File System directly from the __NuttX Kernel Image in RAM__? Without copying to the [__RAM Disk Memory Region__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/boards/risc-v/jh7110/star64/scripts/ld.script#L26)?
 
-We'll probably adopt the Second Method, since we are low on RAM. Like this...
+We'll do the Second Method, since we are low on RAM. Like this...
 
 ```bash
 ## Export the Binary Image to `nuttx.bin`
@@ -1647,36 +1647,31 @@ cat nuttx.bin /tmp/nuttx.zero initrd \
 cp Image "/Volumes/NO NAME/"
 ```
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245
+This is how we copy the initrd in RAM to the Memory Region for the RAM Disk: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245)
 
 ```c
-static void jh7110_copy_ramdisk(void)
-{
-  /* Copy Ramdisk from U-Boot Ramdisk Load Address */
-  // memcpy((void *)__ramdisk_start, (void *)RAMDISK_ADDR_R,
-  //        (size_t)__ramdisk_size);
-
-  // From https://docs.kernel.org/filesystems/romfs.html
+static void jh7110_copy_ramdisk(void) {
+  // Based on ROM FS Format: https://docs.kernel.org/filesystems/romfs.html
   // After _edata, search for "-rom1fs-". This is the RAM Disk Address.
+  // Stop searching after 64 KB.
   extern uint8_t _edata[];
   extern uint8_t _sbss[];
   extern uint8_t _ebss[];
-  _info("_edata=%p, _sbss=%p, _ebss=%p, JH7110_IDLESTACK_TOP=%p\n", (void *)_edata, (void *)_sbss, (void *)_ebss, JH7110_IDLESTACK_TOP);
   const char *header = "-rom1fs-";
   uint8_t *ramdisk_addr = NULL;
-  for (uint8_t *addr = _edata; addr < (uint8_t *)JH7110_IDLESTACK_TOP + (65 * 1024); addr++)
-    {
-      if (memcmp(addr, header, strlen(header)) == 0)
-        {
-          ramdisk_addr = addr;
-          break;
-        }
+  for (uint8_t *addr = _edata; addr < (uint8_t *)JH7110_IDLESTACK_TOP + (65 * 1024); addr++) {
+    if (memcmp(addr, header, strlen(header)) == 0) {
+      ramdisk_addr = addr;
+      break;
     }
-  _info("ramdisk_addr=%p\n", ramdisk_addr);
+  }
+  // Check for Missing RAM Disk
   if (ramdisk_addr == NULL) { _info("Missing RAM Disk"); }
-  DEBUGASSERT(ramdisk_addr != NULL);  // Missing RAM Disk
+  DEBUGASSERT(ramdisk_addr != NULL); 
+
+  // RAM Disk must be after Idle Stack
   if (ramdisk_addr <= (uint8_t *)JH7110_IDLESTACK_TOP) { _info("RAM Disk must be after Idle Stack"); }
-  DEBUGASSERT(ramdisk_addr > (uint8_t *)JH7110_IDLESTACK_TOP);  // RAM Disk must be after Idle Stack
+  DEBUGASSERT(ramdisk_addr > (uint8_t *)JH7110_IDLESTACK_TOP);
 
   // Read the Filesystem Size from the next 4 bytes, in Big Endian
   // Add 0x1F0 to Filesystem Size
@@ -1691,18 +1686,152 @@ static void jh7110_copy_ramdisk(void)
   // Filesystem Size must be less than RAM Disk Memory Region
   DEBUGASSERT(size <= (size_t)__ramdisk_size);
 
-  _info("Before Copy: ramdisk_addr=%p\n", ramdisk_addr);////
-  verify_image(ramdisk_addr);////
+  // Before Copy: Verify the RAM Disk Image to be copied
+  verify_image(ramdisk_addr);
 
   // Copy the Filesystem Size to RAM Disk Start
   // Warning: __ramdisk_start overlaps with ramdisk_addr + size
   // memmove is aliased to memcpy, so we implement memmove ourselves
   local_memmove((void *)__ramdisk_start, ramdisk_addr, size);
 
-  _info("After Copy: __ramdisk_start=%p\n", __ramdisk_start);////
-  verify_image(__ramdisk_start);////
+  // Before Copy: Verify the copied RAM Disk Image
+  verify_image(__ramdisk_start);
 }
 ```
+
+We copy the initrd at the very top of our NuttX Start Code, before erasing the BSS (in case it corrupts our RAM Disk, but actually it shouldn't): [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L144-L156)
+
+```c
+// NuttX Start Code
+void jh7110_start(int mhartid) {
+  DEBUGASSERT(mhartid == 0); /* Only Hart 0 supported for now */
+  if (0 == mhartid) {
+    /* Copy the RAM Disk */
+    jh7110_copy_ramdisk();
+
+    /* Clear the BSS */
+    jh7110_clear_bss();
+```
+
+NuttX mounts the RAM Disk from the Memory Region later during startup: [jh7110_appinit.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/boards/risc-v/jh7110/star64/src/jh7110_appinit.c#L51-L87)
+
+```c
+// After NuttX has booted...
+void board_late_initialize(void) {
+  // Mount the RAM Disk
+  mount_ramdisk();
+}
+
+// Mount the RAM Disk
+int mount_ramdisk(void) {
+  desc.minor    = RAMDISK_DEVICE_MINOR;
+  desc.nsectors = NSECTORS((ssize_t)__ramdisk_size);
+  desc.sectsize = SECTORSIZE;
+  desc.image    = __ramdisk_start;
+  ret = boardctl(BOARDIOC_ROMDISK, (uintptr_t)&desc);
+```
+
+And NuttX mounts our RAM Disk successfully!
+
+```text
+jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x50400290, _ebss=0x50407000, JH7110_IDLESTACK_TOP=0x50407c00
+jh7110_copy_ramdisk: ramdisk_addr=0x50408288
+jh7110_copy_ramdisk: size=8192016
+jh7110_copy_ramdisk: Before Copy: ramdisk_addr=0x50408288
+jh7110_copy_ramdisk: After Copy: __ramdisk_start=0x50a00000
+...
+elf_initialize: Registering ELF
+uart_register: Registering /dev/console
+work_start_lowpri: Starting low-priority kernel worker thread(s)
+nx_start_application: Starting init task: /system/bin/init
+load_absmodule: Loading /system/bin/init
+elf_loadbinary: Loading file: /system/bin/init
+elf_init: filename: /system/bin/init loadinfo: 0x5040c618
+elf_read: Read 64 bytes from offset 0
+```
+
+[(Source)](https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89)
+
+_Why did we insert 32 KB of zeroes after the NuttX Binary Image, before the initrd Initial RAM Disk?_
+
+```bash
+## Insert 32 KB of zeroes after Binary Image for Kernel Stack
+head -c 32768 /dev/zero >/tmp/nuttx.zero
+
+## Append Initial RAM Disk to Binary Image
+cat nuttx.bin /tmp/nuttx.zero initrd \
+  >Image
+```
+
+When we refer to the [NuttX Log](https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89) and the [NuttX Linker Script](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/boards/risc-v/jh7110/star64/scripts/ld.script)...
+
+```text
+// End of Data Section
+_edata=0x50400258
+
+// Start of BSS Section
+_sbss=0x50400290
+
+// End of BSS Section
+_ebss=0x50407000
+
+// Top of Idle Stack
+JH7110_IDLESTACK_TOP=0x50407c00
+
+// We located the initd after the Top of Idle Stack
+ramdisk_addr=0x50408288, size=8192016
+
+// And we copied initrd to the Memory Region for the RAM Disk
+__ramdisk_start=0x50a00000
+```
+
+Which says...
+
+1.  The NuttX Binary Image `nuttx.bin` terminates at `_edata`. (End of Data Section)
+
+1.  If we append `initrd` directly to the end of `nuttx.bin`, it will collide with BSS and the Idle Stack. And `initrd` will get corrupted.
+
+1.  Best place to append `initrd` is after the Top of Idle Stack. Which is located 32 KB after `_edata`. (End of Data Section)
+
+1.  That's why we inserted a padding of 32 KB between `nuttx.bin` and `initrd`. So it won't collide with BSS and Idle Stack.
+
+1.  Our code locates `initrd` (searching by Magic Number "-rom1fs-"). And copies `initrd` to `__ramdisk_start`. (Memory Region for the RAM Disk)
+
+1.  NuttX mounts the RAM Disk from `__ramdisk_start`. (Memory Region for the RAM Disk)
+
+_Why did we call local_memmove to copy `initrd` to `__ramdisk_start`? Why not memcpy?_
+
+That's because `initrd` overlaps with `__ramdisk_start`!
+
+```
+ramdisk_addr = 0x50408288, size = 8192016
+ramdisk_addr + size = 0x50bd8298
+Which is AFTER __ramdisk_start (0x50a00000)
+```
+
+`memcpy` won't work with Overlapping Memory Regions. So we wrote our own: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L246-L487)
+
+```c
+// From libs/libc/string/lib_memmove.c
+static FAR void *local_memmove(FAR void *dest, FAR const void *src, size_t count) {
+  FAR char *d;
+  FAR char *s;
+  DEBUGASSERT(dest > src);
+  d = (FAR char *) dest + count;
+  s = (FAR char *) src + count;
+
+  while (count--) {
+    d -= 1;
+    s -= 1;
+    // TODO: Very strange. This needs to be volatile or C Compiler will replace this by memcpy.
+    volatile char c = *s;
+    *d = c;
+  }
+  return dest;
+}
+```
+
+TODO
 
 https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L246-L487
 
@@ -1724,24 +1853,6 @@ static void verify_image(uint8_t *addr) {
     const uint8_t *p = addr + search_addr[i] - 1;
     if (*p != 0x0A) { _info("No Match: %p\n", p); }
   }
-}
-
-// From libs/libc/string/lib_memmove.c
-static FAR void *local_memmove(FAR void *dest, FAR const void *src, size_t count) {
-  FAR char *d;
-  FAR char *s;
-  DEBUGASSERT(dest > src);
-  d = (FAR char *) dest + count;
-  s = (FAR char *) src + count;
-
-  while (count--) {
-    d -= 1;
-    s -= 1;
-    // TODO: Very strange. This needs to be volatile or C Compiler will replace this by memcpy.
-    volatile char c = *s;
-    *d = c;
-  }
-  return dest;
 }
 ```
 
