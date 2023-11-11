@@ -2016,6 +2016,14 @@ mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x518000
 
 `mmuflags=0x26` means Read + Write + Global
 
+_What are the 3 Levels of Page Tables?_
+
+lnvaddr=0x50406000 is m_l1_pgtable
+
+lnvaddr=0x50405000 is m_l2_pgtable
+
+lnvaddr=0x50403000 is m_l3_pgtable
+
 _Can we add L1 for 0xE000 0000 to access PLIC?_
 
 [Nope it fails](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a). Because 0xE000 0000 is not aligned to 0x4000 0000 for L1.
