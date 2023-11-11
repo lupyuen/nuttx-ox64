@@ -2010,7 +2010,35 @@ mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x518000
 
 `mmuflags=0x26` means Read + Write + Global
 
-TODO: [Add L1 for 0xC000 0000](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
+_Can we add L1 for 0xE000 0000 to access PLIC?_
+
+[Nope it fails](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a). Because 0xE000 0000 is not aligned to 0x4000 0000 for L1.
+
+But when we add L1 for 0xC000 0000, it works!
+
+```c
+  // Map PLIC
+  mmu_ln_map_region(1, PGT_L1_VBASE, 0xC0000000, 0xC0000000,
+                    0x40000000, MMU_IO_FLAGS);
+```
+
+But NuttX Apps need to access 0xC000 0000. So NuttX Apps will fail...
+
+```text
+nx_start_application: Starting init task: /system/bin/init
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x50602000, vaddr=0xc0100000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x5061b000, vaddr=0xc0200000, mmuflags=0x0
+elf_addrenv_select: ERROR: up_addrenv_text_enable_write failed: -22
+elf_load: ERROR: elf_addrenv_select() failed: -22
+elf_loadbinary: Failed to load ELF program binary: -22
+exec_internal: ERROR: Failed to load program '/system/bin/init': -22
+_assert: Current Version: NuttX  12.0.3 47ec850-dirty Nov 11 2023 20:24:22 risc-v
+_assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBringUp process: Kernel 0x502014b0
+```
+
+[(Source)](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
+
+TODO: Map PLIC as L2 at 0xE000 0000 (is it aligned?)
 
 # Documentation for Ox64 BL808
 
