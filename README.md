@@ -1934,6 +1934,8 @@ mmu_ln_setentry:
 
 __Map PLIC: (Level 1)__
 
+When we add L1 for 0xE000 0000 to access PLIC...
+
 ```text
 mmu_ln_map_region: 
   ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
