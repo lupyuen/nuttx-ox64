@@ -2052,9 +2052,18 @@ _assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBring
 
 [(Source)](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
 
-TODO: Map PLIC as L2 at 0xE000 0000: Fails with IRQ 5
+_What if we map PLIC as L2 at 0xE000 0000?_
 
-[Add L1 for 0xC000 0000. Move apps to 0x8000 0000. NSH starts OK yay!](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
+This fails with IRQ 5...
+
+```c
+  // Map PLIC as L2
+  map_region(0xE0000000, 0xE0000000, 0x10000000, MMU_IO_FLAGS);
+```
+
+_What if we add L1 for 0xC000 0000? Move apps to 0x8000 0000?_
+
+NSH starts OK yay! Though we wasted a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC...
 
 ```text
 uart_register: Registering /dev/console
@@ -2083,6 +2092,12 @@ nsh> riscv_dispatch_irq: irq=8
 riscv_dispatch_irq: irq=8
 nx_start: CPU0: Beginning Idle Loop
 ```
+
+[(Source)](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
+
+TODO: Add L2 for PLIC
+
+TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
 # Documentation for Ox64 BL808
 
