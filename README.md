@@ -1569,6 +1569,90 @@ In this article, NuttX has booted plenty of code on Ox64. Here's the flow of the
 
   (Which prevents NuttX Shell from starting)
 
+# NuttX UART Driver for Ox64 BL808
+
+TODO
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h
+
+# Initial RAM Disk for Ox64 BL808
+
+TODO
+
+```bash
+## Export the Binary Image to `nuttx.bin`
+riscv64-unknown-elf-objcopy \
+  -O binary \
+  nuttx \
+  nuttx.bin
+
+## Insert 32 KB of zeroes after Binary Image for Kernel Stack
+head -c 32768 /dev/zero >/tmp/nuttx.zero
+
+## Append Initial RAM Disk to Binary Image
+cat nuttx.bin /tmp/nuttx.zero initrd \
+  >Image
+```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245
+
+```c
+static void jh7110_copy_ramdisk(void)
+{
+  /* Copy Ramdisk from U-Boot Ramdisk Load Address */
+  // memcpy((void *)__ramdisk_start, (void *)RAMDISK_ADDR_R,
+  //        (size_t)__ramdisk_size);
+
+  // From https://docs.kernel.org/filesystems/romfs.html
+  // After _edata, search for "-rom1fs-". This is the RAM Disk Address.
+  extern uint8_t _edata[];
+  extern uint8_t _sbss[];
+  extern uint8_t _ebss[];
+  _info("_edata=%p, _sbss=%p, _ebss=%p, JH7110_IDLESTACK_TOP=%p\n", (void *)_edata, (void *)_sbss, (void *)_ebss, JH7110_IDLESTACK_TOP);
+  const char *header = "-rom1fs-";
+  uint8_t *ramdisk_addr = NULL;
+  for (uint8_t *addr = _edata; addr < (uint8_t *)JH7110_IDLESTACK_TOP + (65 * 1024); addr++)
+    {
+      if (memcmp(addr, header, strlen(header)) == 0)
+        {
+          ramdisk_addr = addr;
+          break;
+        }
+    }
+  _info("ramdisk_addr=%p\n", ramdisk_addr);
+  if (ramdisk_addr == NULL) { _info("Missing RAM Disk"); }
+  DEBUGASSERT(ramdisk_addr != NULL);  // Missing RAM Disk
+  if (ramdisk_addr <= (uint8_t *)JH7110_IDLESTACK_TOP) { _info("RAM Disk must be after Idle Stack"); }
+  DEBUGASSERT(ramdisk_addr > (uint8_t *)JH7110_IDLESTACK_TOP);  // RAM Disk must be after Idle Stack
+
+  // Read the Filesystem Size from the next 4 bytes, in Big Endian
+  // Add 0x1F0 to Filesystem Size
+  const uint32_t size =
+    (ramdisk_addr[8] << 24) + 
+    (ramdisk_addr[9] << 16) + 
+    (ramdisk_addr[10] << 8) + 
+    ramdisk_addr[11] + 
+    0x1F0;
+  _info("size=%d\n", size);
+
+  // Filesystem Size must be less than RAM Disk Memory Region
+  DEBUGASSERT(size <= (size_t)__ramdisk_size);
+
+  _info("Before Copy: ramdisk_addr=%p\n", ramdisk_addr);////
+  verify_image(ramdisk_addr);////
+
+  // Copy the Filesystem Size to RAM Disk Start
+  // Warning: __ramdisk_start overlaps with ramdisk_addr + size
+  // memmove is aliased to memcpy, so we implement memmove ourselves
+  local_memmove((void *)__ramdisk_start, ramdisk_addr, size);
+
+  _info("After Copy: __ramdisk_start=%p\n", __ramdisk_start);////
+  verify_image(__ramdisk_start);////
+}
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
