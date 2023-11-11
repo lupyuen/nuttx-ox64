@@ -1577,6 +1577,32 @@ https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh711
 
 https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h
 
+Disabled Interrupts: [bl602_attach and bl602_detach](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c#L377-L431)
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h#L30-L41
+
+```c
+#define BL602_UART0_BASE 0x30002000
+#define BL602_UART_BASE(n) (BL602_UART0_BASE)
+// Previously: #define BL602_UART_BASE(n)    (BL602_UART0_BASE + (n * (BL602_UART1_BASE - BL602_UART0_BASE)))
+```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L175-L184
+
+```c
+void riscv_earlyserialinit(void)
+{
+  bl602_earlyserialinit();
+}
+
+void riscv_serialinit(void)
+{
+  bl602_serialinit();
+}
+```
+
+TODO: /dev/ttyS0 is missing
+
 # Initial RAM Disk for Ox64 BL808
 
 TODO
