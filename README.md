@@ -2058,6 +2058,34 @@ TODO: Map PLIC as L2 at 0xE000 0000: Fails with IRQ 5
 
 [Add L1 for 0xC000 0000. Move apps to 0x8000 0000. NSH starts OK yay!](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
 
+```text
+uart_register: Registering /dev/console
+work_start_lowpri: Starting low-priority kernel worker thread(s)
+nx_start_application: Starting init task: /system/bin/init
+mmu_ln_setentry: ptlevel=1, lnvaddr=0x50600000, paddr=0x50601000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x50602000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x5061b000, vaddr=0x80200000, mmuflags=0x0
+elf_symname: Symbol has no name
+elf_symvalue: SHN_UNDEF: Failed to get symbol name: -3
+elf_relocateadd: Section 2 reloc 2: Undefined symbol[0] has no name: -3
+up_exit: TCB=0x50409900 exiting
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+
+NuttShell (NSH) NuttX-12.0.3
+riscv_dispatch_irq: irq=8
+nsh> riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+nx_start: CPU0: Beginning Idle Loop
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
