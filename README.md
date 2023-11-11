@@ -1603,6 +1603,8 @@ void riscv_serialinit(void)
 
 TODO: /dev/ttyS0 is missing
 
+https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89
+
 # Initial RAM Disk for Ox64 BL808
 
 TODO
@@ -1678,6 +1680,56 @@ static void jh7110_copy_ramdisk(void)
   verify_image(__ramdisk_start);////
 }
 ```
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L246-L487
+
+```c
+// Extracted from:
+// grep --binary-files=text -b -o A initrd
+const uint32_t search_addr[] =
+{
+76654,
+78005,
+79250,
+...
+7988897,
+7992714,
+};
+
+static void verify_image(uint8_t *addr) {
+  for (int i = 0; i < sizeof(search_addr) / sizeof(search_addr[0]); i++) {
+    const uint8_t *p = addr + search_addr[i] - 1;
+    if (*p != 0x0A) { _info("No Match: %p\n", p); }
+  }
+}
+
+// From libs/libc/string/lib_memmove.c
+static FAR void *local_memmove(FAR void *dest, FAR const void *src, size_t count) {
+  FAR char *d;
+  FAR char *s;
+  DEBUGASSERT(dest > src);
+  d = (FAR char *) dest + count;
+  s = (FAR char *) src + count;
+
+  while (count--) {
+    d -= 1;
+    s -= 1;
+    // TODO: Very strange. This needs to be volatile or C Compiler will replace this by memcpy.
+    volatile char c = *s;
+    *d = c;
+  }
+  return dest;
+}
+```
+
+```text
+elf_loadbinary: Failed to load ELF program binary: -22
+exec_internal: ERROR: Failed to load program '/system/bin/init': -22
+_assert: Current Version: NuttX  12.0.3 8017bd9-dirty Nov 10 2023 22:50:07 risc-v
+_assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBringUp process: Kernel 0x502014ea
+```
+
+https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89
 
 # Documentation for Ox64 BL808
 
