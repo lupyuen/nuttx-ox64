@@ -1912,6 +1912,85 @@ Yep it does! [(See the log)](https://gist.github.com/lupyuen/9fc9b2de9938b48666c
 
 TODO: Fix the Memory Map [(See the MMU Log)](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a)
 
+# NuttX Memory Map for Ox64 BL808
+
+TODO
+
+From the [MMU Log](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a)
+
+map I/O regions: (Level 1)
+
+```text
+mmu_ln_map_region: 
+  ptlevel=1, lnvaddr=0x50406000, paddr=0, vaddr=0, size=0x50000000, mmuflags=0x26
+
+mmu_ln_setentry: 
+  ptlevel=1, lnvaddr=0x50406000, paddr=0, vaddr=0, mmuflags=0x26
+mmu_ln_setentry: 
+  ptlevel=1, lnvaddr=0x50406000, paddr=0x40000000, vaddr=0x40000000, mmuflags=0x26
+```
+
+map PLIC: (Level 1)
+
+```text
+mmu_ln_map_region: 
+  ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
+mmu_ln_setentry: 
+  ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
+```
+
+map kernel text:  (Levels 2 & 3)
+
+```text
+mmu_ln_setentry:
+  ptlevel=2, lnvaddr=0x50405000, paddr=0x50403000, vaddr=0x50200000, mmuflags=0x0
+
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50200000, vaddr=0x50200000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50201000, vaddr=0x50201000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50202000, vaddr=0x50202000, mmuflags=0x2a
+...
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503fd000, vaddr=0x503fd000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503fe000, vaddr=0x503fe000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503ff000, vaddr=0x503ff000, mmuflags=0x2a
+```
+
+map kernel data: (Levels 2 & 3)
+
+```text
+mmu_ln_setentry:
+  ptlevel=2, lnvaddr=0x50405000, paddr=0x50404000, vaddr=0x50400000, mmuflags=0x0
+
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50400000, vaddr=0x50400000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50401000, vaddr=0x50401000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50402000, vaddr=0x50402000, mmuflags=0x26
+...
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505fd000, vaddr=0x505fd000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505fe000, vaddr=0x505fe000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505ff000, vaddr=0x505ff000, mmuflags=0x26
+```
+
+connect the L1 and L2 page tables:
+
+```text
+mmu_ln_setentry:
+  ptlevel=1, lnvaddr=0x50406000, paddr=0x50405000, vaddr=0x50200000, mmuflags=0x20
+```
+
+map the page pool: (Level 2)
+
+```text
+mmu_ln_map_region: 
+  ptlevel=2, lnvaddr=0x50405000, paddr=0x50600000, vaddr=0x50600000, size=0x1400000, mmuflags=0x26
+
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50600000, vaddr=0x50600000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50800000, vaddr=0x50800000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50a00000, vaddr=0x50a00000, mmuflags=0x26
+...
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51400000, vaddr=0x51400000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51600000, vaddr=0x51600000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x51800000, mmuflags=0x26
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
