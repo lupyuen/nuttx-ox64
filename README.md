@@ -1601,6 +1601,8 @@ And the UART Driver works! [(See the log)](https://gist.github.com/lupyuen/74a44
 
 TODO: /dev/ttyS0 is missing
 
+TODO: Enable UART Interrupts
+
 # Initial RAM Disk for Ox64 BL808
 
 Two ways we can load the Initial RAM Disk...
@@ -1831,12 +1833,21 @@ static FAR void *local_memmove(FAR void *dest, FAR const void *src, size_t count
 }
 ```
 
-TODO
+_We're sure that it works?_
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L246-L487
+That's why we called `verify_image` to do a simple integrity check on `initrd`, before and after copying. And that's how we discovered that `memcpy` doesn't work. From [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L246-L487)
 
 ```c
-// Extracted from:
+// Verify that image is correct
+static void verify_image(uint8_t *addr) {
+  // Verify that the Byte Positions below (offset by 1) contain 0x0A
+  for (int i = 0; i < sizeof(search_addr) / sizeof(search_addr[0]); i++) {
+    const uint8_t *p = addr + search_addr[i] - 1;
+    if (*p != 0x0A) { _info("No Match: %p\n", p); }
+  }
+}
+
+// Byte Positions (offset by 1) of 0x0A in initrd. Extracted from:
 // grep --binary-files=text -b -o A initrd
 const uint32_t search_addr[] =
 {
@@ -1847,23 +1858,47 @@ const uint32_t search_addr[] =
 7988897,
 7992714,
 };
-
-static void verify_image(uint8_t *addr) {
-  for (int i = 0; i < sizeof(search_addr) / sizeof(search_addr[0]); i++) {
-    const uint8_t *p = addr + search_addr[i] - 1;
-    if (*p != 0x0A) { _info("No Match: %p\n", p); }
-  }
-}
 ```
 
+But NuttX fails to start our NuttX Shell (NSH) ELF Executable from "/system/bin/init"...
+
 ```text
+elf_read: Read 3392 bytes from offset 3385080
+elf_addrenv_select: ERROR: up_addrenv_text_enable_write failed: -22
+elf_load: ERROR: elf_addrenv_select() failed: -22
+...
 elf_loadbinary: Failed to load ELF program binary: -22
 exec_internal: ERROR: Failed to load program '/system/bin/init': -22
 _assert: Current Version: NuttX  12.0.3 8017bd9-dirty Nov 10 2023 22:50:07 risc-v
 _assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBringUp process: Kernel 0x502014ea
 ```
 
-https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89
+[(Source)](https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89)
+
+Maybe because NuttX is trying to map the User Address Space 0xC000 0000: [nsh/defconfig](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/boards/risc-v/jh7110/star64/configs/nsh/defconfig#L17-L26)
+
+```text
+CONFIG_ARCH_TEXT_VBASE=0xC0000000
+CONFIG_ARCH_TEXT_NPAGES=128
+CONFIG_ARCH_DATA_VBASE=0xC0100000
+CONFIG_ARCH_DATA_NPAGES=128
+CONFIG_ARCH_HEAP_VBASE=0xC0200000
+CONFIG_ARCH_HEAP_NPAGES=128
+```
+
+But our Kernel Memory Space already extends to 0xF000 0000? (Because of the PLIC at 0xE000 0000)
+
+From [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_mm_init.c#L43-L46):
+
+```c
+/* Map the whole I/O memory with vaddr = paddr mappings */
+#define MMU_IO_BASE     (0x00000000)
+#define MMU_IO_SIZE     (0xf0000000)
+```
+
+TODO: Check the Memory Map
+
+TODO: Exclude PLIC from Memory Map. See if the NuttX Shell will start.
 
 # Documentation for Ox64 BL808
 
