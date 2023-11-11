@@ -4,9 +4,9 @@
 
 Read the articles...
 
--   ["Ox64 BL808 RISC-V SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
+-   ["RISC-V Ox64 BL808 SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
--   ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
+-   ["RISC-V Ox64 BL808 SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
 _What's this BL808?_ [(Datasheet)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_DS/en/BL808_DS_1.2_en.pdf) [(Reference Manual)](https://github.com/bouffalolab/bl_docs/blob/main/BL808_RM/en/BL808_RM_en_1.3.pdf)
 
@@ -1609,6 +1609,30 @@ https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89
 
 TODO
 
+Two ways we can load the Initial RAM Disk...
+
+1.  Load the Initial RAM Disk from a __Separate File: initrd__ (similar to Star64)
+
+    This means we need to modify the [__U-Boot Script: boot-pine64.scr__](https://github.com/openbouffalo/buildroot_bouffalo/blob/main/board/pine64/ox64/boot-pine64.cmd)
+
+    And make it [__load the initrd__](https://lupyuen.github.io/articles/semihost#appendix-boot-nuttx-over-tftp-with-initial-ram-disk) file into RAM.
+
+    (Which is good for separating the NuttX Kernel and NuttX Apps)
+
+    OR...
+
+1.  Append the Initial RAM Disk to the __NuttX Kernel Image__
+
+    So the U-Boot Bootloader will load (one-shot into RAM) the NuttX Kernel + Initial RAM Disk.
+    
+    And we reuse the existing __U-Boot Config__ on the microSD Card: [__extlinux/extlinux.conf__](https://github.com/openbouffalo/buildroot_bouffalo/blob/main/board/pine64/ox64/rootfs-overlay/boot/extlinux/extlinux.conf)
+
+    (Which might be more efficient for our Limited RAM)
+
+    __TODO:__ Can we mount the File System directly from the __NuttX Kernel Image in RAM__? Without copying to the [__RAM Disk Memory Region__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/boards/risc-v/jh7110/star64/scripts/ld.script#L26)?
+
+We'll probably adopt the Second Method, since we are low on RAM. Like this...
+
 ```bash
 ## Export the Binary Image to `nuttx.bin`
 riscv64-unknown-elf-objcopy \
@@ -1622,6 +1646,9 @@ head -c 32768 /dev/zero >/tmp/nuttx.zero
 ## Append Initial RAM Disk to Binary Image
 cat nuttx.bin /tmp/nuttx.zero initrd \
   >Image
+
+## Overwrite the Linux Image on Ox64 microSD
+cp Image "/Volumes/NO NAME/"
 ```
 
 https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245
