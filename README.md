@@ -1906,9 +1906,11 @@ From [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox6
 #define MMU_IO_SIZE     (0xf0000000)
 ```
 
-TODO: Check the Memory Map
+_Let's disable PLIC, and exclude PLIC from Memory Map. Will the NuttX Shell start?_
 
-TODO: Exclude PLIC from Memory Map. See if the NuttX Shell will start.
+Yep it does! [(See the log)](https://gist.github.com/lupyuen/9fc9b2de9938b48666cc5e5fa3f8278e)
+
+TODO: Fix the Memory Map
 
 # Documentation for Ox64 BL808
 
