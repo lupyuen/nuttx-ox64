@@ -1932,9 +1932,11 @@ mmu_ln_setentry:
 
 `mmuflags=0x26` means Read + Write + Global
 
+TODO: Fix misaligned paddr=0x40000000
+
 __Map PLIC: (Level 1)__
 
-When we add L1 for 0xE000 0000 to access PLIC...
+Assuming we add L1 for 0xE000 0000 to access PLIC...
 
 ```text
 mmu_ln_map_region: 
@@ -1945,6 +1947,8 @@ mmu_ln_setentry:
 ```
 
 `mmuflags=0x26` means Read + Write + Global
+
+(This will fail because it's misaligned, see below)
 
 __Map kernel text:  (Levels 2 & 3)__
 
