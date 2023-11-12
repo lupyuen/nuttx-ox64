@@ -1638,8 +1638,8 @@ riscv64-unknown-elf-objcopy \
   nuttx \
   nuttx.bin
 
-## Insert 32 KB of zeroes after Binary Image for Kernel Stack
-head -c 32768 /dev/zero >/tmp/nuttx.zero
+## Insert 64 KB of zeroes after Binary Image for Kernel Stack
+head -c 65536 /dev/zero >/tmp/nuttx.zero
 
 ## Append Initial RAM Disk to Binary Image
 cat nuttx.bin /tmp/nuttx.zero initrd \
@@ -1754,11 +1754,11 @@ elf_read: Read 64 bytes from offset 0
 
 [(Source)](https://gist.github.com/lupyuen/74a44a3e432e159c62cc2df6a726cb89)
 
-_Why did we insert 32 KB of zeroes after the NuttX Binary Image, before the initrd Initial RAM Disk?_
+_Why did we insert 64 KB of zeroes after the NuttX Binary Image, before the initrd Initial RAM Disk?_
 
 ```bash
-## Insert 32 KB of zeroes after Binary Image for Kernel Stack
-head -c 32768 /dev/zero >/tmp/nuttx.zero
+## Insert 64 KB of zeroes after Binary Image for Kernel Stack
+head -c 65536 /dev/zero >/tmp/nuttx.zero
 
 ## Append Initial RAM Disk to Binary Image
 cat nuttx.bin /tmp/nuttx.zero initrd \
@@ -1795,13 +1795,13 @@ Which says...
 
 1.  Best place to append `initrd` is after the Top of Idle Stack. Which is located 32 KB after `_edata`. (End of Data Section)
 
-1.  That's why we inserted a padding of 32 KB between `nuttx.bin` and `initrd`. So it won't collide with BSS and Idle Stack.
+1.  That's why we inserted a padding of 64 KB between `nuttx.bin` and `initrd`. So it won't collide with BSS and Idle Stack.
 
 1.  Our code locates `initrd` (searching by Magic Number "-rom1fs-"). And copies `initrd` to `__ramdisk_start`. (Memory Region for the RAM Disk)
 
 1.  NuttX mounts the RAM Disk from `__ramdisk_start`. (Memory Region for the RAM Disk)
 
-_But 32 KB sounds so arbitrary. What if the parameters change?_
+_But 64 KB sounds so arbitrary. What if the parameters change?_
 
 That's why we have a Runtime Check: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245)
 
@@ -2104,7 +2104,9 @@ nx_start: CPU0: Beginning Idle Loop
 
 [(Source)](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
 
-TODO: Add L2 for PLIC
+TODO: Add L2 for PLIC: NSH starts OK yay!
+
+[Map PLIC as Interrupt L2. NSH starts OK yay!](https://gist.github.com/lupyuen/74c8cb0e519984f6392384f6cca3daff)
 
 TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
