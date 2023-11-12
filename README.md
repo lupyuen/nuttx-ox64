@@ -2061,7 +2061,14 @@ This fails with IRQ 5...
   map_region(0xE0000000, 0xE0000000, 0x10000000, MMU_IO_FLAGS);
 ```
 
-_What if we add L1 for 0xC000 0000? Move apps to 0x8000 0000?_
+_What if we add L1 for 0xC000 0000? And move apps to 0x8000 0000?_
+
+```c
+  // Map PLIC as L1
+  // This will waste a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC:
+  mmu_ln_map_region(1, PGT_L1_VBASE, 0xC0000000, 0xC0000000,
+                    0x40000000, MMU_IO_FLAGS);
+```
 
 NSH starts OK yay! Though we wasted a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC...
 
