@@ -2063,6 +2063,8 @@ This fails with IRQ 5...
 
 _What if we add L1 for 0xC000 0000? And move apps to 0x8000 0000?_
 
+From [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_mm_init.c#L238-L246):
+
 ```c
   // Map PLIC as L1
   // This will waste a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC:
