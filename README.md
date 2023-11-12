@@ -2052,14 +2052,14 @@ _assert: Assertion failed ret > 0: at file: init/nx_bringup.c:302 task: AppBring
 
 [(Source)](https://gist.github.com/lupyuen/124aa56c263e51d9306e0d70321f2864)
 
-_What if we map PLIC as L2 at 0xE000 0000?_
-
-This fails with IRQ 5...
+_What if we map PLIC as L2 at 0xE000 0000? By reusing the existing L2 Page Tables?_
 
 ```c
-  // Map PLIC as L2
+  // Map PLIC as L2, by reusing the existing L2 Page Tables
   map_region(0xE0000000, 0xE0000000, 0x10000000, MMU_IO_FLAGS);
 ```
+
+This fails with IRQ 5. The existing L2 Page Tables can't accommodate PLIC at 0xE000 0000.
 
 _What if we add L1 for 0xC000 0000? And move apps to 0x8000 0000?_
 
@@ -2072,9 +2072,13 @@ From [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox6
                     0x40000000, MMU_IO_FLAGS);
 ```
 
-NSH starts OK yay! Though we wasted a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC...
+NSH starts OK! Though we wasted a whole chunk of L1 Addresses (Size 0x4000 0000) just for PLIC...
 
 ```text
+jh7110_kernel_mappings: map PLIC as L1
+mmu_ln_map_region: ptlevel=1, lnvaddr=0x50406000, paddr=0xc0000000, vaddr=0xc0000000, size=0x40000000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=1, lnvaddr=0x50406000, paddr=0xc0000000, vaddr=0xc0000000, mmuflags=0x26
+...
 uart_register: Registering /dev/console
 work_start_lowpri: Starting low-priority kernel worker thread(s)
 nx_start_application: Starting init task: /system/bin/init
@@ -2086,14 +2090,6 @@ elf_symvalue: SHN_UNDEF: Failed to get symbol name: -3
 elf_relocateadd: Section 2 reloc 2: Undefined symbol[0] has no name: -3
 up_exit: TCB=0x50409900 exiting
 riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
-riscv_dispatch_irq: irq=8
 
 NuttShell (NSH) NuttX-12.0.3
 riscv_dispatch_irq: irq=8
@@ -2104,9 +2100,61 @@ nx_start: CPU0: Beginning Idle Loop
 
 [(Source)](https://gist.github.com/lupyuen/0f4bd7efc4d2d2839eba5ad62349af35)
 
-TODO: Add L2 for PLIC: NSH starts OK yay!
+_What if we map PLIC as a new L2 Page Table: Interrupt L2?_
 
-[Map PLIC as Interrupt L2. NSH starts OK yay!](https://gist.github.com/lupyuen/74c8cb0e519984f6392384f6cca3daff)
+From [jh7110_mm_init.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_mm_init.c#L250-L257):
+
+```c
+// Interrupt L2 Table Table
+#define PGT_INT_L2_PBASE (uintptr_t)&m_int_l2_pgtable
+#define PGT_INT_L2_VBASE PGT_INT_L2_PBASE
+#define PGT_INT_L2_SIZE (512)  /* Enough to map 1 GiB */
+static size_t m_int_l2_pgtable[PGT_INT_L2_SIZE] locate_data(".pgtables");
+
+// Map PLIC as Interrupt L2 Table Table
+mmu_ln_map_region(2, PGT_INT_L2_PBASE, 0xE0000000, 0xE0000000, 0x10000000,
+                  MMU_IO_FLAGS);
+
+// Connect the L1 and Interrupt L2 Page Tables for PLIC
+mmu_ln_setentry(1, PGT_L1_VBASE, PGT_INT_L2_PBASE, 0xE0000000, PTE_G);
+```
+
+NSH starts OK yay!
+
+```text
+jh7110_kernel_mappings: map PLIC as Interrupt L2
+mmu_ln_map_region: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0200000, vaddr=0xe0200000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0400000, vaddr=0xe0400000, mmuflags=0x26
+...
+
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xefa00000, vaddr=0xefa00000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xefc00000, vaddr=0xefc00000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xefe00000, vaddr=0xefe00000, mmuflags=0x26
+jh7110_kernel_mappings: connect the L1 and Interrupt L2 page tables for PLIC
+mmu_ln_setentry: ptlevel=1, lnvaddr=0x50407000, paddr=0x50403000, vaddr=0xe0000000, mmuflags=0x20
+...
+uart_register: Registering /dev/console
+work_start_lowpri: Starting low-priority kernel worker thread(s)
+nx_start_application: Starting init task: /system/bin/init
+mmu_ln_setentry: ptlevel=1, lnvaddr=0x50600000, paddr=0x50601000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x50602000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x5061b000, vaddr=0x80200000, mmuflags=0x0
+elf_symname: Symbol has no name
+elf_symvalue: SHN_UNDEF: Failed to get symbol name: -3
+elf_relocateadd: Section 2 reloc 2: Undefined symbol[0] has no name: -3
+up_exit: TCB=0x5040a900 exiting
+riscv_dispatch_irq: irq=8
+
+NuttShell (NSH) NuttX-12.0.3
+riscv_dispatch_irq: irq=8
+nsh> riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+nx_start: CPU0: Beginning Idle Loop
+```
+
+[(Source)](https://gist.github.com/lupyuen/74c8cb0e519984f6392384f6cca3daff)
 
 TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
