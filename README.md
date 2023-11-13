@@ -2184,7 +2184,7 @@ To compute the Value of Level 2 PTE:
 
 - ppn = paddr >> 12 = 0xe0000
 
-  (12 bits per Memory Page)
+  (4096 bytes per Memory Page)
 
 To compute the Address of Level 2 PTE:
 
@@ -2192,17 +2192,13 @@ To compute the Address of Level 2 PTE:
 
   (8 bytes per PTE)
 
-- index = vpn[0 to 1] >> 9 = 0x100
+- index = (vpn >> 9) & 0b111111111 = 0x100
 
-  (9 bits for Level 1)
-
-- vpn[0 to 1] = vpn & 0b111111111111111111 = 0x20000
-
-  (Extract the last 18 bits to get Level 2 and 3)
+  (Extract Bits 9 to 17 to get Level 2 Index)
 
 - vpn = vaddr >> 12 = 0xe0000
 
-  (12 bits per Memory Page)
+  (4096 bytes per Memory Page)
 
 __Compute Level 1 PTE:__
 
@@ -2228,7 +2224,7 @@ To compute the Value of Level 1 PTE:
 
 - ppn = paddr >> 12 = 0x50403
 
-  (12 bits per Memory Page)
+  (1<<12 bits per Memory Page)
 
 To compute the Address of Level 1 PTE:
 
@@ -2236,17 +2232,32 @@ To compute the Address of Level 1 PTE:
 
   (8 bytes per PTE)
 
-- index = vpn[3] = 3
+- index = vpn >> 18 = 3
 
-  (???)
-
-- vpn[2] = vpn >> 18 = 3
-
-  (Skip the last 18 bits for Level 2 and 3)
+  (Extract Bits 18 to 26 to get Level 1 Index)
 
 - vpn = vaddr >> 12 = 0xe0000
 
-  (12 bits per Memory Page)
+  (4096 bytes per Memory Page)
+
+__Compute Level 3 PTE:__
+
+```text
+map kernel text
+mmu_ln_setentry: 
+  ptlevel=2, lnvaddr=0x50406000, paddr=0x50404000, vaddr=0x50200000, mmuflags=0x0
+mmu_ln_setentry: 
+  index=0x81, paddr=0x50404000, mmuflags=0x1, pte_addr=0x50406408, pte_val=0x14101001
+
+mmu_ln_setentry: 
+  ptlevel=3, lnvaddr=0x50404000, paddr=0x50200000, vaddr=0x50200000, mmuflags=0x2a
+mmu_ln_setentry: 
+  index=0, 
+  paddr=0x50200000, 
+  mmuflags=0xeb, 
+  pte_addr=0x50404000, 
+  pte_val=0x140800eb
+```
 
 TODO
 
