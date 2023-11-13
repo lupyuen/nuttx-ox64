@@ -2158,7 +2158,9 @@ nx_start: CPU0: Beginning Idle Loop
 
 TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
-TODO: [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)
+__Compute Level 2 PTE:__
+
+Based the [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 map PLIC as Interrupt L2
@@ -2174,15 +2176,17 @@ mmu_ln_setentry:
   pte_val=0x380000e7
 ```
 
-Computing Value of Level 2 PTE:
+To compute the Value of Level 2 PTE:
 
 - pte_val = (ppn << 10) | mmuflags = 0x380000e7
+
+  (Shift 10 bits to accommodate MMU Flags)
 
 - ppn = paddr >> 12 = 0xe0000
 
   (12 bits per Memory Page)
 
-Computing Address of Level 2 PTE:
+To compute the Address of Level 2 PTE:
 
 - pte_addr = lnvaddr + (index * 8) = 0x50403800
 
@@ -2200,6 +2204,10 @@ Computing Address of Level 2 PTE:
 
   (12 bits per Memory Page)
 
+__Compute Level 1 PTE:__
+
+Based the [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
+
 ```text
 connect the L1 and Interrupt L2 page tables for PLIC
 mmu_ln_setentry:
@@ -2211,6 +2219,34 @@ mmu_ln_setentry:
   pte_addr=0x50407018, 
   pte_val=0x14100c21
 ```
+
+To compute the Value of Level 1 PTE:
+
+- pte_val = (ppn << 10) | mmuflags = 0x14100c21
+
+  (Shift 10 bits to accommodate MMU Flags)
+
+- ppn = paddr >> 12 = 0x50403
+
+  (12 bits per Memory Page)
+
+To compute the Address of Level 1 PTE:
+
+- pte_addr = lnvaddr + (index * 8) = 0x50407018
+
+  (8 bytes per PTE)
+
+- index = vpn[3] = 3
+
+  (???)
+
+- vpn[2] = vpn >> 18 = 3
+
+  (Skip the last 18 bits for Level 2 and 3)
+
+- vpn = vaddr >> 12 = 0xe0000
+
+  (12 bits per Memory Page)
 
 TODO
 
