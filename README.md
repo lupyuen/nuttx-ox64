@@ -2158,6 +2158,8 @@ nx_start: CPU0: Beginning Idle Loop
 
 TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
+TODO: [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
