@@ -2198,6 +2198,24 @@ To compute the Value of Level 1 PTE:
 
   (1<<12 bits per Memory Page)
 
+mmuflags=0x21 means 0b100001:
+
+- NOT Dirty
+
+- NOT Accessed
+
+- Global Mapping
+
+- NOT User-Accessible
+
+- NOT eXecutable
+
+- NOT Writeable
+
+- NOT Readable
+
+- Valid
+
 __Compute Level 2 PTE:__
 
 Based the [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -2239,6 +2257,24 @@ To compute the Value of Level 2 PTE:
 - ppn = paddr >> 12 = 0xe0000
 
   (4096 bytes per Memory Page)
+
+mmuflags=0xe7 means 0b11100111:
+
+- Dirty
+
+- Accessed
+
+- Global Mapping
+
+- NOT User-Accessible
+
+- NOT eXecutable
+
+- Writeable
+
+- Readable
+
+- Valid
 
 __Compute Level 3 PTE:__
 
@@ -2283,6 +2319,24 @@ To compute the Value of Level 3 PTE:
 - ppn = paddr >> 12 = 0x50201
 
   (4096 bytes per Memory Page)
+
+mmuflags=0xeb means 0b11101011:
+
+- Dirty
+
+- Accessed
+
+- Global Mapping
+
+- NOT User-Accessible
+
+- eXecutable
+
+- NOT Writeable
+
+- Readable
+
+- Valid
 
 TODO
 
