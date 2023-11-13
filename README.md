@@ -2160,6 +2160,60 @@ TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
 TODO: [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)
 
+```text
+map PLIC as Interrupt L2
+mmu_ln_map_region:
+  ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
+mmu_ln_setentry:
+  ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
+mmu_ln_setentry:
+  index=0x100,
+  paddr=0xe0000000,
+  mmuflags=0xe7,
+  pte_addr=0x50403800,
+  pte_val=0x380000e7
+```
+
+Computing Value of Level 2 PTE:
+
+- pte_val = (ppn << 10) | mmuflags = 0x380000e7
+
+- ppn = paddr >> 12 = 0xe0000
+
+  (12 bits per Memory Page)
+
+Computing Address of Level 2 PTE:
+
+- pte_addr = lnvaddr + (index * 8) = 0x50403800
+
+  (8 bytes per PTE)
+
+- index = vpn[0 to 1] >> 9 = 0x100
+
+  (9 bits for Level 1)
+
+- vpn[0 to 1] = vpn & 0b111111111111111111 = 0x20000
+
+  (Extract the last 18 bits to get Level 2 and 3)
+
+- vpn = vaddr >> 12 = 0xe0000
+
+  (12 bits per Memory Page)
+
+```text
+connect the L1 and Interrupt L2 page tables for PLIC
+mmu_ln_setentry:
+  ptlevel=1, lnvaddr=0x50407000, paddr=0x50403000, vaddr=0xe0000000, mmuflags=0x20
+mmu_ln_setentry: 
+  index=0x3, 
+  paddr=0x50403000, 
+  mmuflags=0x21, 
+  pte_addr=0x50407018, 
+  pte_val=0x14100c21
+```
+
+TODO
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
