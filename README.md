@@ -1944,7 +1944,7 @@ mmu_ln_setentry:
 
 `mmuflags=0x26` means Read + Write + Global
 
-(This will fail because it's misaligned, see below)
+(This will fail because 0xE000 0000 is misaligned, see below)
 
 __Map kernel text: (Levels 2 & 3)__
 
