@@ -1916,7 +1916,9 @@ Now we fix the Memory Map...
 
 To fix the NuttX Memory Map for Ox64, let's trace the MMU Page Table Entries. From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
-__Map I/O regions: (Level 1)__
+## Map the I/O Region (Level 1)
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 mmu_ln_map_region: 
@@ -1930,7 +1932,7 @@ mmu_ln_setentry:
 
 `mmuflags=0x26` means Read + Write + Global
 
-__Map PLIC: (Level 1)__
+## Map the PLIC (Level 1)
 
 Assuming we add L1 for 0xE000 0000 to access PLIC...
 
@@ -1946,7 +1948,9 @@ mmu_ln_setentry:
 
 (This will fail because 0xE000 0000 is misaligned, see below)
 
-__Map kernel text: (Levels 2 & 3)__
+## Map the Kernel Text (Levels 2 & 3)
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 // Level 2
@@ -1971,7 +1975,9 @@ mmu_ln_setentry: index=0x1ff, paddr=0x503ff000, mmuflags=0xeb, pte_addr=0x50404f
 
 `mmuflags=0x2a` means Read + Execute + Global
 
-__Map kernel data: (Levels 2 & 3)__
+## Map the Kernel Data (Levels 2 & 3)
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 // Level 2
@@ -1994,7 +2000,9 @@ mmu_ln_setentry: index=0x1ff, paddr=0x505ff000, mmuflags=0xe7, pte_addr=0x50405f
 
 `mmuflags=0x26` means Read + Write + Global
 
-__Connect the L1 and L2 page tables:__
+## Connect the Level 1 and Level 2 Page Tables
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 mmu_ln_setentry: 
@@ -2010,7 +2018,9 @@ And PTE is a pointer to the next level of the page table.
 
 Which means that Virtual Address 0x5020 0000 points to the L2 Page Table 0x5040 6000
 
-__Map the page pool: (Level 2)__
+## Map the Page Pool (Level 2)
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 mmu_ln_map_region: ptlevel=2, lnvaddr=0x50406000, paddr=0x50600000, vaddr=0x50600000, size=0x1400000, mmuflags=0x26
@@ -2030,7 +2040,9 @@ mmu_ln_setentry: index=0x8c, paddr=0x51800000, mmuflags=0xe7, pte_addr=0x5040646
 
 `mmuflags=0x26` means Read + Write + Global
 
-__Map the User Address Space: (Levels 1, 2, 3)__
+## Map the User Address Space (Levels 1, 2, 3)
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 nx_start_application: Starting init task: /system/bin/init
@@ -2082,7 +2094,11 @@ mmu_ln_setentry: ptlevel=3, lnvaddr=0x5061b000, paddr=0x5069c000, vaddr=0x802800
 mmu_ln_setentry: index=0x80, paddr=0x5069c000, mmuflags=0xd7, pte_addr=0x5061b400, pte_val=0x141a70d7
 ```
 
+## Page Tables
+
 _What are the 3 Levels of Page Tables?_
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 lnvaddr=0x50407000 is m_l1_pgtable (Level 1 Page Table for Kernel)
 
@@ -2101,6 +2117,8 @@ lnvaddr=0x50602000 is User L3 Page Table for Code, Data
 lnvaddr=0x50601000 is User L2 Page Table for Heap
 
 lnvaddr=0x5061b000 is User L3 Page Table for Heap
+
+# Fix the NuttX Memory Map for PLIC
 
 _Can we add L1 for 0xE000 0000 to access PLIC?_
 
