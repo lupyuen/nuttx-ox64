@@ -1948,19 +1948,24 @@ mmu_ln_setentry:
 
 (This will fail because it's misaligned, see below)
 
-__Map kernel text:  (Levels 2 & 3)__
+__Map kernel text: (Levels 2 & 3)__
 
 ```text
-mmu_ln_setentry:
-  ptlevel=2, lnvaddr=0x50405000, paddr=0x50403000, vaddr=0x50200000, mmuflags=0x0
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50404000, vaddr=0x50200000, mmuflags=0x0
+mmu_ln_setentry: index=0x81, paddr=0x50404000, mmuflags=0x1, pte_addr=0x50406408, pte_val=0x14101001
 
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50200000, vaddr=0x50200000, mmuflags=0x2a
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50201000, vaddr=0x50201000, mmuflags=0x2a
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x50202000, vaddr=0x50202000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50200000, vaddr=0x50200000, mmuflags=0x2a
+mmu_ln_setentry: index=0, paddr=0x50200000, mmuflags=0xeb, pte_addr=0x50404000, pte_val=0x140800eb
+
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x5020100, vaddr=0x50201000, mmuflags=0x2a
+mmu_ln_setentry: index=0x1, paddr=0x50201000, mmuflags=0xeb, pte_addr=0x50404008, pte_val=0x140804eb
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50202000, vaddr=0x50202000, mmuflags=0x2a
+mmu_ln_setentry: index=0x2, paddr=0x50202000, mmuflags=0xeb, pte_addr=0x50404010, pte_val=0x140808eb
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50203000, vaddr=0x50203000, mmuflags=0x2a
+mmu_ln_setentry: index=0x3, paddr=0x50203000, mmuflags=0xeb, pte_addr=0x50404018, pte_val=0x14080ceb
 ...
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503fd000, vaddr=0x503fd000, mmuflags=0x2a
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503fe000, vaddr=0x503fe000, mmuflags=0x2a
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50403000, paddr=0x503ff000, vaddr=0x503ff000, mmuflags=0x2a
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x503ff000, vaddr=0x503ff000, mmuflags=0x2a
+mmu_ln_setentry: index=0x1ff, paddr=0x503ff000, mmuflags=0xeb, pte_addr=0x50404ff8, pte_val=0x140ffceb
 ```
 
 `mmuflags=0x0` means PTE is a pointer to the next level of the page table
@@ -2020,11 +2025,11 @@ __Map the User Address Space: (Levels 1, 2, 3)__
 
 ```text
 nx_start_application: Starting init task: /system/bin/init
-// Level 1 (Data)
+// Level 1 (Code, Data, Heap)
 mmu_ln_setentry: ptlevel=1, lnvaddr=0x50600000, paddr=0x50601000, vaddr=0x80100000, mmuflags=0x0
 mmu_ln_setentry: index=0x2, paddr=0x50601000, mmuflags=0x1, pte_addr=0x50600010, pte_val=0x14180401
 
-// Level 2 (Data)
+// Level 2 (Code, Data)
 mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x50602000, vaddr=0x80100000, mmuflags=0x0
 mmu_ln_setentry: index=0, paddr=0x50602000, mmuflags=0x1, pte_addr=0x50601000, pte_val=0x14180801
 
@@ -2068,6 +2073,16 @@ lnvaddr=0x50406000 is m_l1_pgtable
 lnvaddr=0x50405000 is m_l2_pgtable
 
 lnvaddr=0x50403000 is m_l3_pgtable
+
+lnvaddr=0x5061b000 is User L1 Page Table for Code, Data, Heap
+
+lnvaddr=0x50601000 is User L2 Page Table for Code, Data 
+
+lnvaddr=0x50602000 is User L3 Page Table for Code, Data
+
+lnvaddr=0x50601000 is User L2 Page Table for Heap
+
+lnvaddr=0x5061b000 is User L3 Page Table for Heap
 
 _Can we add L1 for 0xE000 0000 to access PLIC?_
 
