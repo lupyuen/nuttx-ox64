@@ -2048,6 +2048,7 @@ From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f
 nx_start_application: Starting init task: /system/bin/init
 // Level 1 (Code, Data, Heap)
 // `mmuflags=0x0` means it's a link to a PTE
+// `vaddr=0x80100000` will be aligned to 0x80000000
 mmu_ln_setentry: ptlevel=1, lnvaddr=0x50600000, paddr=0x50601000, vaddr=0x80100000, mmuflags=0x0
 mmu_ln_setentry: index=0x2, paddr=0x50601000, mmuflags=0x1, pte_addr=0x50600010, pte_val=0x14180401
 
