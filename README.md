@@ -1914,23 +1914,21 @@ Now we fix the Memory Map...
 
 # NuttX Memory Map for Ox64 BL808
 
-To fix the NuttX Memory Map for Ox64, let's trace the MMU Page Table Entries. From the [MMU Log](https://gist.github.com/lupyuen/73906723edf5f1611c7829779b18668a)...
+To fix the NuttX Memory Map for Ox64, let's trace the MMU Page Table Entries. From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 __Map I/O regions: (Level 1)__
 
 ```text
 mmu_ln_map_region: 
-  ptlevel=1, lnvaddr=0x50406000, paddr=0, vaddr=0, size=0x50000000, mmuflags=0x26
+  ptlevel=1, lnvaddr=0x50407000, paddr=0, vaddr=0, size=0x40000000, mmuflags=0x26
 
 mmu_ln_setentry: 
-  ptlevel=1, lnvaddr=0x50406000, paddr=0, vaddr=0, mmuflags=0x26
+  ptlevel=1, lnvaddr=0x50407000, paddr=0, vaddr=0, mmuflags=0x26
 mmu_ln_setentry: 
-  ptlevel=1, lnvaddr=0x50406000, paddr=0x40000000, vaddr=0x40000000, mmuflags=0x26
+  index=0, paddr=0, mmuflags=0xe7, pte_addr=0x50407000, pte_val=0xe7
 ```
 
 `mmuflags=0x26` means Read + Write + Global
-
-TODO: Fix misaligned paddr=0x40000000
 
 __Map PLIC: (Level 1)__
 
@@ -1976,16 +1974,20 @@ mmu_ln_setentry: index=0x1ff, paddr=0x503ff000, mmuflags=0xeb, pte_addr=0x50404f
 __Map kernel data: (Levels 2 & 3)__
 
 ```text
-mmu_ln_setentry:
-  ptlevel=2, lnvaddr=0x50405000, paddr=0x50404000, vaddr=0x50400000, mmuflags=0x0
+// Level 2
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50405000, vaddr=0x50400000, mmuflags=0x0
+mmu_ln_setentry: index=0x82, paddr=0x50405000, mmuflags=0x1, pte_addr=0x50406410, pte_val=0x14101401
 
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50400000, vaddr=0x50400000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50401000, vaddr=0x50401000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x50402000, vaddr=0x50402000, mmuflags=0x26
+// Level 3
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50405000, paddr=0x50400000, vaddr=0x5040000, mmuflags=0x26
+mmu_ln_setentry: index=0, paddr=0x50400000, mmuflags=0xe7, pte_addr=0x50405000, pte_val=0x141000e7
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50405000, paddr=0x50401000, vaddr=0x50401000, mmuflags=0x26
+mmu_ln_setentry: index=0x1, paddr=0x50401000, mmuflags=0xe7, pte_addr=0x50405008, pte_val=0x141004e7
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50405000, paddr=0x50402000, vaddr=0x50402000, mmuflags=0x26
+mmu_ln_setentry: index=0x2, paddr=0x50402000, mmuflags=0xe7, pte_addr=0x50405010, pte_val=0x141008e7
 ...
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505fd000, vaddr=0x505fd000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505fe000, vaddr=0x505fe000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505ff000, vaddr=0x505ff000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50405000, paddr=0x505ff000, vaddr=0x505ff000, mmuflags=0x26
+mmu_ln_setentry: index=0x1ff, paddr=0x505ff000, mmuflags=0xe7, pte_addr=0x50405ff8, pte_val=0x1417fce7
 ```
 
 `mmuflags=0x0` means PTE is a pointer to the next level of the page table
@@ -1995,29 +1997,35 @@ mmu_ln_setentry: ptlevel=3, lnvaddr=0x50404000, paddr=0x505ff000, vaddr=0x505ff0
 __Connect the L1 and L2 page tables:__
 
 ```text
-mmu_ln_setentry:
-  ptlevel=1, lnvaddr=0x50406000, paddr=0x50405000, vaddr=0x50200000, mmuflags=0x20
+mmu_ln_setentry: 
+  ptlevel=1, lnvaddr=0x50407000, paddr=0x50406000, vaddr=0x50200000, mmuflags=0x20
+
+mmu_ln_setentry: 
+  index=0x1, paddr=0x50406000, mmuflags=0x21, pte_addr=0x50407008, pte_val=0x14101821
 ```
 
 `mmuflags=0x20` means PTE_G: Page is a Global Mapping.
 
 And PTE is a pointer to the next level of the page table.
 
-Which means that Virtual Address 0x5020 0000 points to the L2 Page Table 0x5040 5000
+Which means that Virtual Address 0x5020 0000 points to the L2 Page Table 0x5040 6000
 
 __Map the page pool: (Level 2)__
 
 ```text
-mmu_ln_map_region: 
-  ptlevel=2, lnvaddr=0x50405000, paddr=0x50600000, vaddr=0x50600000, size=0x1400000, mmuflags=0x26
+mmu_ln_map_region: ptlevel=2, lnvaddr=0x50406000, paddr=0x50600000, vaddr=0x50600000, size=0x1400000, mmuflags=0x26
 
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50600000, vaddr=0x50600000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50800000, vaddr=0x50800000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x50a00000, vaddr=0x50a00000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50600000, vaddr=0x50600000, mmuflags=0x26
+mmu_ln_setentry: index=0x83, paddr=0x50600000, mmuflags=0xe7, pte_addr=0x50406418, pte_val=0x141800e7
+
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x5000000, vaddr=0x50800000, mmuflags=0x26
+mmu_ln_setentry: index=0x84, paddr=0x50800000, mmuflags=0xe7, pte_addr=0x50406420, pte_val=0x142000e7
+
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50a00000, vaddr=0x50a00000, mmuflags=0x26
+mmu_ln_setentry: index=0x85, paddr=0x50a00000, mmuflags=0xe7, pte_addr=0x50406428, pte_val=0x142800e7
 ...
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51400000, vaddr=0x51400000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51600000, vaddr=0x51600000, mmuflags=0x26
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x51800000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x51800000, vaddr=0x51800000, mmuflags=0x26
+mmu_ln_setentry: index=0x8c, paddr=0x51800000, mmuflags=0xe7, pte_addr=0x50406460, pte_val=0x146000e7
 ```
 
 `mmuflags=0x26` means Read + Write + Global
@@ -2069,11 +2077,13 @@ mmu_ln_setentry: index=0x80, paddr=0x5069c000, mmuflags=0xd7, pte_addr=0x5061b40
 
 _What are the 3 Levels of Page Tables?_
 
-lnvaddr=0x50406000 is m_l1_pgtable
+lnvaddr=0x50407000 is m_l1_pgtable (Level 1 Page Table for Kernel)
 
-lnvaddr=0x50405000 is m_l2_pgtable
+lnvaddr=0x50406000 is m_l2_pgtable (Level 2 Page Table for Kernel)
 
-lnvaddr=0x50403000 is m_l3_pgtable
+lnvaddr=0x50404000 is m_l3_pgtable (Level 3 Page Table for Kernel)
+
+lnvaddr=0x50403000 is m_int_l3_pgtable (Level 3 Page Table for Kernel PLIC)
 
 lnvaddr=0x5061b000 is User L1 Page Table for Code, Data, Heap
 
