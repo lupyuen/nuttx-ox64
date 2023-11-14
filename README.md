@@ -2398,6 +2398,10 @@ mmuflags=0xeb means 0b11101011:
 
 - Valid
 
+TODO: [G Bit](https://five-embeddev.com/riscv-isa-manual/latest/supervisor.html#sec:translation)
+
+> "The G bit designates a global mapping. Global mappings are those that exist in all address spaces. For non-leaf PTEs, the global setting implies that all mappings in the subsequent levels of the page table are global. Note that failing to mark a global mapping as global merely reduces performance, whereas marking a non-global mapping as global is a software bug that, after switching to an address space with a different non-global mapping for that address range, can unpredictably result in either mapping being used."
+
 TODO
 
 # Documentation for Ox64 BL808
