@@ -2016,6 +2016,51 @@ mmu_ln_setentry: ptlevel=2, lnvaddr=0x50405000, paddr=0x51800000, vaddr=0x518000
 
 `mmuflags=0x26` means Read + Write + Global
 
+__Map the User Address Space: (Levels 1, 2, 3)__
+
+```text
+nx_start_application: Starting init task: /system/bin/init
+// Level 1
+mmu_ln_setentry: ptlevel=1, lnvaddr=0x50600000, paddr=0x50601000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: index=0x2, paddr=0x50601000, mmuflags=0x1, pte_addr=0x50600010, pte_val=0x14180401
+
+// Level 2
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x50602000, vaddr=0x80100000, mmuflags=0x0
+mmu_ln_setentry: index=0, paddr=0x50602000, mmuflags=0x1, pte_addr=0x50601000, pte_val=0x14180801
+
+// Level 3 (0x16)
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50602000, paddr=0x50603000, vaddr=0x80100000, mmuflags=0x16
+mmu_ln_setentry: index=0x100, paddr=0x50603000, mmuflags=0xd7, pte_addr=0x50602800, pte_val=0x14180cd7
+
+// Level 3 (0x1a)
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50602000, paddr=0x50604000, vaddr=0x80000000, mmuflags=0x1a
+mmu_ln_setentry: index=0, paddr=0x50604000, mmuflags=0xdb, pte_addr=0x50602000, pte_val=0x141810db
+
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50602000, paddr=0x50605000, vaddr=0x80001000, mmuflags=0x1a
+mmu_ln_setentry: index=0x1, paddr=0x50605000, mmuflags=0xdb, pte_addr=0x50602008, pte_val=0x141814db
+...
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50602000, paddr=0x50619000, vaddr=0x80015000, mmuflags=0x1a
+mmu_ln_setentry: index=0x15, paddr=0x50619000, mmuflags=0xdb, pte_addr=0x506020a8, pte_val=0x141864db
+
+// Level 3 (0x16)
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x50602000, paddr=0x5061a000, vaddr=0x80101000, mmuflags=0x16
+mmu_ln_setentry: index=0x101, paddr=0x5061a000, mmuflags=0xd7, pte_addr=0x50602808, pte_val=0x141868d7
+
+// Level 2
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50601000, paddr=0x5061b000, vaddr=0x80200000, mmuflags=0x0
+mmu_ln_setentry: index=0x1, paddr=0x5061b000, mmuflags=0x1, pte_addr=0x50601008, pte_val=0x14186c01
+
+// Level 3 (0x16)
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x5061b000, paddr=0x5061c000, vaddr=0x80200000, mmuflags=0x16
+mmu_ln_setentry: index=0, paddr=0x5061c000, mmuflags=0xd7, pte_addr=0x5061b000, pte_val=0x141870d7
+
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x5061b000, paddr=0x5061d000, vaddr=0x80201000, mmuflags=0x16
+mmu_ln_setentry: index=0x1, paddr=0x5061d000, mmuflags=0xd7, pte_addr=0x5061b008, pte_val=0x141874d7
+...
+mmu_ln_setentry: ptlevel=3, lnvaddr=0x5061b000, paddr=0x5069c000, vaddr=0x80280000, mmuflags=0x16
+mmu_ln_setentry: index=0x80, paddr=0x5069c000, mmuflags=0xd7, pte_addr=0x5061b400, pte_val=0x141a70d7
+```
+
 _What are the 3 Levels of Page Tables?_
 
 lnvaddr=0x50406000 is m_l1_pgtable
