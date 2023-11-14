@@ -2040,7 +2040,7 @@ mmu_ln_setentry: index=0x8c, paddr=0x51800000, mmuflags=0xe7, pte_addr=0x5040646
 
 `mmuflags=0x26` means Read + Write + Global
 
-## Map the User Address Space (Levels 1, 2, 3)
+## Map the User Code, Data and Heap (Levels 1, 2, 3)
 
 From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
