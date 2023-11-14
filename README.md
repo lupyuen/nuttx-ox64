@@ -2028,7 +2028,7 @@ mmu_ln_map_region: ptlevel=2, lnvaddr=0x50406000, paddr=0x50600000, vaddr=0x5060
 mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50600000, vaddr=0x50600000, mmuflags=0x26
 mmu_ln_setentry: index=0x83, paddr=0x50600000, mmuflags=0xe7, pte_addr=0x50406418, pte_val=0x141800e7
 
-mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x5000000, vaddr=0x50800000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50800000, vaddr=0x50800000, mmuflags=0x26
 mmu_ln_setentry: index=0x84, paddr=0x50800000, mmuflags=0xe7, pte_addr=0x50406420, pte_val=0x142000e7
 
 mmu_ln_setentry: ptlevel=2, lnvaddr=0x50406000, paddr=0x50a00000, vaddr=0x50a00000, mmuflags=0x26
