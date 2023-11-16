@@ -1932,6 +1932,8 @@ mmu_ln_setentry:
 
 `mmuflags=0x26` means Read + Write + Global
 
+![Level 1 Page Table for Kernel](https://lupyuen.github.io/images/mmu-l1kernel2.jpg)
+
 ## Map the PLIC (Level 2)
 
 From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -1953,6 +1955,8 @@ mmu_ln_setentry: index=0x17f, paddr=0xefe00000, mmuflags=0xe7, pte_addr=0x50403b
 
 `mmuflags=0x26` means Read + Write + Global
 
+![Level 2 Page Table for Interrupt Controller](https://lupyuen.github.io/images/mmu-l2int.jpg)
+
 ## Connect the Level 1 and Level 2 Page Tables for PLIC
 
 From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -1966,6 +1970,8 @@ mmu_ln_setentry:
 ```
 
 `mmuflags=0x20` means PTE_G: Global Mapping.
+
+![Level 1 Page Table for Kernel](https://lupyuen.github.io/images/mmu-l1kernel.jpg)
 
 ## Map the Kernel Text (Levels 2 & 3)
 
@@ -1993,6 +1999,8 @@ mmu_ln_setentry: index=0x1ff, paddr=0x503ff000, mmuflags=0xeb, pte_addr=0x50404f
 `mmuflags=0x0` means PTE is a pointer to the next level of the page table
 
 `mmuflags=0x2a` means Read + Execute + Global
+
+![Level 3 Page Table for Kernel](https://lupyuen.github.io/images/mmu-l3kernel.jpg)
 
 ## Map the Kernel Data (Levels 2 & 3)
 
@@ -2059,6 +2067,8 @@ mmu_ln_setentry: index=0x8c, paddr=0x51800000, mmuflags=0xe7, pte_addr=0x5040646
 
 `mmuflags=0x26` means Read + Write + Global
 
+![Level 2 Page Table for Kernel](https://lupyuen.github.io/images/mmu-l2kernel.jpg)
+
 ## Map the User Code, Data and Heap (Levels 1, 2, 3)
 
 From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -2113,6 +2123,12 @@ mmu_ln_setentry: index=0x1, paddr=0x5061d000, mmuflags=0xd7, pte_addr=0x5061b008
 mmu_ln_setentry: ptlevel=3, lnvaddr=0x5061b000, paddr=0x5069c000, vaddr=0x80280000, mmuflags=0x16
 mmu_ln_setentry: index=0x80, paddr=0x5069c000, mmuflags=0xd7, pte_addr=0x5061b400, pte_val=0x141a70d7
 ```
+
+![Level 1 Page Table for User](https://lupyuen.github.io/images/mmu-l1user.jpg)
+
+![Level 2 Page Table for User](https://lupyuen.github.io/images/mmu-l2user.jpg)
+
+![Level 3 Page Table for User](https://lupyuen.github.io/images/mmu-l3user.jpg)
 
 ## Page Tables
 
