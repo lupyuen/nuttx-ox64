@@ -1932,21 +1932,26 @@ mmu_ln_setentry:
 
 `mmuflags=0x26` means Read + Write + Global
 
-## Map the PLIC (Level 1)
+## Map the PLIC (Level 2)
 
-Assuming we add L1 for 0xE000 0000 to access PLIC...
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ```text
 mmu_ln_map_region: 
-  ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
+  ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, size=0x10000000, mmuflags=0x26
 
-mmu_ln_setentry: 
-  ptlevel=1, lnvaddr=0x50406000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0000000, vaddr=0xe0000000, mmuflags=0x26
+mmu_ln_setentry: index=0x100, paddr=0xe0000000, mmuflags=0xe7, pte_addr=0x50403800, pte_val=0x380000e7
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0200000, vaddr=0xe0200000, mmuflags=0x26
+mmu_ln_setentry: index=0x101, paddr=0xe0200000, mmuflags=0xe7, pte_addr=0x50403808, pte_val=0x380800e7
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xe0400000, vaddr=0xe0400000, mmuflags=0x26
+mmu_ln_setentry: index=0x102, paddr=0xe0400000, mmuflags=0xe7, pte_addr=0x50403810, pte_val=0x381000e7
+...
+mmu_ln_setentry: ptlevel=2, lnvaddr=0x50403000, paddr=0xefe00000, vaddr=0xefe00000, mmuflags=0x26
+mmu_ln_setentry: index=0x17f, paddr=0xefe00000, mmuflags=0xe7, pte_addr=0x50403bf8, pte_val=0x3bf800e7
 ```
 
 `mmuflags=0x26` means Read + Write + Global
-
-(This will fail because 0xE000 0000 is misaligned, see below)
 
 ## Map the Kernel Text (Levels 2 & 3)
 
