@@ -2260,6 +2260,10 @@ nx_start: CPU0: Beginning Idle Loop
 
 TODO: Who maps the User Memory for `lnvaddr=0x50600000`?
 
+![Ox64 boots to NuttX Shell](https://lupyuen.github.io/images/mmu-boot1.png)
+
+[_Ox64 boots to NuttX Shell_](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c328221525)
+
 __Compute Level 1 PTE:__
 
 Based the [Updated MMU Log with PTE](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -2445,6 +2449,10 @@ TODO: [G Bit](https://five-embeddev.com/riscv-isa-manual/latest/supervisor.html#
 > "The G bit designates a global mapping. Global mappings are those that exist in all address spaces. For non-leaf PTEs, the global setting implies that all mappings in the subsequent levels of the page table are global. Note that failing to mark a global mapping as global merely reduces performance, whereas marking a non-global mapping as global is a software bug that, after switching to an address space with a different non-global mapping for that address range, can unpredictably result in either mapping being used."
 
 TODO: [SATP Log](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c328221525)
+
+![NuttX swaps the SATP Register](https://lupyuen.github.io/images/mmu-boot2.jpg)
+
+[_NuttX swaps the SATP Register_](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c328221525)
 
 # Documentation for Ox64 BL808
 
