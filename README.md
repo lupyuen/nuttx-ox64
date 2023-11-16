@@ -1953,6 +1953,20 @@ mmu_ln_setentry: index=0x17f, paddr=0xefe00000, mmuflags=0xe7, pte_addr=0x50403b
 
 `mmuflags=0x26` means Read + Write + Global
 
+## Connect the Level 1 and Level 2 Page Tables for PLIC
+
+From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
+
+```text
+mmu_ln_setentry: 
+  ptlevel=1, lnvaddr=0x50407000, paddr=0x50403000, vaddr=0xe0000000, mmuflags=0x20
+
+mmu_ln_setentry: 
+  index=0x3, paddr=0x50403000, mmuflags=0x21, pte_addr=0x50407018, pte_val=0x14100c21
+```
+
+`mmuflags=0x20` means PTE_G: Global Mapping.
+
 ## Map the Kernel Text (Levels 2 & 3)
 
 From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
@@ -2017,7 +2031,7 @@ mmu_ln_setentry:
   index=0x1, paddr=0x50406000, mmuflags=0x21, pte_addr=0x50407008, pte_val=0x14101821
 ```
 
-`mmuflags=0x20` means PTE_G: Page is a Global Mapping.
+`mmuflags=0x20` means PTE_G: Global Mapping.
 
 And PTE is a pointer to the next level of the page table.
 
