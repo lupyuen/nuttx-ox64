@@ -2401,7 +2401,7 @@ To compute the Address of Level 3 PTE:
 
 - index = vpn & 0b111111111 = 0x1
 
-  (Extract Bits 0 to 18 to get Level 3 Index)
+  (Extract Bits 0 to 8 to get Level 3 Index)
 
 - vpn = vaddr >> 12 = 0x50201
 
