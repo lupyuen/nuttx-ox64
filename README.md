@@ -2504,13 +2504,11 @@ NuttX Kernel starts a NuttX App (in ELF Format) by calling...
 
 - [__mmu_ln_setentry__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_mmu.c#L62-L109) to populate the Page Table Entries
 
-_Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94)?_
+_Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to start the NuttX App?_
 
 Earlier we stepped through the __Boot Sequence__ for NuttX...
 
-- [__"PinePhone Boots NuttX"__](https://lupyuen.github.io/articles/unicorn2#pinephone-boots-nuttx)
-
-- [__"PinePhone Continues Booting NuttX"__](https://lupyuen.github.io/articles/unicorn2#pinephone-continues-booting-nuttx)
+- [__"NuttX Boot Flow"__](https://lupyuen.github.io/articles/ox2#appendix-nuttx-boot-flow)
 
 Right after that, [__nx_bringup__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L373-L458) calls...
 
