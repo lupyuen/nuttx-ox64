@@ -2506,6 +2506,60 @@ NuttX Kernel starts a NuttX App (in ELF Format) by calling...
 
 TODO: Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94)?
 
+# NuttX App calls NuttX Kernel
+
+TODO
+
+```bash
+→ grep PROXY init.S
+PROXY__assert.c
+PROXY__exit.c
+PROXY_clock_gettime.c
+PROXY_gettid.c
+PROXY_nxsem_wait.c
+PROXY_sched_getparam.c
+PROXY_sched_setparam.c
+PROXY_sem_clockwait.c
+PROXY_sem_destroy.c
+PROXY_sem_post.c
+PROXY_sem_trywait.c
+PROXY_task_setcancelstate.c
+PROXY_write.c
+PROXY_boardctl.c
+PROXY_clock_nanosleep.c
+PROXY_close.c
+PROXY_ftruncate.c
+PROXY_get_environ_ptr.c
+PROXY_getenv.c
+PROXY_gethostname.c
+PROXY_ioctl.c
+PROXY_kill.c
+PROXY_lseek.c
+PROXY_lstat.c
+PROXY_mkdir.c
+PROXY_mount.c
+PROXY_nx_pthread_create.c
+PROXY_nx_pthread_exit.c
+PROXY_nx_vsyslog.c
+PROXY_open.c
+PROXY_pgalloc.c
+PROXY_posix_spawn.c
+PROXY_pthread_detach.c
+PROXY_read.c
+PROXY_rename.c
+PROXY_rmdir.c
+PROXY_sched_getscheduler.c
+PROXY_sched_lock.c
+PROXY_sched_unlock.c
+PROXY_setenv.c
+PROXY_stat.c
+PROXY_sysinfo.c
+PROXY_umount2.c
+PROXY_unlink.c
+PROXY_unsetenv.c
+PROXY_waitpid.c
+```
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
