@@ -2484,6 +2484,28 @@ TODO: [SATP Log](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c32822152
 
 [_NuttX swaps the SATP Register_](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c328221525)
 
+# Start NuttX Apps on Ox64 BL808
+
+NuttX Kernel starts a NuttX App (in ELF Format) by calling...
+
+- [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94), which calls...
+
+- [elf_loadbinary](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L225-L355), which calls...
+
+- [elf_load](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/libelf/libelf_load.c#L297-L445), which calls...
+
+- [elf_addrenv_alloc](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/libelf/libelf_addrenv.c#L56-L178), which calls...
+
+- [up_addrenv_create](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_addrenv.c#L339-L490), which calls...
+
+  (Also calls [mmu_satp_reg](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_mmu.h#L152-L176) to set SATP Register)
+
+- [create_region](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_addrenv.c#L213-L310), which calls...
+
+- [mmu_ln_setentry](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_mmu.c#L62-L109) to populate the Page Table Entries
+
+TODO: Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94)?
+
 # Documentation for Ox64 BL808
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
