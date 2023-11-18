@@ -4,6 +4,8 @@
 
 Read the articles...
 
+-   ["RISC-V Ox64 BL808 SBC: Sv39 Memory Management Unit"](https://lupyuen.github.io/articles/mmu)
+
 -   ["RISC-V Ox64 BL808 SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
 
 -   ["RISC-V Ox64 BL808 SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
@@ -1914,6 +1916,10 @@ Now we fix the Memory Map...
 
 # NuttX Memory Map for Ox64 BL808
 
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: Sv39 Memory Management Unit"](https://lupyuen.github.io/articles/mmu)
+
 To fix the NuttX Memory Map for Ox64, let's trace the MMU Page Table Entries. From the [MMU Log](https://gist.github.com/lupyuen/22712d6a2c3a7eb2da1f3cd5c2f4f6cf)...
 
 ## Map the I/O Region (Level 1)
@@ -2155,6 +2161,10 @@ lnvaddr=0x50601000 is User L2 Page Table for Heap
 lnvaddr=0x5061b000 is User L3 Page Table for Heap
 
 # Fix the NuttX Memory Map for PLIC
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: Sv39 Memory Management Unit"](https://lupyuen.github.io/articles/mmu)
 
 _Can we add L1 for 0xE000 0000 to access PLIC?_
 
