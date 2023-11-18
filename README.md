@@ -2510,6 +2510,49 @@ TODO: Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/bl
 
 TODO
 
+```c
+/* Auto-generated write proxy file -- do not edit */
+
+#include <nuttx/config.h>
+#include <unistd.h>
+#include <syscall.h>
+
+ssize_t write(int parm1, FAR const void * parm2, size_t parm3)
+{
+  return (ssize_t)sys_call3((unsigned int)SYS_write, (uintptr_t)parm1, (uintptr_t)parm2, (uintptr_t)parm3);
+}
+```
+
+Proxy for write (nuttx/syscall/proxies/PROXY_write.c) calls...
+
+[sys_call3](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h), which makes an `ecall` to NuttX Kernel...
+
+```c
+static inline uintptr_t sys_call3(unsigned int nbr, uintptr_t parm1,
+                                  uintptr_t parm2, uintptr_t parm3)
+{
+  register long r0 asm("a0") = (long)(nbr);
+  register long r1 asm("a1") = (long)(parm1);
+  register long r2 asm("a2") = (long)(parm2);
+  register long r3 asm("a3") = (long)(parm3);
+
+  asm volatile
+    (
+     "ecall"
+     :: "r"(r0), "r"(r1), "r"(r2), "r"(r3)
+     : "memory"
+     );
+
+  asm volatile("nop" : "=r"(r0));
+
+  return r0;
+}
+```
+
+TODO: Why `nop`?
+
+List of proxies...
+
 ```bash
 → grep PROXY init.S
 PROXY__assert.c
