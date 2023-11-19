@@ -2498,7 +2498,7 @@ TODO: [SATP Log](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c32822152
 
 NuttX Kernel starts a NuttX App (in ELF Format) by calling...
 
-- [__g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94), which calls...
+- [__ELF Loader: g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94), which calls...
 
 - [__elf_loadbinary__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L225-L355), which calls...
 
@@ -2514,7 +2514,7 @@ NuttX Kernel starts a NuttX App (in ELF Format) by calling...
 
 - [__mmu_ln_setentry__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_mmu.c#L62-L109) to populate the Page Table Entries
 
-_Who calls [g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to start the NuttX App?_
+_Who calls [ELF Loader g_elfbinfmt](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to start the NuttX App?_
 
 Earlier we stepped through the __Boot Sequence__ for NuttX...
 
@@ -2540,7 +2540,7 @@ Right after that, [__nx_bringup__](https://github.com/apache/nuttx/blob/master/s
 
 - [__binfmt_s.load__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148), which calls...
 
-- [__g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to load the ELF File (explained above)
+- [__ELF Loader: g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to load the ELF File (explained above)
 
 # NuttX App calls NuttX Kernel
 
