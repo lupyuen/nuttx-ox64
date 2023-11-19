@@ -1146,11 +1146,11 @@ We look up Code Address 0x50208086 in our NuttX Disassembly...
 ```text
 000000005020807a <modifyreg32>:
 up_irq_save():
-/Users/Luppy/ox64/nuttx/include/arch/irq.h:689
+nuttx/include/arch/irq.h:689
     5020807a:	4789                	li	a5,2
     5020807c:	1007b7f3          	csrrc	a5,sstatus,a5
 modifyreg32():
-/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
+nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
 {
   irqstate_t flags;
   uint32_t   regval;
@@ -1158,10 +1158,10 @@ modifyreg32():
   flags   = spin_lock_irqsave(NULL);
   regval  = getreg32(addr);
     50208080:	4118                	lw	a4,0(a0)
-/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:53
+nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:53
   regval &= ~clearbits;
     50208082:	fff5c593          	not	a1,a1
-/Users/Luppy/ox64/nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
+nuttx/arch/risc-v/src/common/riscv_modifyreg32.c:52
   regval  = getreg32(addr);
     50208086:	2701                	sext.w	a4,a4
 ```
@@ -1354,7 +1354,7 @@ MTVAL:  00000000e0002100
 Code Address is 0x50207e6a, from our PLIC Code...
 
 ```text
-/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/jh7110_irq.c:62
+nuttx/arch/risc-v/src/chip/jh7110_irq.c:62
   putreg32(0x0, JH7110_PLIC_ENABLE1);
     50207e64:	700017b7          	lui	a5,0x70001
     50207e68:	0786                	slli	a5,a5,0x1
@@ -2541,6 +2541,104 @@ Right after that, [__nx_bringup__](https://github.com/apache/nuttx/blob/master/s
 - [__binfmt_s.load__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148), which calls...
 
 - [__ELF Loader: g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to load the ELF File (explained above)
+
+# Simple NuttX App for Ox64 BL808
+
+_What's inside the simplest app for NuttX?_
+
+From [hello_main.c](https://github.com/lupyuen2/wip-pinephone-nuttx-apps/blob/ox64b/examples/hello/hello_main.c#L36-L40)
+
+```c
+int main(int argc, FAR char *argv[]) {
+  printf("Hello, World!!\n");
+  return 0;
+}
+```
+
+Here's the RISC-V Disassembly: [hello.S](https://github.com/lupyuen2/wip-pinephone-nuttx/releases/download/ox64a-1/hello.S)
+
+```text
+000000000000003e <main>:
+main():
+apps/examples/hello/hello_main.c:37
+/****************************************************************************
+ * hello_main
+ ****************************************************************************/
+
+int main(int argc, FAR char *argv[])
+{
+  3e:	1141                	addi	sp,sp,-16
+apps/examples/hello/hello_main.c:38
+  printf("Hello, World!!\n");
+  40:	00000517          	auipc	a0,0x0	40: R_RISCV_PCREL_HI20	.LC0
+	40: R_RISCV_RELAX	*ABS*
+  44:	00050513          	mv	a0,a0	44: R_RISCV_PCREL_LO12_I	.L0 
+	44: R_RISCV_RELAX	*ABS*
+
+0000000000000048 <.LVL1>:
+apps/examples/hello/hello_main.c:37
+{
+  48:	e406                	sd	ra,8(sp)
+apps/examples/hello/hello_main.c:38
+  printf("Hello, World!!\n");
+  4a:	00000097          	auipc	ra,0x0	4a: R_RISCV_CALL	puts
+	4a: R_RISCV_RELAX	*ABS*
+  4e:	000080e7          	jalr	ra # 4a <.LVL1+0x2>
+
+0000000000000052 <.LVL2>:
+apps/examples/hello/hello_main.c:40
+  return 0;
+}
+  52:	60a2                	ld	ra,8(sp)
+  54:	4501                	li	a0,0
+  56:	0141                	addi	sp,sp,16
+  58:	8082                	ret
+```
+
+We see that [main](https://github.com/lupyuen2/wip-pinephone-nuttx-apps/blob/ox64b/examples/hello/hello_main.c#L36-L40) calls...
+
+- [puts](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/libs/libc/stdio/lib_puts.c#L34-L96), which calls...
+
+- [lib_fwrite_unlocked](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/libs/libc/stdio/lib_libfwrite.c#L45-L200), which calls...
+
+- [stream->fs_iofunc.write](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/libs/libc/stdio/lib_libfwrite.c#L145) OR...
+
+  [write](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/libs/libc/stdio/lib_libfwrite.c#L149) (See below)
+
+TODO: Which one?
+
+TODO: _start prepares sig_trampoline and calls main
+
+_This code doesn't look right..._
+
+```text
+apps/examples/hello/hello_main.c:38
+  printf("Hello, World!!\n");
+  4a:	00000097          	auipc	ra,0x0
+  4e:	000080e7          	jalr	ra
+```
+
+That's because this is __Relocatable Code__. The auipc offset will be fixed up by the NuttX ELF Loader when it loads this code into User Memory.
+
+The Relocation Info shows that 0x0 will be replaced by the address of `puts`...
+
+```text
+  4a:	00000097          	auipc	ra,0x0
+  4a: R_RISCV_CALL	puts
+  4e:	000080e7          	jalr	ra
+```
+
+_Why `puts` instead of `printf`?_
+
+The GCC Compiler has cleverly optimised away `printf` to become `puts`.
+
+If we do this...
+
+```c
+  printf("Hello, World %s!!\n", "Luppy");
+```
+
+Then `printf` will appear in our disassembly.
 
 # NuttX App calls NuttX Kernel
 
