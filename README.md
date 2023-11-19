@@ -2642,7 +2642,9 @@ Then `printf` will appear in our disassembly.
 
 # NuttX App calls NuttX Kernel
 
-TODO
+Our NuttX App calls `write`, which is a Proxy Version...
+
+From nuttx/syscall/proxies/PROXY_write.c
 
 ```c
 /* Auto-generated write proxy file -- do not edit */
@@ -2656,8 +2658,7 @@ ssize_t write(int parm1, FAR const void * parm2, size_t parm3)
   return (ssize_t)sys_call3((unsigned int)SYS_write, (uintptr_t)parm1, (uintptr_t)parm2, (uintptr_t)parm3);
 }
 ```
-
-Proxy for write (nuttx/syscall/proxies/PROXY_write.c) calls...
+Proxy for `write` calls...
 
 [sys_call3](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h), which makes an `ecall` to NuttX Kernel...
 
@@ -2688,6 +2689,20 @@ TODO: Why `nop`?
 List of proxies...
 
 ```bash
+→ grep PROXY hello.S
+PROXY__assert.c
+PROXY__exit.c
+PROXY_clock_gettime.c
+PROXY_gettid.c
+PROXY_lseek.c
+PROXY_nxsem_wait.c
+PROXY_sem_clockwait.c
+PROXY_sem_destroy.c
+PROXY_sem_post.c
+PROXY_sem_trywait.c
+PROXY_task_setcancelstate.c
+PROXY_write.c
+
 → grep PROXY init.S
 PROXY__assert.c
 PROXY__exit.c
