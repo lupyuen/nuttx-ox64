@@ -2686,6 +2686,8 @@ static inline uintptr_t sys_call3(unsigned int nbr, uintptr_t parm1,
 
 TODO: Why `nop`?
 
+![NuttX App calls NuttX Kernel](https://lupyuen.github.io/images/app-run.png)
+
 List of proxies...
 
 ```bash
@@ -2753,6 +2755,10 @@ PROXY_waitpid.c
 ```
 
 # Documentation for Ox64 BL808
+
+![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
+
+[_Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)_](https://wiki.pine64.org/wiki/Ox64)
 
 - ["Ox64 BL808 RISC-V SBC: Booting Linux and (maybe) Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox64)
 
