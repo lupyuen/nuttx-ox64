@@ -2754,6 +2754,128 @@ PROXY_unsetenv.c
 PROXY_waitpid.c
 ```
 
+# Kernel Handles App Call
+
+TODO
+
+From nuttx/syscall/stubs/STUB_write.c
+
+```c
+/* Auto-generated write stub file -- do not edit */
+
+#include <nuttx/config.h>
+#include <stdint.h>
+#include <unistd.h>
+
+uintptr_t STUB_write(int nbr, uintptr_t parm1, uintptr_t parm2, uintptr_t parm3)
+{
+  return (uintptr_t)write((int)parm1, (FAR const void *)parm2, (size_t)parm3);
+}
+```
+
+TODO: Handle IRQ 8 (RISCV_IRQ_ECALLU)
+
+[Attach RISCV_IRQ_ECALLU](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_exception.c#L114-L119), which calls...
+
+[riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537), which calls...
+
+[dispatch_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L54-L100), which calls Kernel Function Stub and... 
+
+[sys_call2](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_syscall.S#L49-L177) with A0=SYS_syscall_return (3), which calls...
+
+[riscv_perform_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_perform_syscall.c#L36-L78), which calls...
+
+[riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537) with IRQ 0, to return from Syscall
+
+From [syscall_lookup.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall_lookup.h#L202)
+
+```c
+SYSCALL_LOOKUP(write, 3)
+```
+
+Which defines SYS_write in the [Syscall Enum](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall.h#L55-L66)
+
+From hello.S:
+
+```text
+ssize_t write(int parm1, FAR const void * parm2, size_t parm3)
+{
+ dcc:	872a                	mv	a4,a0
+
+0000000000000dce <.LVL1>:
+ dce:	87ae                	mv	a5,a1
+
+0000000000000dd0 <.LVL2>:
+ dd0:	86b2                	mv	a3,a2
+
+0000000000000dd2 <.LBB4>:
+sys_call3():
+/Users/Luppy/ox64/nuttx/include/arch/syscall.h:252
+  register long r0 asm("a0") = (long)(nbr);
+ dd2:	03f00513          	li	a0,63
+```
+
+Thus SYS_write = 63
+
+Also from hello.S:
+
+```text
+ <2><66e7>: Abbrev Number: 6 (DW_TAG_enumerator)
+    <66e8>   DW_AT_name        : (indirect string, offset: 0x4b98): SYS_write
+    <66ec>   DW_AT_const_value : 63
+```
+
+TODO: Enable CONFIG_DEBUG_SYSCALL_INFO: Build Setup > Debug Options > Syscall Debug Features > Syscall Warning / Error / Info
+
+From [ECALL Log](https://gist.github.com/lupyuen/ce82b29c664b1d5898b6a59743310c17)
+
+```text
+riscv_dispatch_irq: irq=8
+riscv_swint: Entry: regs: 0x5040bcb0 cmd: 63
+up_dump_register: EPC: 00000000800019b2
+up_dump_register: A0: 000000000000003f A1: 0000000000000001 A2: 000000008000ad00 A3: 000000000000001e
+up_dump_register: A4: 0000000000000001 A5: 000000008000ad00 A6: 0000000000000000 A7: fffffffffffffff8
+up_dump_register: T0: 0000000050212a20 T1: 0000000000000007 T2: 0000000000000000 T3: 0000000080200908
+up_dump_register: T4: 0000000080200900 T5: 0000000000000000 T6: 0000000000000000
+up_dump_register: S0: 00000000802005c0 S1: 0000000080202010 S2: 0000000080202010 S3: 0000000000000000
+up_dump_register: S4: 0000000000000001 S5: 0000000000000000 S6: 0000000000000000 S7: 0000000000000000
+up_dump_register: S8: 0000000000000000 S9: 0000000000000000 S10: 0000000000000000 S11: 0000000000000000
+up_dump_register: SP: 0000000080202b70 FP: 00000000802005c0 TP: 0000000000000000 RA: 0000000080001a6a
+riscv_swint: SWInt Return: 37
+STUB_write: nbr=440, parm1=1, parm2=8000ad00, parm3=1e
+
+NuttShell (NSH) NuttX-12.0.3
+riscv_swint: Entry: regs: 0x5040baa0 cmd: 3
+up_dump_register: EPC: 0000000080001a6a
+up_dump_register: A0: 0000000000000003 A1: 000000005040bbec A2: 000000000000001e A3: 0000000000000000
+up_dump_register: A4: 0000000000007fff A5: 0000000000000001 A6: 0000000000000009 A7: fffffffffffffff8
+up_dump_register: T0: 000000000000002e T1: 000000000000006a T2: 00000000000001ff T3: 000000000000006c
+up_dump_register: T4: 0000000000000068 T5: 0000000000000009 T6: 000000000000002a
+up_dump_register: S0: 00000000802005c0 S1: 0000000080202010 S2: 0000000080202010 S3: 0000000000000000
+up_dump_register: S4: 0000000000000001 S5: 0000000000000000 S6: 0000000000000000 S7: 0000000000000000
+up_dump_register: S8: 0000000000000000 S9: 0000000000000000 S10: 0000000000000000 S11: 0000000000000000
+up_dump_register: SP: 000000005040bcb0 FP: 00000000802005c0 TP: 0000000000000000 RA: 0000000080001a6a
+riscv_swint: SWInt Return: 1e
+```
+
+Before Call:
+
+A0=0x3f (SYS_write) 
+
+A1=1 (stdout)
+
+A2=0x8000ad00 (g_nshgreeting)
+
+A3=0x1e (length)
+
+nbr=440 (Offset for the stub lookup table, [g_stublookup](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/syscall/syscall_stublookup.c#L80-L93))
+
+After Call:
+
+A0=3 [(SYS_syscall_return)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h#L80-L87)
+
+Returns 0x1E = 30 chars, including [linefeeds before and after](https://github.com/lupyuen2/wip-pinephone-nuttx-apps/blob/ox64b/nshlib/nsh_parse.c#L292-L302)
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
