@@ -1651,6 +1651,8 @@ cat nuttx.bin /tmp/nuttx.zero initrd \
 cp Image "/Volumes/NO NAME/"
 ```
 
+![Initial RAM Disk for Ox64](https://lupyuen.github.io/images/app-initrd.jpg)
+
 This is how we copy the initrd in RAM to the Memory Region for the RAM Disk: [jh7110_start.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/jh7110_start.c#L190-L245)
 
 ```c
@@ -2642,6 +2644,10 @@ Then `printf` will appear in our disassembly.
 
 # NuttX App calls NuttX Kernel
 
+![NuttX App calls NuttX Kernel](https://lupyuen.github.io/images/app-syscall.jpg)
+
+_How does a NuttX App make a System Call to NuttX Kernel?_
+
 Our NuttX App calls `write`, which is a Proxy Version...
 
 From nuttx/syscall/proxies/PROXY_write.c
@@ -2685,6 +2691,8 @@ static inline uintptr_t sys_call3(unsigned int nbr, uintptr_t parm1,
 ```
 
 TODO: Why `nop`?
+
+Here's how it works...
 
 ![NuttX App calls NuttX Kernel](https://lupyuen.github.io/images/app-run.png)
 
