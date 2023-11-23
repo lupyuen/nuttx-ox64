@@ -2923,11 +2923,29 @@ click load_absmodule href "https://github.com/apache/nuttx/blob/master/binfmt/bi
 load_absmodule --> binfmt_s.load["Load Binary Format: \n binfmt_s.load \n (Load a binary module)"]
 click binfmt_s.load href "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" _blank
 
-binfmt_s.load --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
+binfmt_s.load --> g_elfbinfmt["ELF Loader: \n g_elfbinfmt \n (Load the ELF File)"]
+click g_elfbinfmt href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94" "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94" _blank
 
-fff --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
+g_elfbinfmt --> elf_loadbinary["Load ELF Binary: \n elf_loadbinary \n (Load the ELF Binary)"]
+click elf_loadbinary href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355" "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355" _blank
+
+elf_loadbinary --> elf_load["Load ELF: \n elf_load \n (Load the ELF Binary)"]
+click elf_load href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" _blank
+
+elf_load --> elf_addrenv_alloc["Allocate Address Env: \n elf_addrenv_alloc \n (Allocate the Address Env)"]
+click elf_addrenv_alloc href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178" "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178" _blank
+
+elf_addrenv_alloc --> up_addrenv_create["Create Address Env: \n up_addrenv_create \n (Create the Address Env)"]
+click up_addrenv_create href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490" _blank
+
+elf_addrenv_alloc --> mmu_satp_reg["Set SATP Register: \n mmu_satp_reg \n (Set SATP Register)"]
+click mmu_satp_reg href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176" _blank
+
+up_addrenv_create --> create_region["Create MMU Region: \n create_region \n (Create the MMU Region)"]
+click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310" _blank
+
+create_region --> mmu_ln_setentry["Set MMU Page Table Entry: \n mmu_ln_setentry \n (Populate the Page Table Entries)"]
+click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" _blank
 
 fff --> aaa["bbb: \n aaa \n (ccc)"]
 click aaa href "ddd" "eee" _blank
@@ -2936,28 +2954,6 @@ fff --> aaa["bbb: \n aaa \n (ccc)"]
 click aaa href "ddd" "eee" _blank
 
 ```
-
-- [ :  ]() (to ), which calls...
-
-- [ :  ]() (to ), which calls...
-
-- [ ELF Loader: g_elfbinfmt ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) (to load the ELF File, see below)
-
-To load the ELF File: [ ELF Loader g_elfbinfmt ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) calls...
-
-- [ Load ELF Binary: elf_loadbinary ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355) (to load the ELF Binary), which calls...
-
-- [ Load ELF: elf_load ](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445) (to load the ELF Binary), which calls...
-
-- [ Allocate Address Env: elf_addrenv_alloc ](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178) (to allocate the Address Env), which calls...
-
-- [ Create Address Env: up_addrenv_create ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490) (to create the Address Env), which calls...
-
-  (Also calls [ mmu_satp_reg ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176) to set SATP Register)
-
-- [ Create MMU Region: create_region ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310) (to create the MMU Region), which calls...
-
-- [ Set MMU Page Table Entry: mmu_ln_setentry ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109) (to populate the Page Table Entries)
 
 _Phew so NuttX Apps can call NuttX Kernel..._
 
