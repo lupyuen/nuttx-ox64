@@ -2650,55 +2650,46 @@ _How does a NuttX App make a System Call to NuttX Kernel?_
 
 Our NuttX App calls `write`, which is a Proxy Version...
 
-From nuttx/syscall/proxies/PROXY_write.c
-
 ```c
+// From nuttx/syscall/proxies/PROXY_write.c
 /* Auto-generated write proxy file -- do not edit */
-
 #include <nuttx/config.h>
 #include <unistd.h>
 #include <syscall.h>
 
-ssize_t write(int parm1, FAR const void * parm2, size_t parm3)
-{
+ssize_t write(int parm1, FAR const void * parm2, size_t parm3) {
   return (ssize_t)sys_call3((unsigned int)SYS_write, (uintptr_t)parm1, (uintptr_t)parm2, (uintptr_t)parm3);
 }
 ```
-Proxy for `write` calls...
-
-[sys_call3](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h), which makes an `ecall` to NuttX Kernel...
+Proxy for `write` calls [sys_call3](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h), which makes an `ecall` to NuttX Kernel...
 
 ```c
+// Make an `ecall` to NuttX Kernel
 static inline uintptr_t sys_call3(unsigned int nbr, uintptr_t parm1,
-                                  uintptr_t parm2, uintptr_t parm3)
-{
+                                  uintptr_t parm2, uintptr_t parm3) {
   register long r0 asm("a0") = (long)(nbr);
   register long r1 asm("a1") = (long)(parm1);
   register long r2 asm("a2") = (long)(parm2);
   register long r3 asm("a3") = (long)(parm3);
-
   asm volatile
     (
      "ecall"
      :: "r"(r0), "r"(r1), "r"(r2), "r"(r3)
      : "memory"
      );
-
   asm volatile("nop" : "=r"(r0));
-
   return r0;
 }
 ```
-
-TODO: Why `nop`?
 
 Here's how it works...
 
 ![NuttX App calls NuttX Kernel](https://lupyuen.github.io/images/app-run.png)
 
-List of proxies...
+We can see the list of proxies in the RISC-V Disassembly of the NuttX Apps...
 
 ```bash
+## Hello App
 → grep PROXY hello.S
 PROXY__assert.c
 PROXY__exit.c
@@ -2713,6 +2704,7 @@ PROXY_sem_trywait.c
 PROXY_task_setcancelstate.c
 PROXY_write.c
 
+## NuttX Shell NSH
 → grep PROXY init.S
 PROXY__assert.c
 PROXY__exit.c
@@ -2764,46 +2756,58 @@ PROXY_waitpid.c
 
 # Kernel Handles App Call
 
-TODO
+_Our App makes an ecall to jump to NuttX Kernel..._
 
-From nuttx/syscall/stubs/STUB_write.c
+_What happens on the other side?_
+
+Remember the Proxy Function from earlier? Now we do the exact opposite in our __Stub Function__ (that runs in the Kernel)...
 
 ```c
+// From nuttx/syscall/stubs/STUB_write.c
 /* Auto-generated write stub file -- do not edit */
-
 #include <nuttx/config.h>
 #include <stdint.h>
 #include <unistd.h>
 
-uintptr_t STUB_write(int nbr, uintptr_t parm1, uintptr_t parm2, uintptr_t parm3)
-{
+uintptr_t STUB_write(int nbr, uintptr_t parm1, uintptr_t parm2, uintptr_t parm3) {
   return (uintptr_t)write((int)parm1, (FAR const void *)parm2, (size_t)parm3);
 }
 ```
 
-TODO: Handle IRQ 8 (RISCV_IRQ_ECALLU)
+To handle IRQ 8 (RISCV_IRQ_ECALLU), NuttX does...
 
-[Attach RISCV_IRQ_ECALLU](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_exception.c#L114-L119), which calls...
+- [Attach RISCV_IRQ_ECALLU](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_exception.c#L114-L119), which calls...
 
-[riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537), which calls...
+- [riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537), which calls...
 
-[dispatch_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L54-L100), which calls Kernel Function Stub and... 
+- [dispatch_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L54-L100), which calls Kernel Function Stub and... 
 
-[sys_call2](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_syscall.S#L49-L177) with A0=SYS_syscall_return (3), which calls...
+- [sys_call2](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_syscall.S#L49-L177) with A0=SYS_syscall_return (3), which calls...
 
-[riscv_perform_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_perform_syscall.c#L36-L78), which calls...
+- [riscv_perform_syscall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/supervisor/riscv_perform_syscall.c#L36-L78), which calls...
 
-[riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537) with IRQ 0, to return from Syscall
+- [riscv_swint](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/common/riscv_swint.c#L105-L537) with IRQ 0, to return from Syscall
 
-From [syscall_lookup.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall_lookup.h#L202)
+_How did we figure out that 63 is the System Call Number for "write"?_
+
+OK this part gets tricky. Below is the Enum that defines all __System Call Numbers__: [syscall.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall.h#L55-L66) and [syscall_lookup.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall_lookup.h#L202)
 
 ```c
-SYSCALL_LOOKUP(write, 3)
+// System Call Enum sequentially assigns
+// all System Call Numbers (8 to 147-ish)
+enum {
+  ...
+  SYSCALL_LOOKUP(close, 1)
+  SYSCALL_LOOKUP(ioctl, 3)
+  SYSCALL_LOOKUP(read,  3)
+  SYSCALL_LOOKUP(write, 3)
+  ...
+};
 ```
 
-Which defines SYS_write in the [Syscall Enum](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/include/sys/syscall.h#L55-L66)
+But it's an Enum, __numbered sequentially__ from 8 to 147-ish. We won't actually see 63 in the NuttX Source Code.
 
-From hello.S:
+When we look at the RISC-V Disassembly hello.S:
 
 ```text
 ssize_t write(int parm1, FAR const void * parm2, size_t parm3)
@@ -2823,9 +2827,7 @@ sys_call3():
  dd2:	03f00513          	li	a0,63
 ```
 
-Thus SYS_write = 63
-
-Also from hello.S:
+We see that SYS_write = 63. Also from hello.S:
 
 ```text
  <2><66e7>: Abbrev Number: 6 (DW_TAG_enumerator)
@@ -2833,9 +2835,11 @@ Also from hello.S:
     <66ec>   DW_AT_const_value : 63
 ```
 
-TODO: Enable CONFIG_DEBUG_SYSCALL_INFO: Build Setup > Debug Options > Syscall Debug Features > Syscall Warning / Error / Info
+_What happens when we run this?_
 
-From [ECALL Log](https://gist.github.com/lupyuen/ce82b29c664b1d5898b6a59743310c17)
+In `make menuconfig`, enable CONFIG_DEBUG_SYSCALL_INFO: Build Setup > Debug Options > Syscall Debug Features > Syscall Warning / Error / Info
+
+The [NuttX Log](https://gist.github.com/lupyuen/ce82b29c664b1d5898b6a59743310c17) shows the System Calls from NuttX App to NuttX Kernel...
 
 ```text
 riscv_dispatch_irq: irq=8
@@ -2866,23 +2870,75 @@ up_dump_register: SP: 000000005040bcb0 FP: 00000000802005c0 TP: 0000000000000000
 riscv_swint: SWInt Return: 1e
 ```
 
-Before Call:
+_What are the Register Values?_
 
-A0=0x3f (SYS_write) 
+Before System Call:
 
-A1=1 (stdout)
+- A0 = 0x3f (SYS_write) 
 
-A2=0x8000ad00 (g_nshgreeting)
+- A1 = 1 (stdout)
 
-A3=0x1e (length)
+- A2 = 0x8000ad00 (g_nshgreeting)
 
-nbr=440 (Offset for the stub lookup table, [g_stublookup](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/syscall/syscall_stublookup.c#L80-L93))
+- A3 = 0x1e (length)
 
-After Call:
+- nbr = 440 (Offset for the stub lookup table, [g_stublookup](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/syscall/syscall_stublookup.c#L80-L93))
 
-A0=3 [(SYS_syscall_return)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h#L80-L87)
+After System Call:
 
-Returns 0x1E = 30 chars, including [linefeeds before and after](https://github.com/lupyuen2/wip-pinephone-nuttx-apps/blob/ox64b/nshlib/nsh_parse.c#L292-L302)
+- A0 = 3 [(SYS_syscall_return)](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/include/syscall.h#L80-L87)
+
+- Returns 0x1E = 30 chars, including [linefeeds before and after](https://github.com/lupyuen2/wip-pinephone-nuttx-apps/blob/ox64b/nshlib/nsh_parse.c#L292-L302)
+
+# Kernel Starts a NuttX App
+
+_Phew so NuttX Apps can call NuttX Kernel..._
+
+_But how does NuttX Kernel start a NuttX App?_
+
+Earlier we stepped through the __Boot Sequence__ for NuttX...
+
+- [__"NuttX Boot Flow"__](https://lupyuen.github.io/articles/ox2#appendix-nuttx-boot-flow)
+
+Right after that, [__NuttX Bringup (nx_bringup)__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L373-L458) calls...
+
+- [__Create Init Thread: nx_create_initthread__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367) (to create the Init Thread), which calls...
+
+- [__Start App: nx_start_application__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302) (to start NuttX Shell), which calls...
+
+- [__Exec Spawn: exec_spawn__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223) (to start the app), which calls...
+
+- [__Exec Internal: exec_internal__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179) (to start the app), which calls...
+
+- [__Load Module: load_module__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225) (to load the app, see below) and...
+
+  [__Execute Module: exec_module__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450) (to execute the app)
+
+To load a NuttX App module: [__load_module__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225) calls...
+
+- [__Load Absolute Module: load_absmodule__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132) (to load an absolute path), which calls...
+
+- [__Load Binary Format: binfmt_s.load__](https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148) (to load a binary module), which calls...
+
+- [__ELF Loader: g_elfbinfmt__](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) (to load the ELF File, see below)
+
+To load the ELF File: [__ELF Loader g_elfbinfmt__](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) calls...
+
+- [__Load ELF Binary: elf_loadbinary__](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355) (to load the ELF Binary), which calls...
+
+- [__Load ELF: elf_load__](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445) (to load the ELF Binary), which calls...
+
+- [__Allocate Address Env: elf_addrenv_alloc__](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178) (to allocate the Address Env), which calls...
+
+- [__Create Address Env: up_addrenv_create__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490) (to create the Address Env), which calls...
+
+  (Also calls [__mmu_satp_reg__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176) to set SATP Register)
+
+- [__Create MMU Region: create_region__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310) (to create the MMU Region), which calls...
+
+- [__Set MMU Page Table Entry: mmu_ln_setentry__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109) (to populate the Page Table Entries)
+
+There's plenty happening inside [__Execute Module: exec_module__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450). But we won't explore today.
 
 # Documentation for Ox64 BL808
 
