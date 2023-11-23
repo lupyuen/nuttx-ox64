@@ -2917,7 +2917,13 @@ click load_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfm
 exec_internal --> exec_module["Execute Module: \n exec_module \n (Execute the app)"]
 click exec_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" _blank
 
-fff --> aaa["bbb: \n aaa \n (ccc)"]
+load_module --> load_absmodule["Load Absolute Module: \n load_absmodule \n (Load an absolute path)"]
+click load_absmodule href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132" _blank
+
+load_absmodule --> binfmt_s.load["Load Binary Format: \n binfmt_s.load \n (Load a binary module)"]
+click binfmt_s.load href "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" _blank
+
+binfmt_s.load --> aaa["bbb: \n aaa \n (ccc)"]
 click aaa href "ddd" "eee" _blank
 
 fff --> aaa["bbb: \n aaa \n (ccc)"]
@@ -2928,40 +2934,12 @@ click aaa href "ddd" "eee" _blank
 
 fff --> aaa["bbb: \n aaa \n (ccc)"]
 click aaa href "ddd" "eee" _blank
-
-fff --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
-
-fff --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
-
-jh7110_head --> jh7110_start["NuttX Start Code: \n jh7110_start"]
-click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
-
-jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
-click jh7110_start_s href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
 
 ```
 
-[__ ()__]() calls...
-
-- [ :  ]() (), which calls...
-
 - [ :  ]() (to ), which calls...
 
 - [ :  ]() (to ), which calls...
-
-- [ :  ]() (to ), which calls...
-
-- [ :  ]() (to , see below) and...
-
-  [ :  ]() (to )
-
-To load a NuttX App module: [ load_module ](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225) calls...
-
-- [ Load Absolute Module: load_absmodule ](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132) (to load an absolute path), which calls...
-
-- [ Load Binary Format: binfmt_s.load ](https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148) (to load a binary module), which calls...
 
 - [ ELF Loader: g_elfbinfmt ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) (to load the ELF File, see below)
 
