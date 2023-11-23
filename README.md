@@ -2900,59 +2900,52 @@ START --> nx_bringup["NuttX Bringup: \n nx_bringup"]
 click nx_bringup href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L373-L458" "sched/init/nx_bringup.c" _blank
 
 nx_bringup --> nx_create_initthread["Create Init Thread: \n nx_create_initthread \n (Create the Init Thread)"]
-click nx_create_initthread href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367" "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367" _blank
+click nx_create_initthread href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367" "sched/init/nx_bringup.c" _blank
 
 nx_create_initthread --> nx_start_application["Start App: \n nx_start_application \n (Start NuttX Shell)"]
-click nx_start_application href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302" "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302" _blank
+click nx_start_application href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302" "sched/init/nx_bringup.c" _blank
 
 nx_start_application --> exec_spawn["Exec Spawn: \n exec_spawn \n (Start the app)"]
-click exec_spawn href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223" _blank
+click exec_spawn href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223" "binfmt/binfmt_exec.c" _blank
 
 exec_spawn --> exec_internal["Exec Internal: \n exec_internal \n (Start the app)"]
-click exec_internal href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179" _blank
+click exec_internal href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179" "binfmt/binfmt_exec.c" _blank
 
 exec_internal --> load_module["Load Module: \n load_module \n (Load the app)"]
-click load_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225" _blank
+click load_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225" "binfmt/binfmt_loadmodule.c" _blank
 
 exec_internal --> exec_module["Execute Module: \n exec_module \n (Execute the app)"]
-click exec_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" _blank
+click exec_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" "binfmt/binfmt_execmodule.c" _blank
 
 load_module --> load_absmodule["Load Absolute Module: \n load_absmodule \n (Load an absolute path)"]
-click load_absmodule href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132" _blank
+click load_absmodule href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132" "binfmt/binfmt_loadmodule.c" _blank
 
 load_absmodule --> binfmt_s.load["Load Binary Format: \n binfmt_s.load \n (Load a binary module)"]
-click binfmt_s.load href "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" _blank
+click binfmt_s.load href "https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148" "include/nuttx/binfmt/binfmt.h" _blank
 
 binfmt_s.load --> g_elfbinfmt["ELF Loader: \n g_elfbinfmt \n (Load the ELF File)"]
-click g_elfbinfmt href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94" "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94" _blank
+click g_elfbinfmt href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94" "binfmt/elf.c" _blank
 
 g_elfbinfmt --> elf_loadbinary["Load ELF Binary: \n elf_loadbinary \n (Load the ELF Binary)"]
-click elf_loadbinary href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355" "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355" _blank
+click elf_loadbinary href "https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355" "binfmt/elf.c" _blank
 
 elf_loadbinary --> elf_load["Load ELF: \n elf_load \n (Load the ELF Binary)"]
-click elf_load href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" _blank
+click elf_load href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" "binfmt/libelf/libelf_load.c" _blank
 
 elf_load --> elf_addrenv_alloc["Allocate Address Env: \n elf_addrenv_alloc \n (Allocate the Address Env)"]
-click elf_addrenv_alloc href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178" "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178" _blank
+click elf_addrenv_alloc href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c" "binfmt/libelf/libelf_addrenv.c#L56-L178" _blank
 
 elf_addrenv_alloc --> up_addrenv_create["Create Address Env: \n up_addrenv_create \n (Create the Address Env)"]
-click up_addrenv_create href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490" _blank
+click up_addrenv_create href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c" "arch/risc-v/src/common/riscv_addrenv.c#L339-L490" _blank
 
 elf_addrenv_alloc --> mmu_satp_reg["Set SATP Register: \n mmu_satp_reg \n (Set SATP Register)"]
-click mmu_satp_reg href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176" _blank
+click mmu_satp_reg href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h" "arch/risc-v/src/common/riscv_mmu.h#L152-L176" _blank
 
 up_addrenv_create --> create_region["Create MMU Region: \n create_region \n (Create the MMU Region)"]
-click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310" _blank
+click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c" "arch/risc-v/src/common/riscv_addrenv.c#L213-L310" _blank
 
 create_region --> mmu_ln_setentry["Set MMU Page Table Entry: \n mmu_ln_setentry \n (Populate the Page Table Entries)"]
-click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" _blank
-
-fff --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
-
-fff --> aaa["bbb: \n aaa \n (ccc)"]
-click aaa href "ddd" "eee" _blank
-
+click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c" "arch/risc-v/src/common/riscv_mmu.c#L62-L109" _blank
 ```
 
 _Phew so NuttX Apps can call NuttX Kernel..._
