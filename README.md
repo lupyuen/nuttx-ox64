@@ -2896,7 +2896,43 @@ After System Call:
 
 ```mermaid
 flowchart TD
-START --> aaa["bbb \n aaa \n ccc"]
+START --> nx_bringup["NuttX Bringup: \n nx_bringup"]
+click nx_bringup href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L373-L458" "sched/init/nx_bringup.c" _blank
+
+nx_bringup --> nx_create_initthread["Create Init Thread: \n nx_create_initthread \n (Create the Init Thread)"]
+click nx_create_initthread href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367" "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L330-L367" _blank
+
+nx_create_initthread --> nx_start_application["Start App: \n nx_start_application \n (Start NuttX Shell)"]
+click nx_start_application href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302" "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L212C1-L302" _blank
+
+nx_start_application --> exec_spawn["Exec Spawn: \n exec_spawn \n (Start the app)"]
+click exec_spawn href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L183-L223" _blank
+
+exec_spawn --> exec_internal["Exec Internal: \n exec_internal \n (Start the app)"]
+click exec_internal href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_exec.c#L42-L179" _blank
+
+exec_internal --> load_module["Load Module: \n load_module \n (Load the app)"]
+click load_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225" _blank
+
+exec_internal --> exec_module["Execute Module: \n exec_module \n (Execute the app)"]
+click exec_module href "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" "https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
+click aaa href "ddd" "eee" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
+click aaa href "ddd" "eee" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
+click aaa href "ddd" "eee" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
+click aaa href "ddd" "eee" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
+click aaa href "ddd" "eee" _blank
+
+fff --> aaa["bbb: \n aaa \n (ccc)"]
 click aaa href "ddd" "eee" _blank
 
 jh7110_head --> jh7110_start["NuttX Start Code: \n jh7110_start"]
@@ -2904,7 +2940,46 @@ click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox
 
 jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
 click jh7110_start_s href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
 ```
+
+[__ ()__]() calls...
+
+- [ :  ]() (), which calls...
+
+- [ :  ]() (to ), which calls...
+
+- [ :  ]() (to ), which calls...
+
+- [ :  ]() (to ), which calls...
+
+- [ :  ]() (to , see below) and...
+
+  [ :  ]() (to )
+
+To load a NuttX App module: [ load_module ](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L136-L225) calls...
+
+- [ Load Absolute Module: load_absmodule ](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_loadmodule.c#L83-L132) (to load an absolute path), which calls...
+
+- [ Load Binary Format: binfmt_s.load ](https://github.com/apache/nuttx/blob/master/include/nuttx/binfmt/binfmt.h#L122-L148) (to load a binary module), which calls...
+
+- [ ELF Loader: g_elfbinfmt ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) (to load the ELF File, see below)
+
+To load the ELF File: [ ELF Loader g_elfbinfmt ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L84-L94) calls...
+
+- [ Load ELF Binary: elf_loadbinary ](https://github.com/apache/nuttx/blob/master/binfmt/elf.c#L225-L355) (to load the ELF Binary), which calls...
+
+- [ Load ELF: elf_load ](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445) (to load the ELF Binary), which calls...
+
+- [ Allocate Address Env: elf_addrenv_alloc ](https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178) (to allocate the Address Env), which calls...
+
+- [ Create Address Env: up_addrenv_create ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490) (to create the Address Env), which calls...
+
+  (Also calls [ mmu_satp_reg ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176) to set SATP Register)
+
+- [ Create MMU Region: create_region ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310) (to create the MMU Region), which calls...
+
+- [ Set MMU Page Table Entry: mmu_ln_setentry ](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109) (to populate the Page Table Entries)
 
 _Phew so NuttX Apps can call NuttX Kernel..._
 
