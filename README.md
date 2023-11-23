@@ -2892,6 +2892,20 @@ After System Call:
 
 # Kernel Starts a NuttX App
 
+(To see the NuttX Source Code: Right-click the Node and select "Open Link")
+
+```mermaid
+flowchart TD
+START --> aaa["bbb \n aaa \n ccc"]
+click aaa href "ddd" "eee" _blank
+
+jh7110_head --> jh7110_start["NuttX Start Code: \n jh7110_start"]
+click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+
+jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
+click jh7110_start_s href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+```
+
 _Phew so NuttX Apps can call NuttX Kernel..._
 
 _But how does NuttX Kernel start a NuttX App?_
