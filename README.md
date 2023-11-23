@@ -2933,19 +2933,19 @@ elf_loadbinary --> elf_load["Load ELF: \n elf_load \n (Load the ELF Binary)"]
 click elf_load href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_load.c#L297-L445" "binfmt/libelf/libelf_load.c" _blank
 
 elf_load --> elf_addrenv_alloc["Allocate Address Env: \n elf_addrenv_alloc \n (Allocate the Address Env)"]
-click elf_addrenv_alloc href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c" "binfmt/libelf/libelf_addrenv.c#L56-L178" _blank
+click elf_addrenv_alloc href "https://github.com/apache/nuttx/blob/master/binfmt/libelf/libelf_addrenv.c#L56-L178" "binfmt/libelf/libelf_addrenv.c" _blank
 
 elf_addrenv_alloc --> up_addrenv_create["Create Address Env: \n up_addrenv_create \n (Create the Address Env)"]
-click up_addrenv_create href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c" "arch/risc-v/src/common/riscv_addrenv.c#L339-L490" _blank
+click up_addrenv_create href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L339-L490" "arch/risc-v/src/common/riscv_addrenv.c" _blank
 
 elf_addrenv_alloc --> mmu_satp_reg["Set SATP Register: \n mmu_satp_reg \n (Set SATP Register)"]
-click mmu_satp_reg href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h" "arch/risc-v/src/common/riscv_mmu.h#L152-L176" _blank
+click mmu_satp_reg href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.h#L152-L176" "arch/risc-v/src/common/riscv_mmu.h" _blank
 
 up_addrenv_create --> create_region["Create MMU Region: \n create_region \n (Create the MMU Region)"]
-click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c" "arch/risc-v/src/common/riscv_addrenv.c#L213-L310" _blank
+click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_addrenv.c#L213-L310" "arch/risc-v/src/common/riscv_addrenv.c" _blank
 
 create_region --> mmu_ln_setentry["Set MMU Page Table Entry: \n mmu_ln_setentry \n (Populate the Page Table Entries)"]
-click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c" "arch/risc-v/src/common/riscv_mmu.c#L62-L109" _blank
+click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" "arch/risc-v/src/common/riscv_mmu.c" _blank
 ```
 
 _Phew so NuttX Apps can call NuttX Kernel..._
