@@ -3137,7 +3137,11 @@ PLIC Interrupt Priority (0xe0000004):
 0040  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
 ```
 
-TODO: Set PLIC Interrupt Priority to 1
+We set PLIC Interrupt Priority to 1 ourselves.
+
+Then [IRQ 25 is OK yay!](https://gist.github.com/lupyuen/af6112c80db6907e5e5dec3519af53ff)
+
+TODO: What is IRQ 25?
 
 # Documentation for Ox64 BL808
 
