@@ -3097,9 +3097,28 @@ e0201000: 00000007 00000000                    ........
 ## PLIC Hart 0 S-Mode Claim / Complete
 => md 0xe0201004 1
 e0201004: 00000000                             ....
+
+## Interrupt Pending
+=> md 0xe0001000 2
+e0001000: 00000000 00000000                    ........
+
+## PLIC Hart 0 M-Mode Interrupt Enable
+=> md 0xe0002000 2
+e0002000: 00000000 00000000                    ........
+
+## PLIC Hart 0 M-Mode Priority Threshold
+=> md 0xe0200000 2
+e0200000: 00000007 00000000                    ........
+
+## PLIC Hart 0 M-Mode Claim / Complete
+=> md 0xe0200004 1
+e0200004: 00000000                             ....
+
+## Doesn't work: PLIC permission control register
+## md 0xe01ffffc 1
 ```
 
-TODO: Why interrupt not enabled?
+TODO: Why UART Interrupt not enabled? U-Boot and OpenSBI don't use UART Interrupts?
 
 TODO: What is Priority Threshold 7?
 
