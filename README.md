@@ -3183,7 +3183,11 @@ riscv_dispatch_irq: Do irq=8
 NuttShell (NSH) NuttX-12.0.3
 riscv_dispatch_irq: irq=25, claim=0
 riscv_dispatch_irq: *0xe0201004=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
 ```
+
+But Interrupt Pending is set!
 
 TODO: Why is PLIC Claim 0?
 
