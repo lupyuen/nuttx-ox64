@@ -3176,7 +3176,16 @@ riscv_dispatch_irq: irq=25
 riscv_dispatch_irq: irq=25
 ```
 
-TODO: What is IRQ 25?
+But UART Interrupt can't be handled because [PLIC Claim is 0](https://gist.github.com/lupyuen/e1e6bf670ee4eefa0f968f1901407419)...
+
+```text
+riscv_dispatch_irq: Do irq=8
+NuttShell (NSH) NuttX-12.0.3
+riscv_dispatch_irq: irq=25, claim=0
+riscv_dispatch_irq: *0xe0201004=0
+```
+
+TODO: Why is PLIC Claim 0?
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
