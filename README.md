@@ -3213,12 +3213,16 @@ riscv_dispatch_irq: *0xe0201004=0
 PLIC Interrupt Pending (0xe0001000):
 0000  00 00 10 00 00 00 10 00                          ........        
 riscv_dispatch_irq: Do irq=45
+After Claim (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
 
 riscv_dispatch_irq: irq=25, claim=0
 riscv_dispatch_irq: *0xe0201004=0
 PLIC Interrupt Pending (0xe0001000):
 0000  00 00 10 00 00 00 10 00                          ........        
 riscv_dispatch_irq: Do irq=45
+After Claim (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........
 ```
 
 "Do IRQ" now works! But Interrupt Pending is not cleared, after we Claimed the interrupt.
