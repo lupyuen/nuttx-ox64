@@ -3000,7 +3000,30 @@ There's plenty happening inside [__Execute Module: exec_module__](https://github
 
 TODO: UART Interrupts not triggered
 
-Show the UART Interrupt Status...
+From the Linux Device Tree...
+
+```text
+serial@30002000 {
+  compatible = "bflb,bl808-uart";
+  reg = <0x30002000 0x1000>;
+  interrupts = <0x14 0x04>;
+  clocks = <0x04>;
+  status = "okay";
+  phandle = <0x0a>;
+};
+```
+
+Thus...
+
+- RISC-V IRQ = 0x14 = 20
+
+- UART3 Int = (IRQ_NUM_BASE + 4)
+
+- IRQ_NUM_BASE = 16
+
+- NuttX IRQ = 45 (Offset by 25)
+
+We show the UART Interrupt Status...
 
 ```text
 bl602_attach: BL602_UART_INT_STS=0x84
@@ -3013,7 +3036,7 @@ bl602_attach: BL602_UART_INT_EN=0xfff
 
 "urx_fer_int = 1" means "UART RX FIFO error interrupt, auto-cleared when FIFO overflow/underflow error flag is cleared"
 
-We clear the RX FIFO Underflow, still no UART Interrupts...
+We clear the RX FIFO Underflow, but still no UART Interrupts...
 
 ```text
 bl602_attach: BL602_UART_FIFO_CONFIG_0=0x80
@@ -3024,8 +3047,6 @@ We dump the PLIC and UART Registers in U-Boot...
 
 ```bash
 ## UART Registers
-md 0x30002000 36
-
 => md 0x30002000 36
 30002000: 00001705 00000701 00130013 00000000  ................
 30002010: 009f0070 0000006f 0000000f 00000000  p...o..........
@@ -3043,8 +3064,6 @@ md 0x30002000 36
 300020d0: 00000000 00000000                    ........
 
 ## PLIC Interrupt Priority
-md 0xe0000004 1023
-
 => md 0xe0000004 50
 e0000004: 00000000 00000000 00000000 00000000  ................
 e0000014: 00000000 00000000 00000000 00000000  ................
@@ -3068,25 +3087,21 @@ e0000124: 00000000 00000000 00000000 00000000  ................
 e0000134: 00000000 00000000 00000000 00000000  ................
 
 ## PLIC Hart 0 S-Mode Interrupt Enable
-md 0xe0002080 2
-
 => md 0xe0002080 2
 e0002080: 00000000 00000000                    ........
 
 ## PLIC Hart 0 S-Mode Priority Threshold
-md 0xe0201000 2
-
 => md 0xe0201000 2
 e0201000: 00000007 00000000                    ........
 
 ## PLIC Hart 0 S-Mode Claim / Complete
-md 0xe0201004 2
-
 => md 0xe0201004 1
 e0201004: 00000000                             ....
 ```
 
-TODO
+TODO: Why interrupt not enabled?
+
+TODO: What is Priority Threshold 7?
 
 # Documentation for Ox64 BL808
 
