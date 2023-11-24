@@ -3166,6 +3166,16 @@ PLIC Interrupt Priority (0xe0000004):
 
 Then [IRQ 25 is OK yay!](https://gist.github.com/lupyuen/af6112c80db6907e5e5dec3519af53ff)
 
+```text
+riscv_dispatch_irq: irq=8
+riscv_dispatch_irq: irq=8
+
+NuttShell (NSH) NuttX-12.0.3
+riscv_dispatch_irq: irq=25
+riscv_dispatch_irq: irq=25
+riscv_dispatch_irq: irq=25
+```
+
 TODO: What is IRQ 25?
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
