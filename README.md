@@ -3000,6 +3000,10 @@ There's plenty happening inside [__Execute Module: exec_module__](https://github
 
 TODO: UART Interrupts not triggered
 
+We fix the PLIC Offsets according to [C906 User Manual (Page 77)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
+
+_What's the UART3 IRQ?_
+
 From the Linux Device Tree...
 
 ```text
