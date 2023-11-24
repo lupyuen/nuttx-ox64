@@ -2996,6 +2996,51 @@ To load the ELF File: [__ELF Loader g_elfbinfmt__](https://github.com/apache/nut
 
 There's plenty happening inside [__Execute Module: exec_module__](https://github.com/apache/nuttx/blob/master/binfmt/binfmt_execmodule.c#L190-L450). But we won't explore today.
 
+# UART Interrupt for Ox64 BL808
+
+TODO: UART Interrupts not triggered
+
+Show the UART Interrupt Status...
+
+```text
+bl602_attach: BL602_UART_INT_STS=0x84
+bl602_attach: BL602_UART_INT_MASK=0xfff
+bl602_attach: BL602_UART_INT_CLEAR=0x0
+bl602_attach: BL602_UART_INT_EN=0xfff
+```
+
+[(Source)](https://gist.github.com/lupyuen/c3f187af9f5c81594ddf8f854de2ed0a)
+
+"urx_fer_int = 1" means "UART RX FIFO error interrupt, auto-cleared when FIFO overflow/underflow error flag is cleared"
+
+We clear the RX FIFO Underflow, still no UART Interrupts...
+
+```text
+bl602_attach: BL602_UART_FIFO_CONFIG_0=0x80
+bl602_attach: BL602_UART_FIFO_CONFIG_0=0x8
+```
+
+We dump the PLIC and UART Registers in U-Boot...
+
+```bash
+## UART Registers
+md 0x30002000 0x100
+
+## PLIC Interrupt Priority
+md 0xe0000004 1023
+
+## PLIC Hart 0 S-Mode Interrupt Enable
+md 0xe0002080 2
+
+## PLIC Hart 0 S-Mode Priority Threshold
+md 0xe0201000 2
+
+## PLIC Hart 0 S-Mode Claim / Complete
+md 0xe0201004 2
+```
+
+TODO
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
