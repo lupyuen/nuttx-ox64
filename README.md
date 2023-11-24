@@ -3227,7 +3227,31 @@ After Claim (0xe0001000):
 
 "Do IRQ" now works! But Interrupt Pending is not cleared, after we Claimed the interrupt.
 
-TODO: Fix Interrupt Pending
+_Doesn't NuttX already implement C906 PLIC?_
+
+Yep but for Machine Mode only...
+
+- [c906_irq.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq.c)
+
+- [c906_irq_dispatch.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq_dispatch.c)
+
+_What if we copy this code into BL808 PLIC?_
+
+```c
+// From arch/risc-v/src/c906/c906_irq.c
+/* Clear pendings in PLIC */
+uintptr_t val = getreg32(JH7110_PLIC_CLAIM);
+putreg32(val, JH7110_PLIC_CLAIM);
+```
+
+Still the same, Claim = 0...
+
+```text
+riscv_dispatch_irq: irq=25, claim=0
+riscv_dispatch_irq: *0xe0201004=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
+```
 
 _Something special about T-Head C906 PLIC?_
 
@@ -3248,16 +3272,6 @@ Which sets [PLIC_QUIRK_EDGE_INTERRUPT](https://github.com/torvalds/linux/blob/ma
 - [plic_irq_domain_translate](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L312-L325)
 
 TODO: What does it do?
-
-_Doesn't NuttX already implement C906 PLIC?_
-
-Yep but for Machine Mode only...
-
-- [c906_irq.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq.c)
-
-- [c906_irq_dispatch.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq_dispatch.c)
-
-TODO: Copy this code into BL808 PLIC
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
