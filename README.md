@@ -3025,7 +3025,9 @@ Thus...
 
 - IRQ_NUM_BASE = 16
 
-- NuttX IRQ = 45 (Offset by 25)
+- NuttX IRQ = 45 (Offset by RISCV_IRQ_EXT)
+
+- RISCV_IRQ_EXT = 25
 
 We show the UART Interrupt Status...
 
@@ -3187,13 +3189,53 @@ PLIC Interrupt Pending (0xe0001000):
 0000  00 00 10 00 00 00 10 00                          ........        
 ```
 
+_Why is PLIC Claim = 0?_
+
 But Interrupt Pending is set!
 
-TODO: What are the 2 Interrupts Pending?
+_What are the 2 Interrupts Pending?_
 
-TODO: Why is PLIC Claim 0?
+- (0xe0001000) PLIC_IP0: Interrupt Pending for interrupts 1 to 31
+
+  0x100000 = (1 << 20) = IRQ 20 (UART3)
+
+- (0xe0001004) PLIC_IP1: Interrupt Pending for interrupts 32 to 63
+
+  0x100000 = (1 << 20) = IRQ 52 (???)
+
+  TODO: Why?
+
+We [handle Interrupt Pending](https://gist.github.com/lupyuen/84959d9ba79498a13a759b5b86c6fa29) ourselves...
+
+```text
+riscv_dispatch_irq: irq=25, claim=0
+riscv_dispatch_irq: *0xe0201004=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
+riscv_dispatch_irq: Do irq=45
+
+riscv_dispatch_irq: irq=25, claim=0
+riscv_dispatch_irq: *0xe0201004=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
+riscv_dispatch_irq: Do irq=45
+```
+
+"Do IRQ" now works! But Interrupt Pending is not cleared, after we Claimed the interrupt.
+
+TODO: Fix Interrupt Pending
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
+
+TODO: Why is Interrupt Priority set for 4 Interrupts, when we only set 1 (for UART)?
+
+```text
+bl602_attach: Set PLIC Interrupt Priority to 1
+PLIC Interrupt Priority (0xe0000004):
+...
+0040  00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00  ................
+0050  01 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00  ................
+```
 
 # Documentation for Ox64 BL808
 
