@@ -3201,7 +3201,7 @@ _What are the 2 Interrupts Pending?_
 
 - (0xe0001004) PLIC_IP1: Interrupt Pending for interrupts 32 to 63
 
-  0x100000 = (1 << 20) = IRQ 52 (???)
+  0x100000 = (1 << 20) = IRQ 52 (EMAC2)
 
   TODO: Why?
 
