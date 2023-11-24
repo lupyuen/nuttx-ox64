@@ -3189,6 +3189,8 @@ PLIC Interrupt Pending (0xe0001000):
 
 But Interrupt Pending is set!
 
+TODO: What are the 2 Interrupts Pending?
+
 TODO: Why is PLIC Claim 0?
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
