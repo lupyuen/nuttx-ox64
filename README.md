@@ -2998,7 +2998,7 @@ There's plenty happening inside [__Execute Module: exec_module__](https://github
 
 # UART Interrupt for Ox64 BL808
 
-TODO: UART Interrupts not triggered
+Let's fix the UART Interrupts for NuttX on Ox64 BL808!
 
 We fix the PLIC Offsets according to [C906 User Manual (Page 77)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
 
@@ -3228,6 +3228,36 @@ After Claim (0xe0001000):
 "Do IRQ" now works! But Interrupt Pending is not cleared, after we Claimed the interrupt.
 
 TODO: Fix Interrupt Pending
+
+_Something special about T-Head C906 PLIC?_
+
+From this [Linux Patch](https://lore.kernel.org/lkml/CAJF2gTS8Z+6Ewy0D5+0X_h2Jz4BqsJp7wEC5F0iNaDsSpiE2aw@mail.gmail.com/)
+
+> "The T-HEAD C9xx SoC implements a modified/custom T-HEAD PLIC
+specification which will mask current IRQ upon read to CLAIM register
+and will unmask the IRQ upon write to CLAIM register. The
+thead,c900-plic compatible string represents the custom T-HEAD PLIC
+specification."
+
+"thead,c900-plic" is implemented in Linux here: [irq-sifive-plic.c](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L574-L582)
+
+Which sets [PLIC_QUIRK_EDGE_INTERRUPT](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L64), which is used by...
+
+- [plic_irq_set_type](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L212-L235)
+
+- [plic_irq_domain_translate](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L312-L325)
+
+TODO: What does it do?
+
+_Doesn't NuttX already implement C906 PLIC?_
+
+Yep but for Machine Mode only...
+
+- [c906_irq.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq.c)
+
+- [c906_irq_dispatch.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq_dispatch.c)
+
+TODO: Copy this code into BL808 PLIC
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
