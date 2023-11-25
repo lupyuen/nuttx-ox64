@@ -3335,6 +3335,8 @@ TODO: Key press not read correctly
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
+# Strangeness in Ox64 BL808 PLIC
+
 TODO: Why is Interrupt Priority set for 4 Interrupts, when we only set 1 (for UART)?
 
 ```text
@@ -3387,7 +3389,76 @@ test_interrupt_priority():
     50200db8:	05462803          	lw	a6,84(a2)
 ```
 
-(sfence doesn't help)
+sfence doesn't help...
+
+```text
+0000000050200daa <test_interrupt_priority>:
+test_interrupt_priority():
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:451
+  uint32_t before1 = *(volatile uint32_t *) 0xe0000050;
+    50200daa:	461d                	li	a2,7
+    50200dac:	0676                	slli	a2,a2,0x1d
+    50200dae:	4a34                	lw	a3,80(a2)
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:452
+  uint32_t before2 = *(volatile uint32_t *) 0xe0000054;
+    50200db0:	4a78                	lw	a4,84(a2)
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:455
+  *(volatile uint32_t *) 0xe0000050 = 1;
+    50200db2:	4785                	li	a5,1
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:451
+  uint32_t before1 = *(volatile uint32_t *) 0xe0000050;
+    50200db4:	2681                	sext.w	a3,a3
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:452
+  uint32_t before2 = *(volatile uint32_t *) 0xe0000054;
+    50200db6:	2701                	sext.w	a4,a4
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:455
+  *(volatile uint32_t *) 0xe0000050 = 1;
+    50200db8:	ca3c                	sw	a5,80(a2)
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:458
+  __asm__ __volatile__
+    50200dba:	12000073          	sfence.vma
+    50200dbe:	0330000f          	fence	rw,rw
+    50200dc2:	0000100f          	fence.i
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:467
+  uint32_t after1 = *(volatile uint32_t *) 0xe0000050;
+    50200dc6:	4a3c                	lw	a5,80(a2)
+    50200dc8:	2781                	sext.w	a5,a5
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:469
+  __asm__ __volatile__
+    50200dca:	12000073          	sfence.vma
+    50200dce:	0330000f          	fence	rw,rw
+    50200dd2:	0000100f          	fence.i
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:477
+  uint32_t after2 = *(volatile uint32_t *) 0xe0000054;
+    50200dd6:	05462803          	lw	a6,84(a2)
+    50200dda:	2801                	sext.w	a6,a6
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:479
+  __asm__ __volatile__
+    50200ddc:	12000073          	sfence.vma
+    50200de0:	0330000f          	fence	rw,rw
+    50200de4:	0000100f          	fence.i
+```
+
+Let's do the same with U-Boot Bootloader. Looks OK...
+
+```bash
+## Read the values before setting Interrupt Priority
+=> md 0xe0000050 1
+e0000050: 00000000                             ....
+=> md 0xe0000054 1
+e0000054: 00000000                             ....
+
+## Set the Interrupt Priority
+=> mw 0xe0000050 0x01 1
+
+## Read the values after setting Interrupt Priority
+=> md 0xe0000050 1
+e0000050: 00000001                             ....
+=> md 0xe0000054 1
+e0000054: 00000000                             ....
+```
+
+TODO
 
 # Documentation for Ox64 BL808
 
