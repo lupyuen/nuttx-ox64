@@ -3191,7 +3191,9 @@ PLIC Interrupt Pending (0xe0001000):
 
 _Why is PLIC Claim = 0?_
 
-But Interrupt Pending is set!
+This means that there are no External Interrupts triggered. So NuttX does nothing, again and again, till it becomes too busy to respond.
+
+But Interrupt Pending is actually set for 2 External Interrupts!
 
 _What are the 2 Interrupts Pending?_
 
@@ -3203,7 +3205,7 @@ _What are the 2 Interrupts Pending?_
 
   0x100000 = (1 << 20) = IRQ 52 (EMAC2)
 
-  TODO: Why?
+  TODO: Why EMAC2? We didn't enable the interrupt
 
 We [handle Interrupt Pending](https://gist.github.com/lupyuen/84959d9ba79498a13a759b5b86c6fa29) ourselves...
 
