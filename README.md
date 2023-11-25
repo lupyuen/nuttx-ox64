@@ -3296,6 +3296,32 @@ interrupt.
 
 TODO: Fix this for Ox64 NuttX
 
+After Clearing the Pending Interrupts, [NuttX responds to Key Presses yay!](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5)
+
+```text
+NuttShell (NSH) NuttX-12.0.3
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........        
+nsh> riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........        
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........        
+nx_start: CPU0: Beginning Idle Loop
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........        
+ˇriscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........ 
+```
+
+But Claim is still 0 though.
+
+TODO: Key press not read correctly
+
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
 TODO: Why is Interrupt Priority set for 4 Interrupts, when we only set 1 (for UART)?
