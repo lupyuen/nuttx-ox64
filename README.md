@@ -3345,7 +3345,7 @@ PLIC Interrupt Priority (0xe0000004):
 0050  01 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00  ................
 ```
 
-TODO: Interrupt Priority [doesn't seem to be set correctly](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5)
+TODO: Interrupt Priority [doesn't seem to be set correctly](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5). Why does 0xe0000054 change from 0 to 1?
 
 ```text
 bl602_attach: Test Interrupt Priority
