@@ -3235,7 +3235,7 @@ Yep but for Machine Mode only...
 
 - [c906_irq_dispatch.c](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/c906/c906_irq_dispatch.c)
 
-_What if we copy this code into BL808 PLIC?_
+_What if we copy this code into Ox64 PLIC?_
 
 ```c
 // From arch/risc-v/src/c906/c906_irq.c
@@ -3271,7 +3271,23 @@ Which sets [PLIC_QUIRK_EDGE_INTERRUPT](https://github.com/torvalds/linux/blob/ma
 
 - [plic_irq_domain_translate](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L312-L325)
 
-TODO: What does it do?
+_What does it do?_
+
+From another [Linux Patch](https://lore.kernel.org/all/20220630100241.35233-3-samuel@sholland.org/)
+
+> The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+edge until the previous completion message has been received and
+NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+interrupts if not acknowledged in time.
+
+> So the workaround for edge-triggered interrupts to be handled correctly
+and without losing is that it needs to be acknowledged first and then
+handler must be run so that we don't miss on the next edge-triggered
+interrupt.
+
+TODO: Fix this for Ox64 NuttX
 
 TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
 
