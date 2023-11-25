@@ -3197,6 +3197,11 @@ But Interrupt Pending is actually set for 2 External Interrupts!
 
 _What are the 2 Interrupts Pending?_
 
+```text
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 10 00 00 00 10 00                          ........        
+```
+
 - (0xe0001000) PLIC_IP0: Interrupt Pending for interrupts 1 to 31
 
   0x100000 = (1 << 20) = IRQ 20 (UART3)
