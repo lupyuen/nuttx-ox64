@@ -3352,6 +3352,43 @@ bl602_attach: Test Interrupt Priority
 test_interrupt_priority: before1=0, before2=0, after1=1, after2=1
 ```
 
+Here's the Disassembly...
+
+```text
+0000000050200daa <test_interrupt_priority>:
+test_interrupt_priority():
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:451
+  uint32_t before1 = *(volatile uint32_t *) 0xe0000050;
+    50200daa:	461d                	li	a2,7
+    50200dac:	0676                	slli	a2,a2,0x1d
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:454
+  *(volatile uint32_t *) 0xe0000050 = 1;
+    50200dae:	4785                	li	a5,1
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:451
+  uint32_t before1 = *(volatile uint32_t *) 0xe0000050;
+    50200db0:	4a34                	lw	a3,80(a2)
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:452
+  uint32_t before2 = *(volatile uint32_t *) 0xe0000054;
+    50200db2:	4a78                	lw	a4,84(a2)
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:454
+  *(volatile uint32_t *) 0xe0000050 = 1;
+    50200db4:	ca3c                	sw	a5,80(a2)
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:457
+  uint32_t after1 = *(volatile uint32_t *) 0xe0000050;
+    50200db6:	4a3c                	lw	a5,80(a2)
+
+/Users/Luppy/ox64/nuttx/arch/risc-v/src/chip/bl602_serial.c:458
+  uint32_t after2 = *(volatile uint32_t *) 0xe0000054;
+    50200db8:	05462803          	lw	a6,84(a2)
+```
+
+TODO: Try sfence
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
