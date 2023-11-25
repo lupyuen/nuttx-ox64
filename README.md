@@ -3387,7 +3387,7 @@ test_interrupt_priority():
     50200db8:	05462803          	lw	a6,84(a2)
 ```
 
-TODO: Try sfence
+(sfence doesn't help)
 
 # Documentation for Ox64 BL808
 
