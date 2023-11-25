@@ -4,6 +4,8 @@
 
 Read the articles...
 
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
+
 -   ["RISC-V Ox64 BL808 SBC: Sv39 Memory Management Unit"](https://lupyuen.github.io/articles/mmu)
 
 -   ["RISC-V Ox64 BL808 SBC: Starting Apache NuttX RTOS"](https://lupyuen.github.io/articles/ox2)
@@ -1607,6 +1609,10 @@ TODO: Enable UART Interrupts
 
 # Initial RAM Disk for Ox64 BL808
 
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
+
 Two ways we can load the Initial RAM Disk...
 
 1.  Load the Initial RAM Disk from a __Separate File: initrd__ (similar to Star64)
@@ -2498,6 +2504,10 @@ TODO: [SATP Log](https://gist.github.com/lupyuen/aa9b3e575ba4e0c233ab02c32822152
 
 # Start NuttX Apps on Ox64 BL808
 
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
+
 NuttX Kernel starts a NuttX App (in ELF Format) by calling...
 
 - [__ELF Loader: g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94), which calls...
@@ -2545,6 +2555,10 @@ Right after that, [__nx_bringup__](https://github.com/apache/nuttx/blob/master/s
 - [__ELF Loader: g_elfbinfmt__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/binfmt/elf.c#L84-L94) to load the ELF File (explained above)
 
 # Simple NuttX App for Ox64 BL808
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
 
 _What's inside the simplest app for NuttX?_
 
@@ -2645,6 +2659,10 @@ Then `printf` will appear in our disassembly.
 # NuttX App calls NuttX Kernel
 
 ![NuttX App calls NuttX Kernel](https://lupyuen.github.io/images/app-syscall.jpg)
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
 
 _How does a NuttX App make a System Call to NuttX Kernel?_
 
@@ -2755,6 +2773,10 @@ PROXY_waitpid.c
 ```
 
 # Kernel Handles App Call
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
 
 _Our App makes an ecall to jump to NuttX Kernel..._
 
@@ -2947,6 +2969,10 @@ click create_region href "https://github.com/apache/nuttx/blob/master/arch/risc-
 create_region --> mmu_ln_setentry["Set MMU Page Table Entry: \n mmu_ln_setentry \n (Populate the Page Table Entries)"]
 click mmu_ln_setentry href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L62-L109" "arch/risc-v/src/common/riscv_mmu.c" _blank
 ```
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
 
 _Phew so NuttX Apps can call NuttX Kernel..._
 
