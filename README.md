@@ -3262,7 +3262,14 @@ PLIC Interrupt Pending (0xe0001000):
 
 _Something special about T-Head C906 PLIC?_
 
-From this [Linux Patch](https://lore.kernel.org/lkml/CAJF2gTS8Z+6Ewy0D5+0X_h2Jz4BqsJp7wEC5F0iNaDsSpiE2aw@mail.gmail.com/)
+According to the Linux Device Tree, Ox64 uses this PLIC Driver: "thead,c900-plic"
+
+```text
+interrupt-controller@e0000000 {
+  compatible = "thead,c900-plic";
+```
+
+Then from this [Linux Patch](https://lore.kernel.org/lkml/CAJF2gTS8Z+6Ewy0D5+0X_h2Jz4BqsJp7wEC5F0iNaDsSpiE2aw@mail.gmail.com/)
 
 > "The T-HEAD C9xx SoC implements a modified/custom T-HEAD PLIC
 specification which will mask current IRQ upon read to CLAIM register
@@ -3277,6 +3284,10 @@ Which sets [PLIC_QUIRK_EDGE_INTERRUPT](https://github.com/torvalds/linux/blob/ma
 - [plic_irq_set_type](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L212-L235)
 
 - [plic_irq_domain_translate](https://github.com/torvalds/linux/blob/master/drivers/irqchip/irq-sifive-plic.c#L312-L325)
+
+  Which calls [irq_domain_translate_twocell](https://github.com/torvalds/linux/blob/master/kernel/irq/irqdomain.c#L1060-L1081)
+
+  (Instead of the normal [irq_domain_translate_onecell](https://github.com/torvalds/linux/blob/master/kernel/irq/irqdomain.c#L1043-L1060))
 
 _What does it do?_
 
