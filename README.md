@@ -3345,6 +3345,13 @@ PLIC Interrupt Priority (0xe0000004):
 0050  01 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00  ................
 ```
 
+TODO: Interrupt Priority [doesn't seem to be set correctly](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5)
+
+```text
+bl602_attach: Test Interrupt Priority
+test_interrupt_priority: before1=0, before2=0, after1=1, after2=1
+```
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
