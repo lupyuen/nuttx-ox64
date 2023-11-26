@@ -3363,7 +3363,9 @@ TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed ar
 
 # Strangeness in Ox64 BL808 PLIC
 
-TODO: Why is Interrupt Priority set for 4 Interrupts, when we only set 1 (for UART)?
+PLIC in Ox64 BL808 is acting really strange...
+
+Why is Interrupt Priority set for 4 Interrupts, when we only set 1 (for UART)?
 
 ```text
 bl602_attach: Set PLIC Interrupt Priority to 1
@@ -3373,14 +3375,14 @@ PLIC Interrupt Priority (0xe0000004):
 0050  01 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00  ................
 ```
 
-TODO: Interrupt Priority [doesn't seem to be set correctly](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5). Why does 0xe0000054 change from 0 to 1?
+Also, the Interrupt Priority [doesn't seem to be set correctly](https://gist.github.com/lupyuen/4e8ca1f0c0c2bd3b22a8b63f098abdd5). Why does 0xe0000054 change from 0 to 1?
 
 ```text
 bl602_attach: Test Interrupt Priority
 test_interrupt_priority: before1=0, before2=0, after1=1, after2=1
 ```
 
-Here's the Disassembly...
+Here's the Disassembly, which looks OK...
 
 ```text
 0000000050200daa <test_interrupt_priority>:
@@ -3415,7 +3417,9 @@ test_interrupt_priority():
     50200db8:	05462803          	lw	a6,84(a2)
 ```
 
-sfence doesn't help...
+_Maybe we need to flush the CPU Cache?_
+
+But `sfence` doesn't help...
 
 ```text
 0000000050200daa <test_interrupt_priority>:
@@ -3465,7 +3469,7 @@ test_interrupt_priority():
     50200de4:	0000100f          	fence.i
 ```
 
-Let's do the same with U-Boot Bootloader. Looks OK...
+Let's do the same with U-Boot Bootloader. It looks OK, doesn't have the same problem...
 
 ```bash
 ## Read the values before setting Interrupt Priority
@@ -3517,31 +3521,39 @@ test_interrupt_priority: before1=0, before2=0, after1=0, after2=0
 nx_start: Entry
 ```
 
-TODO: Why is MMU messing up PLIC?
+So it's an MMU problem!
 
-TODO: Disable and re-enable MMU during PLIC Operations
+_Why is MMU messing up our updates to Ox64 BL808 PLIC?_
 
-Extended Page Attributes, from [C906 User Manual (Page 53)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
+We might have missed something specific to C906 MMU. Here are the Extended Page Attributes, from [C906 User Manual (Page 53)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
 
-```text
-SO– Strong order (Bit 63)
-Indicates the access order required by memory.
-1’b0: no strong order (Normal-memory),
-1’b1: strong order (Device)。
-The default value is no strong order.
+- __SO – Strong order__ (Bit 63)
 
-C – Cacheable (Bit 62)
-1’b0: Non-cacheable,
-1’b1: Cacheable。
-The default value is Non-cacheable.
+  Indicates the access order required by memory.
 
-B – Buffer (Bit 61)
-1’b0: Non-bufferable,
-1’b1: Bufferable。
-The default value is Non-bufferable
-```
+  1’b0: no strong order (Normal-memory),
 
-TODO: Set Strong Order (Bit 63)
+  1’b1: strong order (Device)。
+
+  The default value is no strong order.
+
+- __C – Cacheable__ (Bit 62)
+
+  1’b0: Non-cacheable,
+
+  1’b1: Cacheable。
+
+  The default value is Non-cacheable.
+
+- __B – Buffer__ (Bit 61)
+
+  1’b0: Non-bufferable,
+
+  1’b1: Bufferable。
+
+  The default value is Non-bufferable
+
+TODO: Set Strong Order (Bit 63) in MMU and retest the setting of PLIC Interrupt Priority
 
 # Documentation for Ox64 BL808
 
