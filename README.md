@@ -3581,6 +3581,12 @@ We might have missed something specific to C906 MMU. Here are the Extended Page 
 
   The default value is Non-bufferable
 
+Also...
+
+> "C906 extended page attributes exist only when the MAEE bit in the MXSTATUS register is 1."
+
+TODO: Set MAEE Bit in MXSTATUS Register
+
 TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
 
 # Documentation for Ox64 BL808
