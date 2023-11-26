@@ -3587,6 +3587,8 @@ Also...
 
 TODO: Set MAEE Bit in MXSTATUS Register
 
+TODO: [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/apps/d0_lowload/src/rv32i_xtheade_lz4.S) doesn't set MXSTATUS
+
 TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
 
 # Documentation for Ox64 BL808
