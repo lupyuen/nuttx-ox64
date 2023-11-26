@@ -3591,6 +3591,16 @@ TODO: [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/a
 
 TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
 
+TODO: Disable and re-enable MMU
+
+```text
+jh7110_mm_init: Disable MMU
+mmu_write_satp: reg=0
+jh7110_mm_init: Test Interrupt Priority
+test_interrupt_priority: before1=0, before2=0, after1=1, after2=0
+jh7110_mm_init: Enable MMU
+```
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
