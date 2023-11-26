@@ -3591,7 +3591,7 @@ TODO: [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/a
 
 TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
 
-_What if we disable and re-enable MMU, while setting PLIC Interrupt Priotity?_
+_What if we disable and re-enable MMU, while setting PLIC Interrupt Priority?_
 
 Yep seems to work...
 
