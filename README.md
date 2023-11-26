@@ -3521,6 +3521,28 @@ TODO: Why is MMU messing up PLIC?
 
 TODO: Disable and re-enable MMU during PLIC Operations
 
+Extended Page Attributes, from [C906 User Manual (Page 53)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
+
+```text
+SO– Strong order (Bit 63)
+Indicates the access order required by memory.
+1’b0: no strong order (Normal-memory),
+1’b1: strong order (Device)。
+The default value is no strong order.
+
+C – Cacheable (Bit 62)
+1’b0: Non-cacheable,
+1’b1: Cacheable。
+The default value is Non-cacheable.
+
+B – Buffer (Bit 61)
+1’b0: Non-bufferable,
+1’b1: Bufferable。
+The default value is Non-bufferable
+```
+
+TODO: Set Strong Order (Bit 63)
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
