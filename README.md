@@ -3484,7 +3484,9 @@ e0000050: 00000001                             ....
 e0000054: 00000000                             ....
 ```
 
-TODO: Before MMU Init
+_Could it be caused by MMU?_
+
+Let's try setting Interrupt Priority before MMU Init. It works OK!
 
 ```text
 123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x504002a0, _ebss=0x50408000, JH7110_IDLESTACK_TOP=0x50408c00
@@ -3495,7 +3497,29 @@ test_interrupt_priority: before1=0, before2=0, after1=1, after2=0
 jh7110_kernel_mappings: map I/O regions
 ```
 
-TODO
+When we set Interrupt Priority after MMU Init, it looks incorrect...
+
+```text
+123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x504002a0, _ebss=0x50408000, JH7110_IDLESTACK_TOP=0x50408c00
+jh7110_copy_ramdisk: ramdisk_addr=0x50410291
+jh7110_copy_ramdisk: size=8192000
+ABCjh7110_kernel_mappings: map I/O regions
+jh7110_kernel_mappings: map PLIC as Interrupt L2
+jh7110_kernel_mappings: connect the L1 and Interrupt L2 page tables for PLIC
+jh7110_kernel_mappings: map kernel text
+jh7110_kernel_mappings: map kernel data
+jh7110_kernel_mappings: connect the L1 and L2 page tables
+jh7110_kernel_mappings: map the page pool
+mmu_satp_reg: pgbase=0x50407000, asid=0x0, reg=0x8000000000050407
+mmu_write_satp: reg=0x8000000000050407
+jh7110_mm_init: Test Interrupt Priority
+test_interrupt_priority: before1=0, before2=0, after1=0, after2=0
+nx_start: Entry
+```
+
+TODO: Why is MMU messing up PLIC?
+
+TODO: Disable and re-enable MMU during PLIC Operations
 
 # Documentation for Ox64 BL808
 
