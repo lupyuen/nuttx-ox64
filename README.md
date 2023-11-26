@@ -3488,6 +3488,8 @@ e0000050: 00000001                             ....
 e0000054: 00000000                             ....
 ```
 
+And U-Boot doesn't use MMU.
+
 _Could it be caused by MMU?_
 
 Let's try setting Interrupt Priority before MMU Init. It works OK!
