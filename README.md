@@ -3484,6 +3484,17 @@ e0000050: 00000001                             ....
 e0000054: 00000000                             ....
 ```
 
+TODO: Before MMU Init
+
+```text
+123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x504002a0, _ebss=0x50408000, JH7110_IDLESTACK_TOP=0x50408c00
+jh7110_copy_ramdisk: ramdisk_addr=0x50410291
+jh7110_copy_ramdisk: size=8192000
+ABCjh7110_mm_init: Test Interrupt Priority
+test_interrupt_priority: before1=0, before2=0, after1=1, after2=0
+jh7110_kernel_mappings: map I/O regions
+```
+
 TODO
 
 # Documentation for Ox64 BL808
