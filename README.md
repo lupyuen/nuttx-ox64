@@ -3533,29 +3533,29 @@ We might have missed something specific to C906 MMU. Here are the Extended Page 
 
   Indicates the access order required by memory.
 
-  1’b0: no strong order (Normal-memory),
+  0: no strong order (Normal-memory)
 
-  1’b1: strong order (Device)。
+  1: strong order (Device)
 
   The default value is no strong order.
 
 - __C – Cacheable__ (Bit 62)
 
-  1’b0: Non-cacheable,
+  0: Non-cacheable
 
-  1’b1: Cacheable。
+  1: Cacheable
 
   The default value is Non-cacheable.
 
 - __B – Buffer__ (Bit 61)
 
-  1’b0: Non-bufferable,
+  0: Non-bufferable
 
-  1’b1: Bufferable。
+  1: Bufferable
 
   The default value is Non-bufferable
 
-TODO: Set Strong Order (Bit 63) in MMU and retest the setting of PLIC Interrupt Priority
+TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
 
 # Documentation for Ox64 BL808
 
