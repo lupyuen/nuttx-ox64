@@ -1577,7 +1577,7 @@ In this article, NuttX has booted plenty of code on Ox64. Here's the flow of the
 
 BL808 UART is mostly identical to BL602 UART, so we ported the NuttX BL602 UART Driver to BL808.
 
-Here's the UART Driver ported to BL808: [bl602_serial.c] (https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c)
+Here's the UART Driver ported to BL808: [bl602_serial.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c)
 
 We hardcoded the UART3 Base Address: [bl602_uart.h](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/hardware/bl602_uart.h#L30-L41)
 
