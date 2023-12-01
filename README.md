@@ -3357,9 +3357,22 @@ PLIC Interrupt Pending (0xe0001000):
 
 But Claim is still 0 though.
 
-TODO: Key press not read correctly
+_Does it work for UART Input?_
 
-TODO: Why is up_irqinitialize not setting Interrupt Priority properly? Signed arithmetic? Or delay?
+Since we've correctly identified the IRQ Number, [__riscv_dispatch_irq__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/jh7110/jh7110_irq_dispatch.c#L48-L105) will (eventually) call [__bl602_receive__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/jh7110/bl602_serial.c#L859-L904) to read the UART Input (pic below)...
+
+```text
+bl602_receive: rxdata=-1
+bl602_receive: rxdata=0x0
+```
+
+But the [__UART Input is empty__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64b/arch/risc-v/src/jh7110/bl602_serial.c#L892-L901)! We need to troubleshoot our UART Driver some more.
+
+[(See the __Complete Log__)](https://gist.github.com/lupyuen/cf32c834f4f5b8f66715ee4c606b7580#file-ox64-nuttx-int-clear-pending2-log-L294-L325)
+
+[(Watch the __Demo on YouTube__)](https://youtu.be/VSTpsSJ_7L0)
+
+![NuttX boots OK on Ox64 BL808! But UART Input is null](https://lupyuen.github.io/images/plic2-run.png)
 
 # Strangeness in Ox64 BL808 PLIC
 
