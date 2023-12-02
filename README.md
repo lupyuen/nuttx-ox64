@@ -3150,6 +3150,14 @@ e0200004: 00000000                             ....
 ## md 0xe01ffffc 1
 ```
 
+TODO: Claim / Complete M-Mode seems OK. Can we claim / complete M-Mode in NuttX?
+
+```text
+=> md 0xe0200004 1
+e0200004: 00000000                             ....
+=> mw 0xe0200004 0x00 1
+```
+
 TODO: Why UART Interrupt not enabled? U-Boot and OpenSBI don't use UART Interrupts?
 
 TODO: What is Priority Threshold 7?
