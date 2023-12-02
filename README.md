@@ -3150,12 +3150,24 @@ e0200004: 00000000                             ....
 ## md 0xe01ffffc 1
 ```
 
-TODO: Claim / Complete M-Mode seems OK. Can we claim / complete M-Mode in NuttX?
+_Claim / Complete M-Mode seems OK in U-Boot. Can we Claim / Complete M-Mode in NuttX S-Mode?_
 
 ```text
 => md 0xe0200004 1
 e0200004: 00000000                             ....
 => mw 0xe0200004 0x00 1
+```
+
+Yes we can Claim / Complete M-Mode in NuttX S-Mode. But S-Mode Claim is still 0...
+
+```text
+PLIC Hart 0 M-Mode Claim / Complete (0xe0200004):
+0000  07 00 00 00                                      ....            
+bl602_attach: Claim / Complete M-Mode: claim=7
+PLIC Hart 0 M-Mode Claim / Complete (0xe0200004):
+0000  00 00 00 00                                      ....            
+...
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
 ```
 
 TODO: Why UART Interrupt not enabled? U-Boot and OpenSBI don't use UART Interrupts?
