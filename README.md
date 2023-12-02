@@ -4,6 +4,8 @@
 
 Read the articles...
 
+-   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
+
 -   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
 
 -   ["RISC-V Ox64 BL808 SBC: Sv39 Memory Management Unit"](https://lupyuen.github.io/articles/mmu)
@@ -1575,6 +1577,10 @@ In this article, NuttX has booted plenty of code on Ox64. Here's the flow of the
 
 # NuttX UART Driver for Ox64 BL808
 
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
+
 BL808 UART is mostly identical to BL602 UART, so we ported the NuttX BL602 UART Driver to BL808.
 
 Here's the UART Driver ported to BL808: [bl602_serial.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64a/arch/risc-v/src/jh7110/bl602_serial.c)
@@ -3024,6 +3030,10 @@ There's plenty happening inside [__Execute Module: exec_module__](https://github
 
 # UART Interrupt for Ox64 BL808
 
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
+
 Let's fix the UART Interrupts for NuttX on Ox64 BL808!
 
 We fix the PLIC Offsets according to [C906 User Manual (Page 77)](https://occ-intl-prod.oss-ap-southeast-1.aliyuncs.com/resource/XuanTie-OpenC906-UserManual.pdf)
@@ -3395,6 +3405,10 @@ But the [__UART Input is empty__](https://github.com/lupyuen2/wip-pinephone-nutt
 ![NuttX boots OK on Ox64 BL808! But UART Input is null](https://lupyuen.github.io/images/plic2-run.png)
 
 # Strangeness in Ox64 BL808 PLIC
+
+Read the article...
+
+-   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
 
 _PLIC in Ox64 BL808 is acting really strange..._
 
