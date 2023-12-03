@@ -3030,6 +3030,8 @@ There's plenty happening inside [__Execute Module: exec_module__](https://github
 
 # UART Interrupt for Ox64 BL808
 
+![Platform-Level Interrupt Controller for Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)](https://lupyuen.github.io/images/plic2-registers.jpg)
+
 Read the article...
 
 -   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
