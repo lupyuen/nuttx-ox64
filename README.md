@@ -3891,6 +3891,8 @@ nsh> hello
 Hello, World!!
 ```
 
+C906 MMU Caching is actually explained in [C906 Integration Manual (Chinese)](https://github.com/T-head-Semi/openc906/blob/main/doc/%E7%8E%84%E9%93%81C906%E9%9B%86%E6%88%90%E6%89%8B%E5%86%8C.pdf), Page 9.
+
 ![UART Input and PLIC are both OK!](https://lupyuen.github.io/images/plic3-title.png)
 
 # Documentation for Ox64 BL808
