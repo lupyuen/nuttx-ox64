@@ -3652,6 +3652,16 @@ test_interrupt_priority: before1=0, before2=0, after1=1, after2=0
 jh7110_mm_init: Enable MMU
 ```
 
+TODO: What is ERRATA_THEAD_* in Linux Kernel?
+
+- [riscv/errata/thead/errata.c](https://github.com/torvalds/linux/blob/master/arch/riscv/errata/thead/errata.c#L88C1-L122)
+
+- [riscv/include/asm/errata_list.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/errata_list.h#L69-L164)
+
+- [riscv/include/asm/pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
+
+- [drivers/perf/riscv_pmu_sbi.c](https://github.com/torvalds/linux/blob/master/drivers/perf/riscv_pmu_sbi.c#L803-L845)
+
 # Compare Ox64 BL808 UART Registers
 
 To fix the null UART Input, let's compare the [UART Registers from NuttX](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75) vs [U-Boot Bootloader](https://gist.github.com/lupyuen/e0d13fb888a490fbf3dfcb01bbdd86fc)
