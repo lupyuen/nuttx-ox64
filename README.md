@@ -3869,6 +3869,31 @@ PLIC Interrupt Pending (0xe0001000):
 2
 ```
 
+Finally [UART Input and PLIC are both OK](https://gist.github.com/lupyuen/3761d9e73ca2c5b97b2f33dc1fc63946) yay!
+
+```text
+NuttShell (NSH) NuttX-12.0.3
+nsh> nx_start: CPU0: Beginning Idle Loop
+
+nsh> 
+nsh> uname -a
+posix_spawn: pid=0x80202978 path=uname file_actions=0x80202980 attr=0x80202988 argv=0x80202a28
+exec_internal: ERROR: Failed to load program 'uname': -2
+nxposix_spawn_exec: ERROR: exec failed: 2
+NuttX 12.0.3 fd05b07 Nov 24 2023 07:42:54 risc-v star64
+nsh> 
+nsh> ls /dev
+posix_spawn: pid=0x80202978 path=ls file_actions=0x80202980 attr=0x80202988 argv=0x80202a28
+exec_internal: ERROR: Failed to load program 'ls': -2
+nxposix_spawn_exec: ERROR: exec failed: 2
+/dev:
+ console
+ null
+ ram0
+ zero
+nsh> 
+```
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
