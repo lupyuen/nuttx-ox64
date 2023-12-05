@@ -3758,9 +3758,9 @@ Nope still the same.
 
 # Fix the UART Interrupt for Ox64 BL808
 
-TODO: Check rxavailable
+Let's fix the UART Interrupt for Ox64 BL808!
 
-https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/jh7110/bl602_serial.c#L1026-L1044
+UART Input is strangely null, so we tried printing the UART Input just before reading it: [bl602_serial.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/jh7110/bl602_serial.c#L1026-L1044)
 
 ```c
 /****************************************************************************
@@ -3784,7 +3784,7 @@ static bool bl602_rxavailable(struct uart_dev_s *dev)
 }
 ```
 
-Yes it prints the UART Input!
+Yes UART Input is correct!
 
 ```text
 nx_start: CPU0: Beginning Idle Loop
@@ -3798,7 +3798,7 @@ PLIC Interrupt Pending (0xe0001000):
 0000  00 00 00 00 00 00 00 00                          ........  
 ```
 
-TODO: Why reading BL602_UART_FIFO_CONFIG_1 (Offset 0x84) will erase UART Input?
+But somehow UART Input is erased when we read BL602_UART_FIFO_CONFIG_1 (Offset 0x84)...
 
 ```c
   uintptr_t fifo = getreg32(0x30002084);
@@ -3806,7 +3806,7 @@ TODO: Why reading BL602_UART_FIFO_CONFIG_1 (Offset 0x84) will erase UART Input?
   _info("fifo=%p, rx=%p\n", fifo, rx);
 ```
 
-Shows...
+Which shows...
 
 ```text
 nx_start: CPU0: Beginning Idle Loop
@@ -3818,7 +3818,11 @@ PLIC Interrupt Pending (0xe0001000):
 
 _Is C906 read-caching the entire page?_
 
-Let's uncache and retest: [riscv_mmu.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/common/riscv_mmu.c#L100-L127)
+Let's Disable MMU Caching and retest. From Linux Kernel we see these MMU Flags to Disable the MMU Caching: [pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
+
+Which is used by this T-Head Errata: [errata_list.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/errata_list.h#L70-L92)
+
+We do the same to Disable MMU Cache in NuttX: [riscv_mmu.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/common/riscv_mmu.c#L100-L127)
 
 ```c
   /* Save it */
@@ -3873,25 +3877,18 @@ Finally [UART Input and PLIC are both OK](https://gist.github.com/lupyuen/3761d9
 
 ```text
 NuttShell (NSH) NuttX-12.0.3
-nsh> nx_start: CPU0: Beginning Idle Loop
-
-nsh> 
 nsh> uname -a
-posix_spawn: pid=0x80202978 path=uname file_actions=0x80202980 attr=0x80202988 argv=0x80202a28
-exec_internal: ERROR: Failed to load program 'uname': -2
-nxposix_spawn_exec: ERROR: exec failed: 2
 NuttX 12.0.3 fd05b07 Nov 24 2023 07:42:54 risc-v star64
 nsh> 
 nsh> ls /dev
-posix_spawn: pid=0x80202978 path=ls file_actions=0x80202980 attr=0x80202988 argv=0x80202a28
-exec_internal: ERROR: Failed to load program 'ls': -2
-nxposix_spawn_exec: ERROR: exec failed: 2
 /dev:
  console
  null
  ram0
  zero
 nsh> 
+nsh> hello
+Hello, World!!
 ```
 
 # Documentation for Ox64 BL808
