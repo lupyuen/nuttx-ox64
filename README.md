@@ -3754,6 +3754,48 @@ Offset 8c: uart_fifo_rdata (Receive Data)
 RX FIFO. OK to ignore this.
 ```
 
+TODO: Check rxavailable
+
+https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/jh7110/bl602_serial.c#L1026-L1044
+
+```c
+/****************************************************************************
+ * Name: bl602_rxavailable
+ *
+ * Description:
+ *   Return true if the receive register is not empty
+ *
+ ****************************************************************************/
+
+static bool bl602_rxavailable(struct uart_dev_s *dev)
+{
+  struct bl602_uart_s *priv = (struct bl602_uart_s *)dev->priv;
+  uint8_t uart_idx          = priv->config.idx;
+
+  /* Return true is data is available in the receive data buffer */
+
+  uintptr_t rx = getreg32(0x3000208c); _info("rx=%p\n", rx); ////
+  return (getreg32(BL602_UART_FIFO_CONFIG_1(uart_idx)) & \
+          UART_FIFO_CONFIG_1_RX_CNT_MASK) != 0;
+}
+```
+
+Yes it prints the UART Input!
+
+```text
+nx_start: CPU0: Beginning Idle Loop
+bl602_rxavailable: rx=0x31
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrut Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........        
+bl602_rxavailable: rx=0x32
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........  
+```
+
+TODO: Why reading BL602_UART_FIFO_CONFIG_1 will erase UART Input?
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
