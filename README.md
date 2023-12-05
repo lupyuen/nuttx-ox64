@@ -3891,6 +3891,8 @@ nsh> hello
 Hello, World!!
 ```
 
+![UART Input and PLIC are both OK!](https://lupyuen.github.io/images/plic3-title.png)
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
