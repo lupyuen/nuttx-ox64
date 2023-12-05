@@ -3659,7 +3659,7 @@ To fix the null UART Input, let's compare the [UART Registers from NuttX](https:
 UART Registers from [NuttX UART Driver](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75)...
 
 ```bash
-// From UART Registers from NuttX
+// UART Registers from NuttX
 bl602_receive: rxdata=-1
 bl602_receive: rxdata=0x0
 UART Registers (0x30002000):
