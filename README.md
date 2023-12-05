@@ -3796,6 +3796,24 @@ PLIC Interrupt Pending (0xe0001000):
 
 TODO: Why reading BL602_UART_FIFO_CONFIG_1 (Offset 0x84) will erase UART Input?
 
+```c
+  uintptr_t fifo = getreg32(0x30002084);
+  uintptr_t rx = getreg32(0x3000208c);
+  _info("fifo=%p, rx=%p\n", fifo, rx);
+```
+
+Shows...
+
+```text
+nx_start: CPU0: Beginning Idle Loop
+bl602_rxavailable: fifo=0x7070120, rx=0
+riscv_dispatch_irq: Clear Pending Interrupts, irq=45, claim=0
+PLIC Interrupt Pending (0xe0001000):
+0000  00 00 00 00 00 00 00 00                          ........
+```
+
+TODO: Is C906 read-caching the entire page?
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
