@@ -3654,7 +3654,7 @@ jh7110_mm_init: Enable MMU
 
 # Compare Ox64 BL808 UART Registers
 
-TODO: Let's compare the [UART Registers from NuttX](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75) vs [U-Boot Bootloader](https://gist.github.com/lupyuen/e0d13fb888a490fbf3dfcb01bbdd86fc)
+To fix the null UART Input, let's compare the [UART Registers from NuttX](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75) vs [U-Boot Bootloader](https://gist.github.com/lupyuen/e0d13fb888a490fbf3dfcb01bbdd86fc)
 
 UART Registers from [NuttX UART Driver](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75)...
 
@@ -3706,26 +3706,36 @@ Here are the differences...
 20: uart_int_sts
 00000094
 00000012
+TODO: Decode this
 
 24: uart_int_mask
 00000ff5
 00000fff
+TODO: Set to 0xfff
 
 50: urx_bcr_int_cfg
 001cffff
 0026ffff
+Number of bytes received. OK to ignore this.
 
 80: uart_fifo_config_0
 00000080
 00000000
+Bit 7 rx_fifo_underflow: Underflow flag of RX FIFO
+Can be cleared by rx_fifo_clr.
+TODO: Set Bit 3 rx_fifo_clr: Clear signal of RX FIFO
 
 84: uart_fifo_config_1
 07070018
 07070000
+rx_fifo_cnt = 1 (RX FIFO available count)
+tx_fifo_cnt = 8 (TX FIFO available count)
+Let's ignore this.
 
 8c: uart_fifo_rdata
 00000000
 00000078
+RX FIFO. OK to ignore this.
 ```
 
 # Documentation for Ox64 BL808
