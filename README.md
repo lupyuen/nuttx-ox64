@@ -3794,7 +3794,7 @@ PLIC Interrupt Pending (0xe0001000):
 0000  00 00 00 00 00 00 00 00                          ........  
 ```
 
-TODO: Why reading BL602_UART_FIFO_CONFIG_1 will erase UART Input?
+TODO: Why reading BL602_UART_FIFO_CONFIG_1 (Offset 0x84) will erase UART Input?
 
 # Documentation for Ox64 BL808
 
