@@ -3876,6 +3876,25 @@ PLIC Interrupt Pending (0xe0001000):
 Finally [UART Input and PLIC are both OK](https://gist.github.com/lupyuen/3761d9e73ca2c5b97b2f33dc1fc63946) yay!
 
 ```text
+Starting kernel ...
+123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x50400290, _ebss=0x50, JH7110_IDLESTACK_TOP=0x50407c00
+jh7110_copy_ramdisk: ramdisk_addr=0x50410281
+jh7110_copy_ramdisk: size=8192000
+ABCjh7110_kernel_mappings: map I/O regions
+mmu_ln_setentry: vaddr=0, lntable[index]=0x9000000000_kernel_mappings: map PLIC as IL2
+mmu_ln_setentry: vaddr=0xe00ntable[index]=0x90000000380000e7
+mmu_ln_setentry: vaddr=0xe0200000, lntable[index]=0x90000000380800e7
+mmu_ln_setentry: vaddr=0xe0400000, lntable[index]=0x90000000381000e7
+...
+mmu_ln_setentry: vaddr=0xefc00000, lntable[index]=0x900000003bf000e7
+mmu_ln_setentry: vaddr=0xefe00000, lntable[index]=0x900000003bf800e7
+jh7110_kernel_mappings: connect the L1 and Interrupt L2 page tables for PLIC
+jh7110_kernel_mappings: map kernel text
+jh7110_kernel_mappings: map kernel data
+jh7110_kernel_mappings: connect the L1 and L2 page tables
+jh7110_kernel_mapmap the page pool
+up_irqinitialize: 
+
 NuttShell (NSH) NuttX-12.0.3
 nsh> uname -a
 NuttX 12.0.3 fd05b07 Nov 24 2023 07:42:54 risc-v star64
