@@ -3816,17 +3816,16 @@ PLIC Interrupt Pending (0xe0001000):
 0000  00 00 00 00 00 00 00 00                          ........
 ```
 
-_Is C906 read-caching the entire page?_
+_Why is C906 messing up the memory access?_
 
-Let's Disable MMU Caching and retest. From Linux Kernel we see these MMU Flags to Disable the MMU Caching: [pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
+From Linux Kernel we see the MMU Flags (Strong Order + Shareable) for I/O Memory: [pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
 
 Which is used by this T-Head Errata: [errata_list.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/errata_list.h#L70-L92)
 
-We do the same to Disable MMU Cache in NuttX: [riscv_mmu.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/common/riscv_mmu.c#L100-L127)
+We do the same to Enable Strong Order + Shareable in NuttX Page Table Entries: [riscv_mmu.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64c/arch/risc-v/src/common/riscv_mmu.c#L100-L127)
 
 ```c
-  /* Save it */
-
+  // Save the Page Table Entry
   lntable[index] = (paddr | mmuflags);
 
   //// Begin Test
@@ -3834,21 +3833,14 @@ We do the same to Disable MMU Cache in NuttX: [riscv_mmu.c](https://github.com/l
   /*
   * [63:59] T-Head Memory Type definitions:
   * bit[63] SO - Strong Order
-  * bit[62] C - Cacheable
-  * bit[61] B - Bufferable
   * bit[60] SH - Shareable
-  * bit[59] Sec - Trustable
-  * 00110 - NC   Weakly-ordered, Non-cacheable, Bufferable, Shareable, Non-trustable
-  * 01110 - PMA  Weakly-ordered, Cacheable, Bufferable, Shareable, Non-trustable
   * 10010 - IO   Strongly-ordered, Non-cacheable, Non-bufferable, Shareable, Non-trustable
   */
-  #define _PAGE_PMA_THEAD		((1UL << 62) | (1UL << 61) | (1UL << 60))
-  #define _PAGE_NOCACHE_THEAD	((1UL < 61) | (1UL << 60))
   #define _PAGE_IO_THEAD		((1UL << 63) | (1UL << 60))
-  #define _PAGE_MTMASK_THEAD	(_PAGE_PMA_THEAD | _PAGE_IO_THEAD | (1UL << 59))
-  if ((mmuflags & PTE_R) &&
-    (vaddr < 0x40000000UL || vaddr >= 0xe0000000UL))
+  if ((mmuflags & PTE_R) &&  // Leaf Page Table Entry
+    (vaddr < 0x40000000UL || vaddr >= 0xe0000000UL))  // I/O or PLIC Memory
     {
+      // Enable Strong Order and Shareable
       lntable[index] = lntable[index] | _PAGE_IO_THEAD;
       _info("vaddr=%p, lntable[index]=%p\n", vaddr, lntable[index]);
     }
