@@ -3877,14 +3877,16 @@ Finally [UART Input and PLIC are both OK](https://gist.github.com/lupyuen/3761d9
 
 ```text
 Starting kernel ...
-123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x50400290, _ebss=0x50, JH7110_IDLESTACK_TOP=0x50407c00
+123jh7110_copy_ramdisk: _edata=0x50400258, _sbss=0x50400290, _ebss=0x50110_IDLESTACK_TOP=0x50407c00
 jh7110_copy_ramdisk: ramdisk_addr=0x50410281
 jh7110_copy_ramdisk: size=8192000
 ABCjh7110_kernel_mappings: map I/O regions
-mmu_ln_setentry: vaddr=0, lntable[index]=0x9000000000_kernel_mappings: map PLIC as IL2
-mmu_ln_setentry: vaddr=0xe00ntable[index]=0x90000000380000e7
+mmu_ln_setentry: vaddr=0, lntable[index]=0x90000000000000e7
+jh7110_kernel_mappings: map PLIC as Interrupt L2
+mmu_ln_setentry: vaddr=0xe0000000, lntable[index]=0x90000000380000e7
 mmu_ln_setentry: vaddr=0xe0200000, lntable[index]=0x90000000380800e7
 mmu_ln_setentry: vaddr=0xe0400000, lntable[index]=0x90000000381000e7
+mmu_ln_setentry: vaddr=0xe0600000, lntable[index]=0x90000000381800e7
 ...
 mmu_ln_setentry: vaddr=0xefc00000, lntable[index]=0x900000003bf000e7
 mmu_ln_setentry: vaddr=0xefe00000, lntable[index]=0x900000003bf800e7
