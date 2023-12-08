@@ -3904,6 +3904,8 @@ nsh> hello
 Hello, World!!
 ```
 
+[(Watch the __Demo on YouTube__)](https://youtu.be/l7Y36nTkr8c)
+
 C906 MMU is actually explained in [__C906 Integration Manual (Chinese)__](https://github.com/T-head-Semi/openc906/blob/main/doc/%E7%8E%84%E9%93%81C906%E9%9B%86%E6%88%90%E6%89%8B%E5%86%8C.pdf), Page 9.
 
 And here's the [__RTL Code for C906 MMU__](https://github.com/T-head-Semi/openc906/tree/main/C906_RTL_FACTORY/gen_rtl/mmu/rtl).
