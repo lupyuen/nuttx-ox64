@@ -4,6 +4,8 @@
 
 Read the articles...
 
+-   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
+
 -   ["RISC-V Ox64 BL808 SBC: UART Interrupt and Platform-Level Interrupt Controller (PLIC)"](https://lupyuen.github.io/articles/plic2)
 
 -   ["RISC-V Ox64 BL808 SBC: NuttX Apps and Initial RAM Disk"](https://lupyuen.github.io/articles/app)
@@ -3664,6 +3666,10 @@ TODO: What is ERRATA_THEAD_* in Linux Kernel?
 
 # Compare Ox64 BL808 UART Registers
 
+Read the article...
+
+-   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
+
 To fix the null UART Input, let's compare the [UART Registers from NuttX](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75) vs [U-Boot Bootloader](https://gist.github.com/lupyuen/e0d13fb888a490fbf3dfcb01bbdd86fc)
 
 UART Registers from [NuttX UART Driver](https://gist.github.com/lupyuen/5d16f536133c0c3b5a30a50950a1ee75)...
@@ -3757,6 +3763,10 @@ RX FIFO. OK to ignore this.
 Nope still the same.
 
 # Fix the UART Interrupt for Ox64 BL808
+
+Read the article...
+
+-   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
 
 Let's fix the UART Interrupt for Ox64 BL808!
 
