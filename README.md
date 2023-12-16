@@ -1470,53 +1470,53 @@ That's because we haven't loaded the Initial RAM Disk! Let's fix this later.
 
 ```mermaid
 flowchart TD
-START --> jh7110_head["NuttX Boot Code: \n jh7110_head \n (Prints 123)"]
-click jh7110_head href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156" "arch/risc-v/src/jh7110/jh7110_head.S" _blank
+START --> bl808_head["NuttX Boot Code: \n bl808_head \n (Prints 123)"]
+click bl808_head href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_head.S#L41-L156" "arch/risc-v/src/bl808/bl808_head.S" _blank
 
-jh7110_head --> jh7110_start["NuttX Start Code: \n jh7110_start"]
-click jh7110_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+bl808_head --> bl808_start["NuttX Start Code: \n bl808_start"]
+click bl808_start href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L254-L297" "arch/risc-v/src/bl808/bl808_start.c" _blank
 
-jh7110_start --> jh7110_start_s["Start Supervisor Mode: \n jh7110_start_s \n (Prints ABC)"]
-click jh7110_start_s href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+bl808_start --> bl808_start_s["Start Supervisor Mode: \n bl808_start_s \n (Prints ABC)"]
+click bl808_start_s href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L200-L254" "arch/risc-v/src/bl808/bl808_start.c" _blank
 
-jh7110_start_s --> riscv_earlyserialinit["Early Serial Init: \n riscv_earlyserialinit"]
-click riscv_earlyserialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+bl808_start_s --> riscv_earlyserialinit["Early Serial Init: \n riscv_earlyserialinit"]
+click riscv_earlyserialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L297-L314" "arch/risc-v/src/bl808/bl808_start.c" _blank
 
-jh7110_start_s --> jh7110_mm_init["Memory Mgmt Init: \n jh7110_mm_init \n (Map the Memory Mgmt Unit)"]
-click jh7110_mm_init href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L259-L284" "arch/risc-v/src/jh7110/jh7110_mm_init.c" _blank
+bl808_start_s --> bl808_mm_init["Memory Mgmt Init: \n bl808_mm_init \n (Map the Memory Mgmt Unit)"]
+click bl808_mm_init href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_mm_init.c#L278-L298" "arch/risc-v/src/bl808/bl808_mm_init.c" _blank
 
-jh7110_start_s --> nx_start["Start NuttX: \n nx_start \n (Starts many things)"]
-click nx_start href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713" "sched/init/nx_start.c" _blank
+bl808_start_s --> nx_start["Start NuttX: \n nx_start \n (Starts many things)"]
+click nx_start href "https://github.com/apache/nuttx/blob/master/sched/init/nx_start.c#L298-L713" "sched/init/nx_start.c" _blank
 
-riscv_earlyserialinit --> u16550_earlyserialinit["UART Early Init: \n u16550_earlyserialinit \n (Setup the UART)"]
-click u16550_earlyserialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1722-L1747" "drivers/serial/uart_16550.c" _blank
+riscv_earlyserialinit --> bl808_earlyserialinit["UART Early Init: \n bl808_earlyserialinit \n (Setup the UART)"]
+click bl808_earlyserialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_serial.c#L700-L720" "drivers/serial/uart_16550.c" _blank
 
 nx_start --> up_irqinitialize["IRQ Init: \n up_irqinitialize"]
-click up_irqinitialize href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103" "arch/risc-v/src/jh7110/jh7110_irq.c#" _blank
+click up_irqinitialize href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_irq.c#L41-L103" "arch/risc-v/src/bl808/bl808_irq.c#" _blank
 
 nx_start --> nx_bringup["Bringup NuttX: \n nx_bringup"]
-click nx_bringup href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462" "sched/init/nx_bringup.c" _blank
+click nx_bringup href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L379-L468" "sched/init/nx_bringup.c" _blank
 
 up_irqinitialize --> riscv_exception_attach["Attach RISC-V Exceptions: \n riscv_exception_attach \n (Attach the RISC-V Exception Handlers)"]
-click riscv_exception_attach href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142" "arch/risc-v/src/common/riscv_exception.c" _blank
+click riscv_exception_attach href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_exception.c#L89-L142" "arch/risc-v/src/common/riscv_exception.c" _blank
 
 up_irqinitialize --> up_initialize["Init NuttX: \n up_initialize"]
-click up_initialize href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132" "arch/risc-v/src/common/riscv_initialize.c" _blank
+click up_initialize href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_initialize.c#L70-L132" "arch/risc-v/src/common/riscv_initialize.c" _blank
 
 up_initialize --> riscv_serialinit["Serial Init: \n riscv_serialinit"]
-click riscv_serialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L164-L168" "arch/risc-v/src/jh7110/jh7110_start.c" _blank
+click riscv_serialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L314-L327" "arch/risc-v/src/bl808/bl808_start.c" _blank
 
-riscv_serialinit --> u16550_serialinit["UART Init: \n u16550_serialinit \n (Register /dev/console and /dev/ttyS0)"]
-click u16550_serialinit href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1747-L1775" "drivers/serial/uart_16550.c" _blank
+riscv_serialinit --> bl808_serialinit["UART Init: \n bl808_serialinit \n (Register /dev/console and /dev/ttyS0)"]
+click bl808_serialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_serial.c#L720-L762" "drivers/serial/uart_16550.c" _blank
 
 nx_bringup --> nx_create_initthread["Create Init Thread: \n nx_create_initthread \n (Create AppBringUp thread)"]
-click aaa href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L330-L369" "sched/init/nx_bringup.c" _blank
+click nx_create_initthread href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L336-L375" "sched/init/nx_bringup.c" _blank
 
 nx_create_initthread --> nx_start_application["Start Application: \n nx_start_application"]
-click nx_start_application href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L212-L304" "sched/init/nx_bringup.c" _blank
+click nx_start_application href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L213-L310" "sched/init/nx_bringup.c" _blank
 
 nx_start_application --> nx_mount["Mount RAM Disk: nx_mount \n (Fails because Initial RAM Disk is missing)"]
-click nx_mount href "https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/fs/mount/fs_mount.c#L260-L514" "fs/mount/fs_mount.c" _blank
+click nx_mount href "https://github.com/apache/nuttx/blob/master/fs/mount/fs_mount.c#L260-L514" "fs/mount/fs_mount.c" _blank
 ```
 
 Read the article...
@@ -1527,55 +1527,79 @@ _What happens exactly when NuttX boots on Ox64?_
 
 In this article, NuttX has booted plenty of code on Ox64. Here's the flow of the __NuttX Code that boots on Ox64__...
 
-[__NuttX Boot Code: jh7110_head__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_head.S#L41-L156) prints "123" and calls...
+[__NuttX Boot Code: bl808_head__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_head.S#L41-L156) calls...
 
-- [__NuttX Start Code: jh7110_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L129-L159) which calls...
+- [__NuttX Start Code: bl808_start__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L254-L297) which calls...
 
-- [__Start Supervisor Mode: jh7110_start_s__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L82-L129) which prints "ABC" and calls...
+- [__Start Supervisor Mode: bl808_start_s__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L200-L254) which prints "ABC" and calls...
 
-- [__Early Serial Init: riscv_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164) (see below) and...
+- [__Early Serial Init: riscv_earlyserialinit__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L297-L314) (see below) and...
 
-  [__Memory Mgmt Init: jh7110_mm_init__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_mm_init.c#L259-L284) (to map the Memory Mgmt Unit) and...
+  [__Memory Mgmt Init: bl808_mm_init__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_mm_init.c#L278-L298) (to init the Memory Mgmt Unit) and...
 
-  [__Start NuttX: nx_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713) (see below)
+  [__Start NuttX: nx_start__](https://github.com/apache/nuttx/blob/master/sched/init/nx_start.c#L298-L713) (see below)
 
-[__Early Serial Init: riscv_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L159-L164) calls...
+[__Early Serial Init: riscv_earlyserialinit__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L297-L314) calls...
 
-- [__UART Early Init: u16550_earlyserialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1722-L1747)
+- [__UART Early Init: bl808_earlyserialinit__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_serial.c#L700-L720)
 
   (To setup the UART)
 
-[__Start NuttX: nx_start__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_start.c#L298-L713) does [__many things__](https://lupyuen.github.io/articles/unicorn2#after-primary-routine) and calls...
+[__Memory Mgmt Init: bl808_mm_init__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_mm_init.c#L278-L298) inits the [__Memory Mgmt Unit__](https://lupyuen.github.io/articles/mmu) by calling...
 
-- [__IRQ Init: up_irqinitialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103) (see below) and...
+- [__MMU Map Region: mmu_ln_map_region__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L137-L153) (to map a Memory Region) and...
 
-  [__Bringup NuttX: nx_bringup__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462) (see below)
+  [__MMU Set Entry: mmu_ln_setentry__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_mmu.c#L61C1-L107) (to set a Page Table Entry)
 
-[__IRQ Init: up_irqinitialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_irq.c#L41C1-L103) calls...
+  [(More about the __Memory Mgmt Unit__)](https://lupyuen.github.io/articles/mmu)
 
-- [__Attach RISC-V Exceptions: riscv_exception_attach__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_exception.c#L89-L142) (to attach the RISC-V Exception Handlers) and...
+[__Start NuttX: nx_start__](https://github.com/apache/nuttx/blob/master/sched/init/nx_start.c#L298-L713) does [__many things__](https://lupyuen.github.io/articles/unicorn2#after-primary-routine) and calls...
 
-  [__Init NuttX: up_initialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132) (see below)
+- [__IRQ Init: up_irqinitialize__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_irq.c#L41C1-L103) (see below) and...
 
-[__Init NuttX: up_initialize__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/common/riscv_initialize.c#L70-L132) calls...
+  [__Bringup NuttX: nx_bringup__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L379-L468) (see below)
 
-- [__Serial Init: riscv_serialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/arch/risc-v/src/jh7110/jh7110_start.c#L164-L168) which calls...
+[__IRQ Init: up_irqinitialize__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_irq.c#L41-L103) calls...
 
-- [__UART Init: u16550_serialinit__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/drivers/serial/uart_16550.c#L1747-L1775)
+- [__Attach RISC-V Exceptions: riscv_exception_attach__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_exception.c#L89-L142) (to attach the RISC-V Exception Handlers) and...
 
-  (To register "/dev/console" and "/dev/ttyS0")
+  [__Init NuttX: up_initialize__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_initialize.c#L70-L132) (see below)
 
-[__Bringup NuttX: nx_bringup__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L373-L462) calls...
+[__Init NuttX: up_initialize__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/common/riscv_initialize.c#L70-L132) calls...
 
-- [__Create Init Thread: nx_create_initthread__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L330-L369) (to create "AppBringUp" thread) which calls...
+- [__Serial Init: riscv_serialinit__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L314-L327) which calls...
 
-- [__Start Application: nx_start_application__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/sched/init/nx_bringup.c#L212-L304) which calls...
+- [__UART Init: bl808_serialinit__](https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_serial.c#L720-L762)
 
-- [__Mount RAM Disk: nx_mount__](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/ox64/fs/mount/fs_mount.c#L260-L514)
+  (To register "/dev/console")
+
+[__Bringup NuttX: nx_bringup__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L379-L468) calls...
+
+- [__Create Init Thread: nx_create_initthread__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L336-L375) (to create "AppBringUp" thread) which calls...
+
+- [__Start NuttX Task: nx_start_task__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L310-L336) (to start NuttX Task) which calls...
+
+- [__Start Application: nx_start_application__](https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L213-L310) which calls...
+
+- [__Board Late Init: board_late_initialize__](https://github.com/apache/nuttx/blob/master/boards/risc-v/bl808/ox64/src/bl808_appinit.c#L134-L167) (to mount Initial RAM Disk) and...
+
+  [__Mount RAM Disk: nx_mount__](https://github.com/apache/nuttx/blob/master/fs/mount/fs_mount.c#L260-L514) (to mount ROM File System from Initial RAM Disk)
 
   (Which fails because our Initial RAM Disk is missing)
 
   (Which prevents NuttX Shell from starting)
+
+  [(How __NuttX Shell__ should be started)](https://github.com/lupyuen/nuttx-ox64#start-nuttx-apps-on-ox64-bl808)
+
+  [(How __NuttX Apps__ are started)](https://lupyuen.github.io/articles/app)
+
+Therefore we expect NuttX to __boot completely on Ox64__ when we've implemented...
+
+- [__Initial RAM Disk__](https://lupyuen.github.io/articles/ox2#appendix-initial-ram-disk) for Ox64
+
+- [__UART Driver and UART Interrupts__](https://lupyuen.github.io/articles/ox2#appendix-uart-driver-for-ox64)
+
+- [__Memory Map__](https://lupyuen.github.io/articles/ox2#appendix-memory-map-for-ox64) might need fixing too
 
 # NuttX UART Driver for Ox64 BL808
 
