@@ -1506,16 +1506,22 @@ click up_initialize href "https://github.com/apache/nuttx/blob/master/arch/risc-
 up_initialize --> riscv_serialinit["Serial Init: \n riscv_serialinit"]
 click riscv_serialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_start.c#L314-L327" "arch/risc-v/src/bl808/bl808_start.c" _blank
 
-riscv_serialinit --> bl808_serialinit["UART Init: \n bl808_serialinit \n (Register /dev/console and /dev/ttyS0)"]
+riscv_serialinit --> bl808_serialinit["UART Init: \n bl808_serialinit \n (Register /dev/console)"]
 click bl808_serialinit href "https://github.com/apache/nuttx/blob/master/arch/risc-v/src/bl808/bl808_serial.c#L720-L762" "drivers/serial/uart_16550.c" _blank
 
 nx_bringup --> nx_create_initthread["Create Init Thread: \n nx_create_initthread \n (Create AppBringUp thread)"]
 click nx_create_initthread href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L336-L375" "sched/init/nx_bringup.c" _blank
 
-nx_create_initthread --> nx_start_application["Start Application: \n nx_start_application"]
+nx_create_initthread --> nx_start_task["Start NuttX Task: \n nx_start_task"]
+click nx_start_task href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L310-L336" "sched/init/nx_bringup.c" _blank
+
+nx_start_task --> nx_start_application["Start Application: \n nx_start_application"]
 click nx_start_application href "https://github.com/apache/nuttx/blob/master/sched/init/nx_bringup.c#L213-L310" "sched/init/nx_bringup.c" _blank
 
-nx_start_application --> nx_mount["Mount RAM Disk: nx_mount \n (Fails because Initial RAM Disk is missing)"]
+nx_start_application --> board_late_initialize["Board Late Init: board_late_initialize \n (Mount Initial RAM Disk)"]
+click board_late_initialize href "https://github.com/apache/nuttx/blob/master/boards/risc-v/bl808/ox64/src/bl808_appinit.c#L134-L167" "boards/risc-v/bl808/ox64/src/bl808_appinit.c" _blank
+
+board_late_initialize --> nx_mount["Mount RAM Disk: nx_mount \n (Fails because Initial RAM Disk is missing)"]
 click nx_mount href "https://github.com/apache/nuttx/blob/master/fs/mount/fs_mount.c#L260-L514" "fs/mount/fs_mount.c" _blank
 ```
 
