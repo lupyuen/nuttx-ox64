@@ -2,6 +2,8 @@
 
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)
 
+[![Daily Build of NuttX for Ox64](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64.yml/badge.svg)](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64.yml)
+
 Read the articles...
 
 -   ["$8 RISC-V SBC on a Real-Time Operating System: Ox64 + NuttX"](https://www.hackster.io/lupyuen/8-risc-v-sbc-on-a-real-time-operating-system-ox64-nuttx-474358)
@@ -26,7 +28,7 @@ BL808 is a complex creature with 3 (Asymmetric) RISC-V Cores (linked via IPC)...
 
     (Multimedia Core with MIPI CSI / DSI, Neural Proc Unit)
 
-    (Memory Mgmt Unit is Sv39, 128/256/512 TLB table entry. Same as Star64?)
+    (Memory Mgmt Unit is Sv39, 128/256/512 TLB table entry. Same as Star64)
 
 1.  M0 Core: [T-Head E907 32-bit RV32IMAFCP](https://www.t-head.cn/product/e907?lang=en) (320 MHz)
 
@@ -105,6 +107,34 @@ _Why Apache NuttX RTOS?_
 It might be interesting to run Apache NuttX RTOS on both the D0 Multimedia Core and the M0 Wireless Core. Then D0 and M0 can talk over OpenAMP (Asymmetric Multi-Processing).
 
 Let's explore...
+
+# NuttX Automated Daily Build for Ox64
+
+NuttX for Ox64 is now built automatically every day via GitHub Actions.
+
+The Daily Releases are available here...
+
+- [nuttx-ox64/releases](https://github.com/lupyuen/nuttx-ox64/releases)
+
+[nuttx.hash](https://github.com/lupyuen/nuttx-ox64/releases/download/nuttx-ox64-2023-12-19/nuttx.hash) contains the Commit Hash of the NuttX Kernel and NuttX Apps repos...
+
+```text
+NuttX Source: https://github.com/apache/nuttx/tree/31a6ffa15ca4e1604f80a02646a73c16570b8cbb
+NuttX Apps: https://github.com/apache/nuttx-apps/tree/dcfb4d066247463daed6c59ed09668004f72e1c8
+```
+
+The GitHub Actions Workflow is here...
+
+- [ox64.yml](https://github.com/lupyuen/nuttx-ox64/blob/main/.github/workflows/ox64.yml)
+
+Maybe someday we'll do Daily Automated Testing...
+
+1.  Download the Daily Build to TFTP Server
+1.  Power on Ox64 with an [IKEA Smart Power Plug via Home Assistant](https://lupyuen.github.io/articles/tftp#whats-next)
+1.  Ox64 boots the Daily Build over TFTP
+1.  Capture the Automated Testing Log and write to the Release Notes
+
+[(Similar to BL602)](https://lupyuen.github.io/articles/auto)
 
 # Flashing UART vs Serial Console
 
