@@ -13,8 +13,8 @@ on:
     - cron: '0 0 * * *'
 
   ## Run on every commit to this branch
-  ## push:
-  ##   branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -147,7 +147,7 @@ jobs:
     - name: Publish the GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: nuttx-star64-${{ steps.date.outputs.date }}
+        tag_name: nuttx-ox64-${{ steps.date.outputs.date }}
         draft: false
         prerelease: false
         generate_release_notes: false
