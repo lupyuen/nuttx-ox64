@@ -127,6 +127,11 @@ The GitHub Actions Workflow is here...
 
 - [ox64.yml](https://github.com/lupyuen/nuttx-ox64/blob/main/.github/workflows/ox64.yml)
 
+To run the NuttX Daily Build on Ox64...
+1.  Download the `Image` file from the Daily Build
+1.  Overwrite the `Image` file in the [Ox64 Linux microSD Card](https://www.hackster.io/lupyuen/8-risc-v-sbc-on-a-real-time-operating-system-ox64-nuttx-474358)
+1.  Boot Ox64 with the microSD Card
+
 Maybe someday we'll do Daily Automated Testing...
 
 1.  Download the Daily Build to TFTP Server
