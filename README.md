@@ -3703,11 +3703,29 @@ Also...
 
 > "C906 extended page attributes exist only when the MAEE bit in the MXSTATUS register is 1."
 
-TODO: Set MAEE Bit in MXSTATUS Register
+__So Beware:__ T-Head MMU Flags (Strong Order / Shareable) are available only if OpenSBI has set the __MAEE Bit in the MXSTATUS Register to 1__. Otherwise the MMU will crash when we set the flags!
 
-TODO: [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/apps/d0_lowload/src/rv32i_xtheade_lz4.S) doesn't set MXSTATUS
+__For Ox64 (T-Head C906):__ MAEE Bit in MXSTATUS Register is set to 1. So T-Head MMU flags are allowed. (But [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/apps/d0_lowload/src/rv32i_xtheade_lz4.S) doesn't set MXSTATUS?)
 
-TODO: Set Strong Order (Bit 63) in MMU Page Table Entries. Retest the setting of PLIC Interrupt Priority
+[__For CanMV-k230 (T-Head C908):__](https://github.com/apache/nuttx/pull/11379) MAEE Bit in MXSTATUS Register is (probably) set to 0. So T-Head MMU flags are NOT ALLOWED. [(Verified by yf13)](https://github.com/yf13)
+
+This is how we set the T-Head MMU Flags (Strong Order / Shareable)...
+
+-   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
+
+_What is `ERRATA_THEAD_*` in Linux Kernel?_
+
+- [riscv/errata/thead/errata.c](https://github.com/torvalds/linux/blob/master/arch/riscv/errata/thead/errata.c#L88C1-L122)
+
+- [riscv/include/asm/errata_list.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/errata_list.h#L69-L164)
+
+- [riscv/include/asm/pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
+
+- [drivers/perf/riscv_pmu_sbi.c](https://github.com/torvalds/linux/blob/master/drivers/perf/riscv_pmu_sbi.c#L803-L845)
+
+Check out the answer here...
+
+-   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
 
 _What if we disable and re-enable MMU, while setting PLIC Interrupt Priority?_
 
@@ -3720,16 +3738,6 @@ jh7110_mm_init: Test Interrupt Priority
 test_interrupt_priority: before1=0, before2=0, after1=1, after2=0
 jh7110_mm_init: Enable MMU
 ```
-
-TODO: What is ERRATA_THEAD_* in Linux Kernel?
-
-- [riscv/errata/thead/errata.c](https://github.com/torvalds/linux/blob/master/arch/riscv/errata/thead/errata.c#L88C1-L122)
-
-- [riscv/include/asm/errata_list.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/errata_list.h#L69-L164)
-
-- [riscv/include/asm/pgtable-64.h](https://github.com/torvalds/linux/blob/master/arch/riscv/include/asm/pgtable-64.h#L126-L142)
-
-- [drivers/perf/riscv_pmu_sbi.c](https://github.com/torvalds/linux/blob/master/drivers/perf/riscv_pmu_sbi.c#L803-L845)
 
 # Compare Ox64 BL808 UART Registers
 
