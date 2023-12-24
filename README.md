@@ -3705,9 +3705,15 @@ Also...
 
 __So Beware:__ T-Head MMU Flags (Strong Order / Shareable) are available only if OpenSBI has set the __MAEE Bit in the MXSTATUS Register to 1__. Otherwise the MMU will crash when we set the flags!
 
-__For Ox64 (T-Head C906):__ MAEE Bit in MXSTATUS Register is set to 1. So T-Head MMU flags are allowed. (But [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/apps/d0_lowload/src/rv32i_xtheade_lz4.S) doesn't set MXSTATUS?)
+__For Ox64 (T-Head C906):__ MAEE Bit in MXSTATUS Register is set to 1. So T-Head MMU Flags are allowed. (But [d0_lowload Boot Code](https://github.com/openbouffalo/OBLFR/blob/master/apps/d0_lowload/src/rv32i_xtheade_lz4.S) doesn't set MXSTATUS?)
 
-[__For CanMV-k230 (T-Head C908):__](https://github.com/apache/nuttx/pull/11379) MAEE Bit in MXSTATUS Register is (probably) set to 0. So T-Head MMU flags are NOT ALLOWED. [(Verified by yf13)](https://github.com/yf13)
+[__For CanMV-k230 (T-Head C908):__](https://github.com/apache/nuttx/pull/11379) MAEE Bit in MXSTATUS Register is (probably) set to 0. So T-Head MMU Flags are NOT ALLOWED. MMU will crash if we set the T-Head MMU Flags! [(Reported by yf13)](https://github.com/yf13)
+
+TODO: Does T-Head C908 support T-Head MMU Flags or RISC-V Svpbmt Extension? We can't find the C908 Manual, and this [Linux Patch](https://lore.kernel.org/lkml/20230622231305.631331-4-heiko@sntech.de/T/) says...
+
+> In an ideal world those would be handled as extensions as well - T-Head fixed
+their vectors with the C908 so they might do standards-compliant Svpbmt and
+Zicbom in the future.
 
 This is how we set the T-Head MMU Flags (Strong Order / Shareable)...
 
