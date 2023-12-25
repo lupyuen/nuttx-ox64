@@ -4003,6 +4003,42 @@ And here's the [__RTL Code for C906 MMU__](https://github.com/T-head-Semi/openc9
 
 ![UART Input and PLIC are both OK!](https://lupyuen.github.io/images/plic3-title.png)
 
+# Fix the RISC-V Timer with OpenSBI
+
+_The "sleep" command always hangs in NuttX Shell. How to fix it?_
+
+That's because we haven't implemented the RISC-V Timer for Ox64! We should call OpenSBI to handle the Timer, here's the fix: https://github.com/lupyuen2/wip-pinephone-nuttx/commit/57ea5f000636f739ac3cb8ea1e60936798f6c3a9#diff-535879ffd6d9fc8e7d84b37a88bdeb1609c4a90e3777150939a96bed18696aee
+
+We only need to change arch/risc-v/src/bl808/bl808_timerisr.c.
+
+(Ignore arch/risc-v/src/common/riscv_mtimer.c, we were verifying that mtime and mtimecmp are unused in Kernel Mode)
+
+How it works...
+
+- [riscv_mtimer_initialize](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/common/riscv_mtimer.c#L318-L332) calls riscv_mtimer_set_mtimecmp
+
+- [riscv_mtimer_set_mtimecmp](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/common/riscv_mtimer.c#L136-L141) calls riscv_sbi_set_timer
+
+- [riscv_sbi_set_timer](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/common/supervisor/riscv_sbi.c#L94-L107) calls sbi_ecall
+
+- [sbi_ecall](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/common/supervisor/riscv_sbi.c#L53-L76) makes an ecall to OpenSBI
+
+- Which access the System Timer
+
+Originally we set MTIMER_FREQ to 10000000: [bl808_timerisr.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/bl808/bl808_timerisr.c#L44-L48)
+
+```c
+#define MTIMER_FREQ 10000000
+```
+
+But this causes the command `sleep 1` to pause for 10 seconds. So we divide the frequency by 10: [bl808_timerisr.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/bl808/bl808_timerisr.c#L44-L48)
+
+```c
+#define MTIMER_FREQ 1000000
+```
+
+[Here's the log (ignore the errors)](https://gist.github.com/lupyuen/8aa66e7f88d1e31a5f198958c15e4393)
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
