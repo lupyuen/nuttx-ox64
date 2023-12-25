@@ -4043,8 +4043,10 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 
 TODO: Assume LED connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
 
+TODO: BL808 RM Page 56
+
 ```text
-4.5.1 Normal Output Mode
+4.5.1 Normal GPIO Output Mode
 • Set reg_gpio_xx_oe to 1 to enable the GPIO output mode
 • Set reg_gpio_xx_func_sel to 11 to enter the SWGPIO mode
 • Set reg_gpio_xx_mode to 0 to enable the normal output function of I/O
@@ -4085,7 +4087,7 @@ mw 0x20000938 0x1000b40 1
 md 0x20000938 1
 ```
 
-TODO
+TODO: BL808 RM Page 119
 
 ```text
 4.8.30 gpio_cfg29
