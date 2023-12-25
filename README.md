@@ -4039,6 +4039,90 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 
 [Here's the log (ignore the errors)](https://gist.github.com/lupyuen/8aa66e7f88d1e31a5f198958c15e4393)
 
+# LED Driver for Ox64 BL808
+
+TODO
+
+```text
+4.5.1 Normal Output Mode
+• Set reg_gpio_xx_oe to 1 to enable the GPIO output mode
+• Set reg_gpio_xx_func_sel to 11 to enter the SWGPIO mode
+• Set reg_gpio_xx_mode to 0 to enable the normal output function of I/O
+• Set to enable/disable the internal pull-up and pull-down functions through reg_gpio_xx_pu and reg_gpio_xx_pd ,
+and then set the level of I/O pin through reg_gpio_xx_o
+```
+
+TODO
+
+```text
+Bits Name Type Reset Description
+
+31:30 reg_gpio_0_mode r/w 0 When GPIO Function Selected to SWGPIO
+00 (Output Value Mode): GPIO Output by reg_gpio_x_o
+Value
+01 (Set/Celar Mode ) :GPIO Output set by reg_gpio_x_set
+and clear by reg_gpio_x_clr
+10 : SWGPIO Source comes from GPIO DMA (GPIO DMA
+Mode), GPIO Output value by gpio_dma_o
+11: SWGPIO Source comes from GPIO DMA (GPIO DMA
+Mode), GPIO Outout value by gpio_dma_set/gpio_dma_clr
+
+29 RSVD
+
+28 reg_gpio_0_i r 0
+
+27 RSVD
+
+26 reg_gpio_0_clr w1p 0 When SWGPIO @ Set/Clear Mode
+Set this bit will clear GPIO output value to 0,when set/clr at
+the same time, only set take effect
+
+25 reg_gpio_0_set w1p 0 When SWGPIO @ Set/Clear Mode
+Set this bit will set GPIO output value to 1,when set/clr at
+the same time, only set take effect
+
+24 reg_gpio_0_o r/w 0 When SWGPIO @ Output Value Mode
+00 : GPIO Value changes according to this value
+01 : GPIO Value Set by this register and clr by clr_reg
+
+23 RSVD
+
+22 reg_gpio_0_int_mask r/w 1 mask interrupt (1)
+
+21 gpio_0_int_stat r 0 interrupt status
+
+20 reg_gpio_0_int_clr r/w 0 clear interrupt
+
+19:16 reg_gpio_0_int_mode_set r/w 0 0000 : sync falling edge trigger
+0001 : sync rising edge trigger
+0010 : sync low level trigger
+0011 : sync high level trigger
+01xx : sync rising & falling edge trigger
+1000 : async falling edge trigger
+1001 : async rising edge trigger
+1010 : async low level trigger
+1011 : async high level trigger
+
+15:13 RSVD
+
+12:8 reg_gpio_0_func_sel r/w 5’hB GPIO Function Select (Default : SWGPIO)
+
+7 RSVD
+
+6 reg_gpio_0_oe r/w 0 Register Controlled GPIO Output Enable (Used when GPIO
+Function select to Register Control GPIO)
+
+5 reg_gpio_0_pd r/w 0 GPIO Pull Down Control
+
+4 reg_gpio_0_pu r/w 0 GPIO Pull Up Control
+
+3:2 reg_gpio_0_drv r/w 0 GPIO Driving Control
+
+1 reg_gpio_0_smt r/w 1 GPIO SMT Control
+
+0 reg_gpio_0_ie r/w 0 GPIO Input Enable
+```
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
