@@ -4041,7 +4041,7 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 
 # LED Driver for Ox64 BL808
 
-TODO
+TODO: Assume LED connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
 
 ```text
 4.5.1 Normal Output Mode
@@ -4052,12 +4052,48 @@ TODO
 and then set the level of I/O pin through reg_gpio_xx_o
 ```
 
+TODO: U-Boot Commands
+
+```bash
+## Dump gpio_cfg29 at 0x20000938
+md 0x20000938 1
+
+## Set reg_gpio_xx_oe (Bit 6) to 1 to enable the GPIO output mode
+## (1 << 6)
+
+## Set reg_gpio_xx_func_sel (Bits 8 to 12) to 11 to enter the SWGPIO mode
+## (11 << 8)
+
+## Set reg_gpio_xx_mode (Bits 30 to 31) to 0 to enable the normal output function of I/O
+## (0 << 30)
+
+## Set reg_gpio_xx_pu (Bit 4) and reg_gpio_xx_pd (Bit 5) to 0 to disable the internal pull-up and pull-down functions
+## (0 << 4)
+
+## Set the level of I/O pin through reg_gpio_xx_o (Bit 24)
+## Either (0 << 24)
+## Or (1 << 24)
+
+## Set GPIO Output to 0: (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (0 << 24)
+## = 0xb40
+mw 0x20000938 0xb40 1
+md 0x20000938 1
+
+## Set GPIO Output to 1: (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (1 << 24)
+## = 0x1000b40
+mw 0x20000938 0x1000b40 1
+md 0x20000938 1
+```
+
 TODO
 
 ```text
+4.8.30 gpio_cfg29
+Address：0x20000938
+
 Bits Name Type Reset Description
 
-31:30 reg_gpio_0_mode r/w 0 When GPIO Function Selected to SWGPIO
+31:30 reg_gpio_29_mode r/w 0 When GPIO Function Selected to SWGPIO
 00 (Output Value Mode): GPIO Output by reg_gpio_x_o
 Value
 01 (Set/Celar Mode ) :GPIO Output set by reg_gpio_x_set
@@ -4069,31 +4105,31 @@ Mode), GPIO Outout value by gpio_dma_set/gpio_dma_clr
 
 29 RSVD
 
-28 reg_gpio_0_i r 0
+28 reg_gpio_29_i r 0
 
 27 RSVD
 
-26 reg_gpio_0_clr w1p 0 When SWGPIO @ Set/Clear Mode
+26 reg_gpio_29_clr w1p 0 When SWGPIO @ Set/Clear Mode
 Set this bit will clear GPIO output value to 0,when set/clr at
 the same time, only set take effect
 
-25 reg_gpio_0_set w1p 0 When SWGPIO @ Set/Clear Mode
+25 reg_gpio_29_set w1p 0 When SWGPIO @ Set/Clear Mode
 Set this bit will set GPIO output value to 1,when set/clr at
 the same time, only set take effect
 
-24 reg_gpio_0_o r/w 0 When SWGPIO @ Output Value Mode
+24 reg_gpio_29_o r/w 0 When SWGPIO @ Output Value Mode
 00 : GPIO Value changes according to this value
 01 : GPIO Value Set by this register and clr by clr_reg
 
 23 RSVD
 
-22 reg_gpio_0_int_mask r/w 1 mask interrupt (1)
+22 reg_gpio_29_int_mask r/w 1 mask interrupt (1)
 
-21 gpio_0_int_stat r 0 interrupt status
+21 gpio_29_int_stat r 0 interrupt status
 
-20 reg_gpio_0_int_clr r/w 0 clear interrupt
+20 reg_gpio_29_int_clr r/w 0 clear interrupt
 
-19:16 reg_gpio_0_int_mode_set r/w 0 0000 : sync falling edge trigger
+19:16 reg_gpio_29_int_mode_set r/w 0 0000 : sync falling edge trigger
 0001 : sync rising edge trigger
 0010 : sync low level trigger
 0011 : sync high level trigger
@@ -4105,22 +4141,22 @@ the same time, only set take effect
 
 15:13 RSVD
 
-12:8 reg_gpio_0_func_sel r/w 5’hB GPIO Function Select (Default : SWGPIO)
+12:8 reg_gpio_29_func_sel r/w 5’hB GPIO Function Select (Default : SW-GPIO)
 
 7 RSVD
 
-6 reg_gpio_0_oe r/w 0 Register Controlled GPIO Output Enable (Used when GPIO
+6 reg_gpio_29_oe r/w 0 Register Controlled GPIO Output Enable (Used when GPIO
 Function select to Register Control GPIO)
 
-5 reg_gpio_0_pd r/w 0 GPIO Pull Down Control
+5 reg_gpio_29_pd r/w 0 GPIO Pull Down Control
 
-4 reg_gpio_0_pu r/w 0 GPIO Pull Up Control
+4 reg_gpio_29_pu r/w 0 GPIO Pull Up Control
 
-3:2 reg_gpio_0_drv r/w 0 GPIO Driving Control
+3:2 reg_gpio_29_drv r/w 0 GPIO Driving Control
 
-1 reg_gpio_0_smt r/w 1 GPIO SMT Control
+1 reg_gpio_29_smt r/w 1 GPIO SMT Control
 
-0 reg_gpio_0_ie r/w 0 GPIO Input Enable
+0 reg_gpio_29_ie r/w 0 GPIO Input Enable
 ```
 
 # Documentation for Ox64 BL808
