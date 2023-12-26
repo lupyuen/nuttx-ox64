@@ -4007,11 +4007,21 @@ And here's the [__RTL Code for C906 MMU__](https://github.com/T-head-Semi/openc9
 
 _The "sleep" command always hangs in NuttX Shell. How to fix it?_
 
-That's because we haven't implemented the RISC-V Timer for Ox64! We should call OpenSBI to handle the Timer, here's the fix: https://github.com/lupyuen2/wip-pinephone-nuttx/commit/57ea5f000636f739ac3cb8ea1e60936798f6c3a9#diff-535879ffd6d9fc8e7d84b37a88bdeb1609c4a90e3777150939a96bed18696aee
+That's because we haven't implemented the RISC-V Timer for Ox64! We should call OpenSBI to handle the Timer, [here's the fix](https://github.com/lupyuen2/wip-pinephone-nuttx/commit/57ea5f000636f739ac3cb8ea1e60936798f6c3a9#diff-535879ffd6d9fc8e7d84b37a88bdeb1609c4a90e3777150939a96bed18696aee). (Ignore riscv_mtimer.c, we were verifying that mtime and mtimecmp are unused in Kernel Mode)
 
-We only need to change arch/risc-v/src/bl808/bl808_timerisr.c.
+We only need to change [arch/risc-v/src/bl808/bl808_timerisr.c](https://github.com/lupyuen2/wip-pinephone-nuttx/blob/nim/arch/risc-v/src/bl808/bl808_timerisr.c#L44-L116)
 
-(Ignore arch/risc-v/src/common/riscv_mtimer.c, we were verifying that mtime and mtimecmp are unused in Kernel Mode)
+```c
+#define MTIMER_FREQ 1000000
+
+// This function is called during start-up to initialize the timer interrupt.
+void up_timer_initialize(void) {
+  struct oneshot_lowerhalf_s *lower = riscv_mtimer_initialize(
+    0, 0, RISCV_IRQ_STIMER, MTIMER_FREQ);
+  DEBUGASSERT(lower);
+  up_alarm_set_lowerhalf(lower);
+}
+```
 
 How it works...
 
@@ -4036,6 +4046,8 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 ```c
 #define MTIMER_FREQ 1000000
 ```
+
+Now the `sleep` command works correctly in NuttX Shell!
 
 [Here's the log (ignore the errors)](https://gist.github.com/lupyuen/8aa66e7f88d1e31a5f198958c15e4393)
 
@@ -4068,27 +4080,34 @@ and then set the level of I/O pin through reg_gpio_xx_o
 
 Thus...
 
-- Set reg_gpio_xx_oe (Bit 6) to 1 to enable the GPIO output mode
-
+- Set reg_gpio_xx_oe (Bit 6) to 1 to enable the GPIO output mode <br>
   = (1 << 6)
 
-- Set reg_gpio_xx_func_sel (Bits 8 to 12) to 11 to enter the SWGPIO mode
-
+- Set reg_gpio_xx_func_sel (Bits 8 to 12) to 11 to enter the SWGPIO mode <br>
   = (11 << 8)
 
-- Set reg_gpio_xx_mode (Bits 30 to 31) to 0 to enable the normal output function of I/O
-
+- Set reg_gpio_xx_mode (Bits 30 to 31) to 0 to enable the normal output function of I/O <br>
   = (0 << 30)
 
-- Set reg_gpio_xx_pu (Bit 4) and reg_gpio_xx_pd (Bit 5) to 0 to disable the internal pull-up and pull-down functions
-
+- Set reg_gpio_xx_pu (Bit 4) and reg_gpio_xx_pd (Bit 5) to 0 to disable the internal pull-up and pull-down functions <br>
   = (0 << 4)
 
-- Set the level of I/O pin through reg_gpio_xx_o (Bit 24)
-
+- Set the level of I/O pin through reg_gpio_xx_o (Bit 24) <br>
   = Either (0 << 24) Or (1 << 24)
 
 (GPIO Bit Definitions are below)
+
+Which means...
+
+- Set GPIO Output to 0 <br>
+  = (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (0 << 24) <br>
+  = 0xb40
+
+- Set GPIO Output to 1 <br>
+  = (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (1 << 24) <br>
+  = 0x1000b40
+
+_How to test this?_
 
 GPIO 29 Base Address `gpio_cfg29` is 0x20000938.
 
@@ -4114,11 +4133,11 @@ $ md 020000938 1
 
 And U-Boot switches the LED On and Off correctly yay!
 
-_How do we set GPIO 29 in our NuttX LED Driver?_
+_How to flip the GPIO in our NuttX LED Driver?_
 
 TODO
 
-_How did we get the GPIO 29 Bit Definitions?_
+_How did we get the GPIO Bit Definitions?_
 
 From BL808 Reference Manual Page 119...
 
