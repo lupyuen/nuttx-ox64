@@ -4172,6 +4172,8 @@ And our LED Driver works OK with Nim: It blinks our LED on Ox64 BL808 SBC!
 
 - [Watch the Demo on YouTube](https://youtube.com/shorts/KCkiXFxBgxQ)
 
+- [See the Log](https://gist.github.com/lupyuen/553c2da4ad5d119468d223e162573e96)
+
 - ["Blink an LED with Nim"](https://github.com/lupyuen/nuttx-nim#blink-an-led-with-nim)
 
 Later we'll replace the (awful) code above by the BL808 GPIO Driver. Which we'll copy from NuttX for BL602.
