@@ -4041,9 +4041,15 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 
 # LED Driver for Ox64 BL808
 
-TODO: Assume LED connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
+Let's create a simple LED Driver for testing Blinky in Nim.
 
-TODO: BL808 RM Page 56
+Assume LED is connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
+
+(With a 47 Ohm Resistor, yellow-purple-black-gold)
+
+_How do we flip a BL808 GPIO High and Low?_
+
+From BL808 Reference Manual Page 56...
 
 ```text
 4.5.1 Normal GPIO Output Mode
@@ -4054,59 +4060,65 @@ TODO: BL808 RM Page 56
 and then set the level of I/O pin through reg_gpio_xx_o
 ```
 
-TODO: U-Boot Commands
+Thus...
+
+- Set reg_gpio_xx_oe (Bit 6) to 1 to enable the GPIO output mode
+
+  = (1 << 6)
+
+- Set reg_gpio_xx_func_sel (Bits 8 to 12) to 11 to enter the SWGPIO mode
+
+  = (11 << 8)
+
+- Set reg_gpio_xx_mode (Bits 30 to 31) to 0 to enable the normal output function of I/O
+
+  = (0 << 30)
+
+- Set reg_gpio_xx_pu (Bit 4) and reg_gpio_xx_pd (Bit 5) to 0 to disable the internal pull-up and pull-down functions
+
+  = (0 << 4)
+
+- Set the level of I/O pin through reg_gpio_xx_o (Bit 24)
+
+  = Either (0 << 24) Or (1 << 24)
+
+(GPIO Bit Definitions are below)
+
+GPIO 29 Base Address `gpio_cfg29` is 0x20000938.
+
+For testing, we use U-Boot Bootloader to set GPIO 29 to High and Low...
 
 ```bash
 ## Dump gpio_cfg29 at 0x20000938
-md 0x20000938 1
-
-## Set reg_gpio_xx_oe (Bit 6) to 1 to enable the GPIO output mode
-## (1 << 6)
-
-## Set reg_gpio_xx_func_sel (Bits 8 to 12) to 11 to enter the SWGPIO mode
-## (11 << 8)
-
-## Set reg_gpio_xx_mode (Bits 30 to 31) to 0 to enable the normal output function of I/O
-## (0 << 30)
-
-## Set reg_gpio_xx_pu (Bit 4) and reg_gpio_xx_pd (Bit 5) to 0 to disable the internal pull-up and pull-down functions
-## (0 << 4)
-
-## Set the level of I/O pin through reg_gpio_xx_o (Bit 24)
-## Either (0 << 24)
-## Or (1 << 24)
+$ md 0x20000938 1
+20000938: 00400803                             ..@.
 
 ## Set GPIO Output to 0: (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (0 << 24)
 ## = 0xb40
-mw 0x20000938 0xb40 1
-md 0x20000938 1
+$ mw 0x20000938 0xb40 1
+$ md 0x20000938 1
+20000938: 00000b40                             @...
 
 ## Set GPIO Output to 1: (1 << 6) | (11 << 8) | (0 << 30) | (0 << 4) | (1 << 24)
 ## = 0x1000b40
-mw 0x20000938 0x1000b40 1
-md 0x20000938 1
-```
-
-TODO: U-Boot switches the LED On and Off correctly yay!
-
-```bash
-=> md 0x20000938 1
-20000938: 00400803                             ..@.
-
-=> mw 0x20000938 0xb40 1
-=> md 0x20000938 1
-20000938: 00000b40                             @...
-
-=> mw 0x20000938 0x1000b40 1
-=> md 020000938 1
+$ mw 0x20000938 0x1000b40 1
+$ md 020000938 1
 20000938: 01000b40                             @...
 ```
 
-TODO: BL808 RM Page 119
+And U-Boot switches the LED On and Off correctly yay!
+
+_How do we set GPIO 29 in our NuttX LED Driver?_
+
+TODO
+
+_How did we get the GPIO 29 Bit Definitions?_
+
+From BL808 Reference Manual Page 119...
 
 ```text
 4.8.30 gpio_cfg29
-Address：0x20000938
+Base Address：0x20000938
 
 Bits Name Type Reset Description
 
