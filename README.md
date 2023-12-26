@@ -4041,9 +4041,15 @@ But this causes the command `sleep 1` to pause for 10 seconds. So we divide the 
 
 # LED Driver for Ox64 BL808
 
-Let's create a simple LED Driver for testing Blinky in Nim.
+We wish to blink an LED with Nim on Ox64...
 
-Assume LED is connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
+- ["Blink an LED with Nim"](https://github.com/lupyuen/nuttx-nim#blink-an-led-with-nim)
+
+But first we need a barebones NuttX LED Driver for Ox64.
+
+_How to create the NuttX LED Driver?_
+
+We assume LED is connected to GPIO 29, Pin 21. [(See the Pinout)](https://wiki.pine64.org/wiki/File:Ox64_pinout.png)
 
 (With a 47 Ohm Resistor, yellow-purple-black-gold)
 
