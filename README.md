@@ -4007,6 +4007,10 @@ And here's the [__RTL Code for C906 MMU__](https://github.com/T-head-Semi/openc9
 
 # Fix the RISC-V Timer with OpenSBI
 
+Read the article...
+
+-   ["Nim on a Real-Time Operating System: Apache NuttX RTOS + Ox64 BL808 SBC"](https://lupyuen.github.io/articles/nim)
+
 _The `sleep` command hangs in NuttX Shell. How to fix it?_
 
 That's because we haven't implemented the RISC-V Timer for Ox64! We should call OpenSBI to handle the Timer, [here's the fix](https://github.com/lupyuen2/wip-pinephone-nuttx/commit/57ea5f000636f739ac3cb8ea1e60936798f6c3a9#diff-535879ffd6d9fc8e7d84b37a88bdeb1609c4a90e3777150939a96bed18696aee).
@@ -4057,6 +4061,10 @@ Now the `sleep` command works correctly in NuttX Shell!
 [Here's the log (ignore the errors)](https://gist.github.com/lupyuen/8aa66e7f88d1e31a5f198958c15e4393)
 
 # LED Driver for Ox64 BL808
+
+Read the article...
+
+-   ["Nim on a Real-Time Operating System: Apache NuttX RTOS + Ox64 BL808 SBC"](https://lupyuen.github.io/articles/nim)
 
 We wish to blink an LED with Nim on Ox64...
 
