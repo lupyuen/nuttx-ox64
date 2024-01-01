@@ -6,6 +6,8 @@
 
 Read the articles...
 
+-   ["Nim on a Real-Time Operating System: Apache NuttX RTOS + Ox64 BL808 SBC"](https://lupyuen.github.io/articles/nim)
+
 -   ["$8 RISC-V SBC on a Real-Time Operating System: Ox64 + NuttX"](https://www.hackster.io/lupyuen/8-risc-v-sbc-on-a-real-time-operating-system-ox64-nuttx-474358)
 
 -   ["Fixed the UART Interrupt and Platform-Level Interrupt Controller (Ox64 BL808)"](https://lupyuen.github.io/articles/plic3)
