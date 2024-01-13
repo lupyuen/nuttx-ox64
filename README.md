@@ -6,6 +6,8 @@
 
 Read the articles...
 
+-   ["Apache NuttX RTOS in a Web Browser? Adventures with TinyEMU and VirtIO"](https://lupyuen.github.io/articles/tinyemu)
+
 -   ["Nim on a Real-Time Operating System: Apache NuttX RTOS + Ox64 BL808 SBC"](https://lupyuen.github.io/articles/nim)
 
 -   ["$8 RISC-V SBC on a Real-Time Operating System: Ox64 + NuttX"](https://www.hackster.io/lupyuen/8-risc-v-sbc-on-a-real-time-operating-system-ox64-nuttx-474358)
@@ -4271,6 +4273,10 @@ Objective: Take the NuttX Kernel built for Ox64 BL808 SBC. And boot it on TinyEM
 Check out the details here...
 
 - ["Emulate Ox64 BL808 SBC with TinyEMU"](https://github.com/lupyuen/nuttx-tinyemu#emulate-ox64-bl808-sbc-with-tinyemu)
+
+Also read the article...
+
+- ["Apache NuttX RTOS in a Web Browser? Adventures with TinyEMU and VirtIO"](https://lupyuen.github.io/articles/tinyemu)
 
 # Documentation for Ox64 BL808
 
