@@ -4264,6 +4264,14 @@ Function select to Register Control GPIO)
 0 reg_gpio_29_ie r/w 0 GPIO Input Enable
 ```
 
+# Emulate Ox64 BL808 SBC with TinyEMU
+
+Objective: Take the NuttX Kernel built for Ox64 BL808 SBC. And boot it on TinyEMU RISC-V Emulator in the Web Browser!
+
+Check out the details here...
+
+- ["Emulate Ox64 BL808 SBC with TinyEMU"](https://github.com/lupyuen/nuttx-tinyemu#emulate-ox64-bl808-sbc-with-tinyemu)
+
 # Documentation for Ox64 BL808
 
 ![Pine64 Ox64 64-bit RISC-V SBC (Sorry for my substandard soldering)](https://lupyuen.github.io/images/ox64-solder.jpg)
