@@ -6,6 +6,8 @@
 
 Read the articles...
 
+-   ["Emulate Ox64 BL808 in the Web Browser: Experiments with TinyEMU RISC-V Emulator and Apache NuttX RTOS"](https://lupyuen.github.io/articles/tinyemu2)
+
 -   ["Apache NuttX RTOS in a Web Browser? Adventures with TinyEMU and VirtIO"](https://lupyuen.github.io/articles/tinyemu)
 
 -   ["Nim on a Real-Time Operating System: Apache NuttX RTOS + Ox64 BL808 SBC"](https://lupyuen.github.io/articles/nim)
@@ -4272,15 +4274,15 @@ Function select to Register Control GPIO)
 
 # Emulate Ox64 BL808 SBC with TinyEMU
 
+Read the article...
+
+-   ["Emulate Ox64 BL808 in the Web Browser: Experiments with TinyEMU RISC-V Emulator and Apache NuttX RTOS"](https://lupyuen.github.io/articles/tinyemu2)
+
 Objective: Take the NuttX Kernel built for Ox64 BL808 SBC. And boot it on TinyEMU RISC-V Emulator in the Web Browser!
 
 Check out the details here...
 
 - ["Emulate Ox64 BL808 SBC with TinyEMU"](https://github.com/lupyuen/nuttx-tinyemu#emulate-ox64-bl808-sbc-with-tinyemu)
-
-Also read the article...
-
-- ["Apache NuttX RTOS in a Web Browser? Adventures with TinyEMU and VirtIO"](https://lupyuen.github.io/articles/tinyemu)
 
 ![Ox64 BL808 Emulator with TinyEMU RISC-V Emulator and Apache NuttX RTOS](https://lupyuen.github.io/images/tinyemu2-title.png)
 
