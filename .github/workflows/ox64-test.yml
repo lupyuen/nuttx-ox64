@@ -37,7 +37,7 @@ jobs:
       run:  |
         git clone https://github.com/lupyuen/ox64-tinyemu
 
-    - name: Build TinyEMU
+    - name: Build Ox64 BL808 Emulator
       run: |
         cd ox64-tinyemu
         make
@@ -50,6 +50,6 @@ jobs:
       run: |
         ls -l nuttx.bin
         wget --output-document=nuttx.cfg https://raw.githubusercontent.com/lupyuen/nuttx-tinyemu/main/docs/root-riscv64.cfg
-        ## wget --output-document=expect.sh https://raw.githubusercontent.com/lupyuen/nuttx-tinyemu/main/docs/root-riscv64.cfg
-        ## chmod +x expect.sh
-        ## ./expect.sh
+        wget --output-document=expect.sh https://github.com/lupyuen/nuttx-ox64/raw/main/expect.sh
+        chmod +x expect.sh
+        ./expect.sh
