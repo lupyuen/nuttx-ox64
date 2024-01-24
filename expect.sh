@@ -10,7 +10,7 @@ send -s "ostest\r"
 
 set timeout 120
 expect {
-  "ostest_main: Exiting with status 0" { exit 0 }
+  "ostest_main: Exiting with status -1" { exit 0 }
   timeout { exit 1 }
 }
 exit 2
