@@ -3,6 +3,7 @@
 # Apache NuttX RTOS for Pine64 Ox64 64-bit RISC-V SBC (Bouffalo Lab BL808)
 
 [![Daily Build of NuttX for Ox64](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64.yml/badge.svg)](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64.yml)
+[![Daily Test of NuttX for Ox64](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64-test.yml/badge.svg)](https://github.com/lupyuen/nuttx-ox64/actions/workflows/ox64-test.yml)
 
 Read the articles...
 
