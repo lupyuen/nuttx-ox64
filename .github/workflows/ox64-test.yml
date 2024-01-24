@@ -43,16 +43,16 @@ jobs:
         make
         cp temu ..
 
-    - name: Download NuttX Build
+    - name: Download NuttX Build and Test Script
       run: |
         wget https://github.com/lupyuen/nuttx-ox64/releases/download/nuttx-ox64-${{ steps.date.outputs.date }}/Image
         wget https://github.com/lupyuen/nuttx-ox64/releases/download/nuttx-ox64-${{ steps.date.outputs.date }}/nuttx.hash
         wget https://github.com/lupyuen/nuttx-ox64/raw/main/nuttx.cfg
-        wget https://github.com/lupyuen/nuttx-ox64/raw/main/expect.sh
-        chmod +x expect.sh
+        wget https://github.com/lupyuen/nuttx-ox64/raw/main/nuttx.exp
+        chmod +x nuttx.exp
         ls -l
         cat nuttx.hash
 
     - name: Run Test
       run: |
-        ./expect.sh
+        ./nuttx.exp
