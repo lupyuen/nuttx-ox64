@@ -1,6 +1,6 @@
 #!/usr/bin/expect
 set send_slow {1 0.001}
-spawn ./temu root-riscv64.cfg
+spawn ./temu nuttx.cfg
 
 expect "nsh> "
 send -s "uname -a\r"
