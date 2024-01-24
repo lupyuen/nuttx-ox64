@@ -41,6 +41,7 @@ jobs:
       run: |
         cd ox64-tinyemu
         make
+        cp temu ..
 
     - name: Download NuttX Build
       run: |
@@ -48,8 +49,8 @@ jobs:
 
     - name: Run Test
       run: |
-        ls -l nuttx.bin
         wget --output-document=nuttx.cfg https://raw.githubusercontent.com/lupyuen/nuttx-tinyemu/main/docs/root-riscv64.cfg
         wget --output-document=expect.sh https://github.com/lupyuen/nuttx-ox64/raw/main/expect.sh
         chmod +x expect.sh
+        ls -l
         ./expect.sh
