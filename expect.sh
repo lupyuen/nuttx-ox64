@@ -14,8 +14,8 @@ send -s "uname -a\r"
 expect "nsh> "
 send -s "ostest\r"
 
-## Wait at most 120 seconds
-set timeout 120
+## Wait at most 30 seconds
+set timeout 30
 
 ## Check the response...
 expect {
