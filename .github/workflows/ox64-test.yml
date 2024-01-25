@@ -8,13 +8,13 @@ permissions:
 
 on:
 
-  ## Run every day at 1:00 UTC
+  ## Run every 55 minutes past the hour
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '55 * * * *'
 
   ## Run on every commit to this branch
-  push:
-    branches: [ main ]
+  ## push:
+  ##   branches: [ main ]
 
 jobs:
   test:
