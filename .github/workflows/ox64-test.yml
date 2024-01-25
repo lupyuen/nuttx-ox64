@@ -8,9 +8,9 @@ permissions:
 
 on:
 
-  ## Run every 55 minutes past the hour
+  ## Run every day at 0:55 UTC
   schedule:
-    - cron: '55 * * * *'
+    - cron: '55 0 * * *'
 
   ## Run on every commit to this branch
   ## push:
