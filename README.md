@@ -7,6 +7,8 @@
 
 Read the articles...
 
+-   ["Automated Testing with Ox64 BL808 Emulator (Apache NuttX RTOS)"](https://lupyuen.github.io/articles/tinyemu3)
+
 -   ["Emulate Ox64 BL808 in the Web Browser: Experiments with TinyEMU RISC-V Emulator and Apache NuttX RTOS"](https://lupyuen.github.io/articles/tinyemu2)
 
 -   ["Apache NuttX RTOS in a Web Browser? Adventures with TinyEMU and VirtIO"](https://lupyuen.github.io/articles/tinyemu)
@@ -4275,7 +4277,9 @@ Function select to Register Control GPIO)
 
 # Emulate Ox64 BL808 SBC with TinyEMU
 
-Read the article...
+Read the articles...
+
+-   ["Automated Testing with Ox64 BL808 Emulator (Apache NuttX RTOS)"](https://lupyuen.github.io/articles/tinyemu3)
 
 -   ["Emulate Ox64 BL808 in the Web Browser: Experiments with TinyEMU RISC-V Emulator and Apache NuttX RTOS"](https://lupyuen.github.io/articles/tinyemu2)
 
