@@ -7,6 +7,8 @@
 
 Read the articles...
 
+-   ["Zig runs ROM FS Filesystem in the Web Browser (thanks to Apache NuttX RTOS)"](https://lupyuen.github.io/articles/romfs)
+
 -   ["TCC RISC-V Compiler runs in the Web Browser (thanks to Zig Compiler)"](https://lupyuen.github.io/articles/tcc)
 
 -   ["Automated Testing with Ox64 BL808 Emulator (Apache NuttX RTOS)"](https://lupyuen.github.io/articles/tinyemu3)
@@ -4294,6 +4296,14 @@ Check out the details here...
 ![Ox64 BL808 Emulator with TinyEMU RISC-V Emulator and Apache NuttX RTOS](https://lupyuen.github.io/images/tinyemu2-title.png)
 
 [_(Live Demo of Ox64 BL808 Emulator)_](https://lupyuen.github.io/nuttx-tinyemu/ox64)
+
+# Build and Test NuttX Apps in the Web Browser
+
+Ox64 Emulator is now integrated with TCC RISC-V Compiler in WebAssembly. So we can Build and Test NuttX Apps in the Web Browser!
+
+Read the article...
+
+-   ["Zig runs ROM FS Filesystem in the Web Browser (thanks to Apache NuttX RTOS)"](https://lupyuen.github.io/articles/romfs)
 
 # Documentation for Ox64 BL808
 
