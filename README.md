@@ -7,6 +7,8 @@
 
 Read the articles...
 
+-   ["QuickJS JavaScript Engine on a Real-Time Operating System (Apache NuttX RTOS)"](https://lupyuen.github.io/articles/quickjs)
+
 -   ["Zig runs ROM FS Filesystem in the Web Browser (thanks to Apache NuttX RTOS)"](https://lupyuen.github.io/articles/romfs)
 
 -   ["TCC RISC-V Compiler runs in the Web Browser (thanks to Zig Compiler)"](https://lupyuen.github.io/articles/tcc)
@@ -4304,6 +4306,14 @@ Ox64 Emulator is now integrated with TCC RISC-V Compiler in WebAssembly. So we c
 Read the article...
 
 -   ["Zig runs ROM FS Filesystem in the Web Browser (thanks to Apache NuttX RTOS)"](https://lupyuen.github.io/articles/romfs)
+
+# QuickJS JavaScript Engine on Ox64 BL808 SBC
+
+QuickJS JavaScript Engine now runs on Ox64 BL808 SBC, and in the Ox64 Web Emulator!
+
+Read the article...
+
+-   ["QuickJS JavaScript Engine on a Real-Time Operating System (Apache NuttX RTOS)"](https://lupyuen.github.io/articles/quickjs)
 
 # Documentation for Ox64 BL808
 
