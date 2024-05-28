@@ -7,6 +7,8 @@
 
 Read the articles...
 
+-   ["Rust Apps on Ox64 BL808 RISC-V SBC and Apache NuttX RTOS"](https://lupyuen.github.io/articles/rust5)
+
 -   ["Too many Embedded Logs? PureScript might help (Ox64 BL808 SBC / Apache NuttX RTOS)"](https://lupyuen.github.io/articles/purescript)
 
 -   ["(Homage to MakeCode) Coding Ox64 BL808 SBC the Drag-n-Drop Way"](https://lupyuen.github.io/articles/quickjs2)
