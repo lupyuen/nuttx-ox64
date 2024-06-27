@@ -26,7 +26,7 @@ jobs:
     - name: Checkout Source Files
       run:  |
         ## TODO: Paste the GitHub Repo and Branch
-        source=https://github.com/apache/nuttx/tree/master
+        source=https://github.com/rushabhvg/nuttx/tree/gpio2
 
         ## Match `https://github.com/user/repo/tree/branch`
         pattern='\(.*\)\/tree\/\(.*\)'
