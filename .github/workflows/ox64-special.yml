@@ -26,7 +26,7 @@ jobs:
     - name: Checkout Source Files
       run:  |
         ## TODO: Paste the GitHub Repo and Branch
-        source=https://github.com/henryrov/nuttx/tree/bl808-spi-squash
+        source=https://github.com/apache/nuttx/tree/master
 
         ## Match `https://github.com/user/repo/tree/branch`
         pattern='\(.*\)\/tree\/\(.*\)'
@@ -80,7 +80,7 @@ jobs:
         riscv64-unknown-elf-gcc -v
 
         ## Configure the build
-        tools/configure.sh ox64:spi
+        tools/configure.sh ox64:nsh
 
         ## Preserve the build config
         cp .config nuttx.config
