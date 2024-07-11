@@ -80,7 +80,7 @@ jobs:
         riscv64-unknown-elf-gcc -v
 
         ## Configure the build
-        tools/configure.sh ox64:nsh
+        tools/configure.sh ox64:spi
 
         ## Preserve the build config
         cp .config nuttx.config
