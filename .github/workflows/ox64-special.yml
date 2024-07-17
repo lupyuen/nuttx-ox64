@@ -28,7 +28,7 @@ jobs:
         set -x  #  Echo commands
         
         ## TODO: Paste the GitHub Repo and Branch
-        source=https://github.com/yf13/nuttx/tree/12635
+        source=https://github.com/apache/nuttx/tree/master
 
         ## Match `https://github.com/user/repo/tree/branch`
         pattern='\(.*\)\/tree\/\(.*\)'
