@@ -13,8 +13,8 @@ on:
     - cron: '0 0 * * *'
 
   ## Run on every commit to this branch
-  ## push:
-  ##   branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -36,8 +36,8 @@ jobs:
 
     - name: Install Toolchain
       run:  |
-        wget --no-check-certificate https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.12/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14.tar.gz
-        tar -xf riscv64-unknown-elf-toolchain*.tar.gz
+        wget --no-check-certificate https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v13.2.0-2/xpack-riscv-none-elf-gcc-13.2.0-2-linux-x64.tar.gz
+        tar -xf xpack-riscv-none-elf-gcc-*.tar.gz
 
     - name: Checkout Source Files
       run:  |
@@ -49,7 +49,7 @@ jobs:
     - name: Build
       run: |
         ## Add toolchain to PATH
-        export PATH=$PATH:$PWD/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14/bin
+        export PATH=$PATH:$PWD/xpack-riscv-none-elf-gcc-13.2.0-2/bin
         cd nuttx/nuttx
 
         ## Dump the git hash
